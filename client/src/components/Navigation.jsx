@@ -5,12 +5,13 @@ import { useAuth } from '../AuthContext';
 
 export function Navigation() {
   const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isAuthenticated, setIsAuthenticated, user, setUser} = useAuth();
 
   const handleLogout = async () => {
     await logout();
-    setIsAuthenticated(false); // Cambiar el estado de autenticación en el contexto
-    localStorage.clear()
+    localStorage.removeItem('user', 'accessToken');
+    setIsAuthenticated(false);
+    setUser(null);
     navigate('/login'); // Redirigir a la página de login
   };
 
@@ -19,6 +20,7 @@ export function Navigation() {
       <ul>
         <li>
           <h1><Link to="/">VaxFlow</Link></h1>
+          <h3>{user}</h3>
         </li>
         {isAuthenticated ? (
           <>

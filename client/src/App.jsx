@@ -4,12 +4,15 @@ import { Traspaso } from "./pages/Traspaso";
 import { Navigation } from "./components/Navigation";
 import { Login } from "./pages/Login";
 import { ChangePassword } from "./pages/ChangePassword";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AuthProvider, useAuth } from "./AuthContext";
 
 function App() {
 
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  useEffect(() => {
+    console.log('is authenticated?  ' + isAuthenticated +'  user: ' + user);
+  }, [isAuthenticated])
 
   return (
     <BrowserRouter>

@@ -17,7 +17,7 @@ export const login = async (credentials) => {
 };
 
 export const logout = () => {
-  localStorage.removeItem('accessToken');
+  localStorage.removeItem('accessToken', 'user');
   delete authApi.defaults.headers.common['Authorization'];
   return authApi.post('logout/');
 };

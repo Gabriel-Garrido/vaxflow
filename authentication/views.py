@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import AccessToken
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer 
@@ -32,15 +32,15 @@ class LoginView(APIView):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-
-            # Generar el token JWT usando el usuario autenticado
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            name = user.username
             
-            return Response({'message': 'Login successful', 'access_token': access_token, 'user': name})
+            access_token = AccessToken.for_user(user)
+            return Response({
+                'message': 'Login successful',
+                'username': user.username  # Agregar el nombre de usuario en la respuesta
+            })
         else:
             return Response({'message': 'Login failed'}, status=400)
+
         
 class LogoutView(APIView):
     def post(self, request):

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { login } from '../api/authentication';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
@@ -8,14 +8,16 @@ export function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { user, setUser } = useAuth();
 
   const handleLogin = async () => {
     try {
       const response = await login({ username, password });
       if (response) {
-        console.log('Login successful:', response.data);
-        setIsAuthenticated(true); // Actualiza el estado de autenticación en App
-        navigate('/home'); // Redirige a la página de inicio
+        localStorage.setItem('user', JSON.stringify(username));
+        setIsAuthenticated(true);
+        setUser(username);
+        navigate('/home');
       }
     } catch (error) {
       console.error('Login error:', error);
