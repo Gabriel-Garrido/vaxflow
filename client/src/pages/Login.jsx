@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { login } from '../api/authentication';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
-export function Login({ setIsAuthenticated }) {
+export function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   const handleLogin = async () => {
     try {
@@ -18,7 +20,6 @@ export function Login({ setIsAuthenticated }) {
     } catch (error) {
       console.error('Login error:', error);
     }
-    navigate('/home'); // Redirige a la página de inicio
   };
 
   const handleSubmit = (e) => {

@@ -1,22 +1,12 @@
 import React, { createContext, useContext, useState } from 'react';
-import { login, isAuthenticated as checkIsAuthenticated } from './api/authentication';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(checkIsAuthenticated());
-
-  const handleLogin = async (credentials) => {
-    try {
-      await login(credentials);
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error('Login error:', error);
-    }
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, handleLogin }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

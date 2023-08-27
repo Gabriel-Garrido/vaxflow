@@ -10,6 +10,7 @@ export const login = async (credentials) => {
     const token = response.data.access;
     localStorage.setItem('accessToken', token);
     authApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    return response
   } catch (error) {
     throw error;
   }

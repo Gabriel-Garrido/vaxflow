@@ -1,39 +1,35 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { Home } from "./pages/Home"
-import { Traspaso } from "./pages/Traspaso"
-import { Navigation } from "./components/Navigation"
-import { Login } from "./pages/Login"
-import { ChangePassword } from "./pages/ChangePassword"
-import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Home } from "./pages/Home";
+import { Traspaso } from "./pages/Traspaso";
+import { Navigation } from "./components/Navigation";
+import { Login } from "./pages/Login";
+import { ChangePassword } from "./pages/ChangePassword";
+import React from 'react';
+import { AuthProvider, useAuth } from "./AuthContext";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem('accessToken') !== null
-  );
+
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   return (
     <BrowserRouter>
-      <Navigation
-        isAuthenticated={isAuthenticated}
-        setIsAuthenticated={setIsAuthenticated}
-      />     
-      <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/traspaso" element={<Traspaso />} />
-        
-        {/* Definir rutas basadas en el estado de autenticación */}
+      <Navigation />     
+      <Routes>      
         {isAuthenticated ? (
           <>
+            <Route path="/traspaso" element={<Traspaso />} />
             <Route path="/change-password" element={<ChangePassword />} />
-            <Route path="*" element={<Navigate to="/home" />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<Home />} />
+            <Route path="/login" element={<Home />} />
           </>
         ) : (
-          <Route path="*" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="*" element={<Login />} />
         )}
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
