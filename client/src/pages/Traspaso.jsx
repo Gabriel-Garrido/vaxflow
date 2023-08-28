@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getAllStock, getAllVacunatorios, createTraspaso } from '../api/inventario';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
+import { logout } from '../api/authentication';
 
 export function Traspaso() {
   const {
@@ -18,25 +20,55 @@ export function Traspaso() {
   const navigate = useNavigate();
   const [stocks, setStocks] = useState([]);
   const [vacunatorios, setVacunatorios] = useState([]);
-  const isAuthenticated = localStorage.getItem('accessToken') !== null; // Verifica autenticación
+  const { isAuthenticated, setIsAuthenticated } = useAuth()
 
   useEffect(() => {
     async function loadStocks() {
-      if (isAuthenticated) { // Verifica autenticación antes de cargar datos
-        const res = await getAllStock();
-        setStocks(res.data);
+      try {
+        const response = await getAllStock();
+        console.log(response.data);
+        setStocks(response.data);
+      } catch (error) {
+        console.error('Error fetching stock:', error);
+        if (
+          error.response &&
+          error.response.status === 401
+        ) {
+          logout();
+          setIsAuthenticated(false)
+          navigate('/login');
+        } else {
+          setLoading(false);
+        }
       }
     }
-    loadStocks();
-
+    
     async function loadVacunatorios() {
-      if (isAuthenticated) { // Verifica autenticación antes de cargar datos
+      try {
         const res = await getAllVacunatorios();
         setVacunatorios(res.data);
+      } catch (error) {
+        console.error('Error fetching stock:', error);
+        if (
+          error.response &&
+          error.response.status === 401
+        ) {
+          logout();
+          setIsAuthenticated(false)
+          navigate('/login');
+        } else {
+          setLoading(false);
+        }
       }
+
     }
-    loadVacunatorios();
-  }, [isAuthenticated]); // Asegúrate de que la autenticación sea una dependencia
+    if (isAuthenticated) {
+      loadStocks();
+      loadVacunatorios();
+    } else {
+      navigate("/login")
+    }
+  }, [navigate]); // Asegúrate de que la autenticación sea una dependencia
 
   const selectedVacunaId = watch('vacuna_traspaso');
   const selectedStock = stocks.find(stock => stock.id === selectedVacunaId);
@@ -48,12 +80,9 @@ export function Traspaso() {
     } else {
       console.error('User is not authenticated');
       // Puedes manejar el feedback al usuario
+      navigate("/login")
     }
   });
-
-  if (!isAuthenticated) {
-    return <div>You are not authenticated.</div>; // Renderiza un mensaje si no está autenticado
-  }
 
   return (
     <div>

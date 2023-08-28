@@ -1,25 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { getAllStock } from '../api/inventario';
+import { useNavigate } from 'react-router-dom'
+import { logout } from '../api/authentication'
+import { useAuth } from '../AuthContext';
 
 export function Stock() {
   const [stock, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); 
+  const { isAuthenticated, setIsAuthenticated, user, setUser} = useAuth();
 
   useEffect(() => {
     async function fetchStock() {
       try {
-        const response = await getAllStock(); // Utiliza la función getAllStock de tu API
+        const response = await getAllStock();
         console.log(response.data);
         setStock(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching stock:', error);
-        setLoading(false);
+        if (
+          error.response &&
+          error.response.status === 401
+        ) {
+          logout();
+          setIsAuthenticated(false)
+          navigate('/login');
+        } else {
+          setLoading(false);
+        }
       }
     }
-
-    fetchStock();
-  }, []);
+    if (isAuthenticated) {
+      fetchStock();
+    } else {
+      navigate('/login');
+    }
+    
+  }, [navigate]);
 
   if (loading) {
     return <div>Loading...</div>;

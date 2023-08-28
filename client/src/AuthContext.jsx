@@ -1,7 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-
 
 const AuthContext = createContext();
 
@@ -12,11 +9,23 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     const savedToken = localStorage.getItem('accessToken');
-    if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
-      setIsAuthenticated(true);
-    } 
     
+    if (savedUser && savedToken) {
+      const parsedUser = JSON.parse(savedUser);
+      if (parsedUser.username && savedToken.trim() !== '') {
+        setUser(parsedUser);
+        setIsAuthenticated(true)
+        ;
+      } else {
+        localStorage.clear()
+        setIsAuthenticated(false)
+
+      }
+    } else {
+      localStorage.clear();
+      setIsAuthenticated(false)
+
+    }
   }, []);
 
   return (
