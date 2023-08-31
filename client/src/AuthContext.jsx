@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
     
     if (savedUser && savedToken) {
       const parsedUser = JSON.parse(savedUser);
-      if (parsedUser.username && savedToken.trim() !== '') {
+      if (parsedUser && savedToken.trim() !== '') {
         setUser(parsedUser);
         setIsAuthenticated(true)
         ;
