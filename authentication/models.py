@@ -3,20 +3,18 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
-    ROL_CHOICES = [
-        ('encargado', 'Encargado de Vacunatorio'),
-        ('referente', 'Referente de Salud'),
-        ('vacunador', 'Vacunador'),
-    ]
 
     rut = models.CharField(max_length=12, unique=True)
-    vacunatorio = models.ForeignKey('inventario.Vacunatorio', on_delete=models.SET_NULL, null=True, blank=True)
-    tipo_usuario = models.CharField(max_length=10, choices=ROL_CHOICES, default='vacunador')
+    name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    phone = models.CharField(max_length=20)
+    vacunatorio = models.ForeignKey('inventario.Vacunatorio', on_delete=models.SET_NULL, null=True, blank=False)
+    email = models.EmailField(_("email"), max_length=254, blank=False)
 
     groups = models.ManyToManyField(
         Group,
         verbose_name=_('groups'),
-        blank=True,
+        blank=False,
         help_text=_('The groups this user belongs to.'),
         related_name='customuser_set'
     )
