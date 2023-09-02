@@ -4,7 +4,6 @@ import { es } from 'date-fns/locale';
 export function StockCard({ stock }) {
   return (
     <div key={stock.id}>
-      <h1>Vacuna: {stock.nombre_vacuna}</h1>
       {stock.fecha_descongelacion && stock.hora_descongelacion && (
         <p>
           Descongeladas el{' '}
