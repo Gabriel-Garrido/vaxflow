@@ -45,35 +45,39 @@ export function Stock() {
   }
   console.log(stock);
   return (
-    <div className="container card mt-5">
-      <h1 className='card-title text-center'>Stock</h1>
-      <ul className="list-group card-body">
+    <div className="container mt-5">
+      <h1 className="text-center text-primary">Stock</h1>
+      <ul className="list-group">
         {stock.map(item => (
-          <li key={item.id} className="list-group-item stock-item" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
-            <div className="d-flex justify-content-between align-items-center">
-            <img
-              src={`../../public/images/Pfizer bivalente.jpg`}
-              alt={item.nombre}
-              className="img-fluid mt-3 ms-3"
-              style={{ maxWidth: '150px', maxHeight: '100px' }} // Ajusta el tamaño según tus necesidades
-            />
-              <h2>{item.nombre_vacuna}</h2>
-              <span className="badge rounded-pill bg-primary fs-5">{item.stock} dosis </span>
-            </div>
-              <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
-                <div class="offcanvas-header">
-                  <h3 class="offcanvas-title" id="offcanvasBottomLabel">{item.nombre_vacuna}</h3>
-                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body big">
-                  <StockCard stock={item}/>
-                </div>
+          <li
+            key={item.id}
+            className="list-group-item btn btn-link btn-block stock-item"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target={`#stockItem${item.id}`}
+            aria-expanded="false"
+          >
+              <div className="d-flex justify-content-between align-items-center">
+                <img
+                  src={`../../public/images/Pfizer bivalente.jpg`}
+                  alt={item.nombre}
+                  className="img-fluid"
+                  style={{ maxWidth: '150px', maxHeight: '100px' }}
+                />
+                <h2 className="mb-0">{item.nombre_vacuna}</h2>
+                <span className="badge bg-primary fs-5">{item.stock} dosis</span>
               </div>
+            <div
+              id={`stockItem${item.id}`}
+              className="collapse"
+            >
+              <div className="card card-body">
+                <StockCard stock={item} />
+              </div>
+            </div>
           </li>
-          
-          ))}
+        ))}
       </ul>
     </div>
-
   );
 }
