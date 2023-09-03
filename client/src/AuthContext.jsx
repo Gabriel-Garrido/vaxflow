@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getUserDetails } from './api/authentication';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null)
+  const [userDetails, setUserDetails] = useState(null)
+
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -29,7 +32,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser, userDetails, setUserDetails }}>
       {children}
     </AuthContext.Provider>
   );

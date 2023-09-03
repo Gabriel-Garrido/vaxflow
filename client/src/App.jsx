@@ -7,12 +7,20 @@ import { ChangePassword } from "./pages/ChangePassword";
 import { Footer } from "./components/Footer"
 import React, { useEffect } from 'react';
 import { AuthProvider, useAuth } from "./AuthContext";
+import { getUserDetails } from "./api/authentication";
 
 function App() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, setUserDetails } = useAuth();
   
   useEffect(() => {
     console.log('is authenticated?  ' + isAuthenticated +'  user: ' + user);
+    if (isAuthenticated){
+    getUserDetails()
+        .then((userDetailsData) => {
+          console.log('Detalles del usuario recibidos:', userDetailsData);
+          setUserDetails(userDetailsData);
+        })}
+
   }, [isAuthenticated])
 
   return (
