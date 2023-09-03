@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { logout } from '../api/authentication';
 
-export function Traspaso() {
+export function Traspaso({ stock }) {
   const {
     register,
     handleSubmit,
@@ -20,7 +20,7 @@ export function Traspaso() {
   const navigate = useNavigate();
   const [stocks, setStocks] = useState([]);
   const [vacunatorios, setVacunatorios] = useState([]);
-  const { isAuthenticated, setIsAuthenticated } = useAuth()
+  const { isAuthenticated, setIsAuthenticated, userDetails } = useAuth()
 
   useEffect(() => {
     async function loadStocks() {
@@ -96,35 +96,37 @@ export function Traspaso() {
         name="vacuna"
         {...register('vacuna_traspaso', { required: true })}
         className="form-select"
+        value={stock.vacuna} // Establecer el valor predeterminado desde stock.vacuna
+        disabled // Deshabilitar la selección
       >
-        <option value=""></option>
-        {stocks.map((stock) => (
-          <option key={stock.id} value={stock.id}>
-            {stock.nombre_vacunatorio} {'=>'} {stock.nombre_vacuna} - Stock: {stock.stock}
-          </option>
-        ))}
+        <option value={stock.vacuna}>{stock.nombre_vacunatorio} {'=>'} {stock.nombre_vacuna} - Stock: {stock.stock}</option>
       </select>
-      {errors.vacuna_traspaso && <p className="text-danger">Este campo es requerido</p>}
-    </div>
-    <div className="mb-3">
-      <label htmlFor="vacunatorio" className="form-label text-light">
-        Selecciona un vacunatorio:
-      </label>
-      <select
-        id="vacunatorio"
-        name="vacunatorio"
-        {...register('vacunatorio_destino', { required: true })}
-        className="form-select"
-      >
-        <option value=""></option>
-        {vacunatorios.map((vacunatorio) => (
-          <option key={vacunatorio.id} value={vacunatorio.id}>
-            {vacunatorio.nombre}
-          </option>
-        ))}
-      </select>
-      {errors.vacunatorio_destino && <p className="text-danger">Este campo es requerido</p>}
-    </div>
+    {errors.vacuna_traspaso && <p className="text-danger">Este campo es requerido</p>}
+  </div>
+
+  <div className="mb-3">
+  <label htmlFor="vacunatorio" className="form-label text-light">
+    Vacunatorio de destino:
+  </label>
+  <select
+    id="vacunatorio"
+    name="vacunatorio"
+    {...register('vacunatorio_destino', { required: true })}
+    className="form-select"
+  >
+    <option value=""></option>
+    {vacunatorios.map((vacunatorio) => (
+      // Filtra el vacunatorio actual del usuario
+      userDetails.vacunatorio !== vacunatorio.id && (
+        <option key={vacunatorio.id} value={vacunatorio.id}>
+          {vacunatorio.nombre}
+        </option>
+      ))
+    )}
+  </select>
+  {errors.vacunatorio_destino && <p className="text-danger">Este campo es requerido</p>}
+</div>
+
     <div className="mb-3">
       <label htmlFor="cantidad" className="form-label text-light">
         Cantidad:

@@ -10,6 +10,7 @@ class VacunaStockSerializer(serializers.ModelSerializer):
     nombre_vacuna = serializers.CharField(source='tipo_vacuna.nombre', read_only=True)
     nombre_vacunatorio = serializers.CharField(source='vacunatorio.nombre', read_only=True)
     caducidad_fabricante = serializers.CharField(source='tipo_vacuna.fecha_caducidad_fabricante', read_only=True)
+    lote = serializers.CharField(source='tipo_vacuna.lote', read_only=True)
 
     class Meta:
         model = VacunaStock

@@ -9,7 +9,7 @@ export function Stock() {
   const [stock, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); 
-  const { isAuthenticated, setIsAuthenticated, user, setUser} = useAuth();
+  const { isAuthenticated, setIsAuthenticated, user, setUser, userDetails} = useAuth();
 
   useEffect(() => {
     console.log(user);
@@ -46,8 +46,8 @@ export function Stock() {
   }
   console.log(stock);
   return (
-    <div className="container mt-5">
-      <h1 className="text-center text-primary">Stock</h1>
+    <div className="container mt-5 card">
+      <h3 className="text-center text-primary card-header">Stock vacunatorio {userDetails.vacunatorio_nombre}</h3>
 
       {/* Acordeón de Bootstrap */}
       <div className="accordion" id="stockAccordion">
@@ -62,16 +62,25 @@ export function Stock() {
                 aria-expanded="false"
                 aria-controls={`collapse${item.id}`}
               >
-                <div className="d-flex justify-content-between align-items-center">
-                <img
+                <div className="container row">
+                  
+                  <div className='col-3'>
+                    <img
                   src={`../../public/images/Pfizer bivalente.jpg`}
                   alt={item.nombre}
                   className="img-fluid"
-                  style={{ maxWidth: '150px', maxHeight: '100px' }}
+                  style={{ maxWidth: '100px', maxHeight: '80px' }}
                 />
-                <h2 className="mb-0">{item.nombre_vacuna}</h2>
-
-                <span className="badge bg-primary fs-5">{item.stock} dosis</span>
+                  </div>
+                
+                <div className='col-7'>
+                  <h1 className="mb-0"> {item.nombre_vacuna} </h1>
+                  <h5>Lote: {item.lote}</h5>
+                </div>
+                <div className='col-2'>
+                  <span className="badge rounded-pill bg-primary fs-6">{item.stock} dosis</span>
+                </div>
+                
               </div>
               </button>
             </h2>
