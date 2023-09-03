@@ -12,6 +12,7 @@ export function Stock() {
   const { isAuthenticated, setIsAuthenticated, user, setUser} = useAuth();
 
   useEffect(() => {
+    console.log(user);
     async function fetchStock() {
       try {
         const response = await getAllStock();
@@ -47,17 +48,21 @@ export function Stock() {
   return (
     <div className="container mt-5">
       <h1 className="text-center text-primary">Stock</h1>
-      <ul className="list-group">
+
+      {/* Acordeón de Bootstrap */}
+      <div className="accordion" id="stockAccordion">
         {stock.map(item => (
-          <li
-            key={item.id}
-            className="list-group-item btn btn-link btn-block stock-item"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target={`#stockItem${item.id}`}
-            aria-expanded="false"
-          >
-              <div className="d-flex justify-content-between align-items-center">
+          <div className="accordion-item" key={item.id}>
+            <h2 className="accordion-header" id={`heading${item.id}`}>
+              <button
+                className="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={`#collapse${item.id}`}
+                aria-expanded="false"
+                aria-controls={`collapse${item.id}`}
+              >
+                <div className="d-flex justify-content-between align-items-center">
                 <img
                   src={`../../public/images/Pfizer bivalente.jpg`}
                   alt={item.nombre}
@@ -65,19 +70,24 @@ export function Stock() {
                   style={{ maxWidth: '150px', maxHeight: '100px' }}
                 />
                 <h2 className="mb-0">{item.nombre_vacuna}</h2>
+
                 <span className="badge bg-primary fs-5">{item.stock} dosis</span>
               </div>
+              </button>
+            </h2>
             <div
-              id={`stockItem${item.id}`}
-              className="collapse"
+              id={`collapse${item.id}`}
+              className="accordion-collapse collapse"
+              aria-labelledby={`heading${item.id}`}
+              data-bs-parent="#stockAccordion"
             >
-              <div className="card card-body">
+              <div className="accordion-body">
                 <StockCard stock={item} />
               </div>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
