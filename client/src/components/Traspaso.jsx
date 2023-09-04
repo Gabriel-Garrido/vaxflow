@@ -18,12 +18,13 @@ export function Traspaso({ stock }) {
   } = useForm({
     mode: 'all', // Habilitar validación en cada cambio
     defaultValues: {
+      vacuna_traspaso: stock.id,
       cantidad_traspasada: 1, // Valor predeterminado para cantidad
-      responsable_entrega: userDetails.id
     },
   });
 
   useEffect(() => {
+    console.log(stock);
     async function loadStocks() {
       try {
         const response = await getAllStock();
@@ -93,20 +94,19 @@ export function Traspaso({ stock }) {
 
 {/* Responsable de entrega: */}
         <div className="mb-3">
-          <label htmlFor="responsable_entrega" className="form-label text-light">
+          <label htmlFor="traspaso_entrega" className="form-label text-light">
             Responsable de entrega:
           </label>
           <select
-            id="responsable_entrega"
-            name="responsable_entrega"
-            {...register('responsable_entrega', { required: true })}
-            className="form-select"
+            id="traspaso_entrega"
+            name="traspaso_entrega"
             value={userDetails.id}
-            disabled
+            {...register('traspasos_entrega', { required: true })}
+            className="form-select"
           >
             <option value={stock.vacuna}>{userDetails.name} {userDetails.last_name} {"("}{userDetails.vacunatorio_nombre}{")"}</option>
           </select>
-          {errors.responsable_entrega && <p className="text-danger">Este campo es requerido</p>}
+          {errors.traspaso_entrega && <p className="text-danger">Este campo es requerido</p>}
         </div>
 
 
@@ -120,8 +120,8 @@ export function Traspaso({ stock }) {
             name="vacuna"
             {...register('vacuna_traspaso', { required: true })}
             className="form-select"
-            value={stock.vacuna} // Establecer el valor predeterminado desde stock.vacuna
-            disabled // Deshabilitar la selección
+            value={stock.id} 
+            disabled
           >
             <option value={stock.vacuna}>{stock.nombre_vacuna} - Stock: {stock.stock}</option>
           </select>
@@ -184,17 +184,17 @@ export function Traspaso({ stock }) {
 
 {/* Responsable de recepción: */}
         <div className="mb-3">
-          <label htmlFor="responsable_recepcion" className="form-label text-light">
+          <label htmlFor="traspaso_recepcion" className="form-label text-light">
             Responsable de recepción:
           </label>
           <input
             type="text"
-            id="responsable_recepcion"
-            name="responsable_recepcion"
-            {...register('responsable_recepcion', { required: true })}
+            id="traspaso_recepcion"
+            name="traspaso_recepcion"
+            {...register('traspaso_recepcion', { required: true })}
             className="form-control"
           />
-          {errors.responsable_recepcion && <p className="text-danger">Este campo es requerido</p>}
+          {errors.traspaso_recepcion && <p className="text-danger">Este campo es requerido</p>}
         </div>
 
 {/* Boton */}
