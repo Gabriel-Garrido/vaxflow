@@ -1,6 +1,7 @@
 from django.db import models, transaction
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from authentication.models import CustomUser
 
 class Vacunatorio(models.Model):
     nombre = models.CharField(max_length=100)
@@ -55,8 +56,8 @@ class TraspasoVacuna(models.Model):
     vacunatorio_destino = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE) 
     fecha_traspaso = models.DateTimeField(auto_now_add=True)
     cantidad_traspasada = models.PositiveIntegerField()
-    responsable_entrega = models.CharField(max_length=100)
-    responsable_recepcion = models.CharField(max_length=100)
+    responsable_entrega = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_entrega')
+    responsable_recepcion = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_recepcion')
 
     def clean(self):
         if self.cantidad_traspasada <= 0:
