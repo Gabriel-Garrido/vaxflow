@@ -20,6 +20,7 @@ export function Traspaso({ stock }) {
     mode: 'all', // Habilitar validación en cada cambio
     defaultValues: {
       vacuna_traspaso: stock.id,
+      traspasos_entrega: userDetails.id,
       cantidad_traspasada: 1, // Valor predeterminado para cantidad
     },
   });
@@ -124,42 +125,11 @@ export function Traspaso({ stock }) {
             <div className="carousel-item active">
               
 
-  {/* Responsable de entrega: */}
-              <div className="mb-3">
-                <label htmlFor="traspaso_entrega" className="form-label text-light">
-                  Responsable de entrega:
-                </label>
-                <select
-                  id="traspaso_entrega"
-                  name="traspaso_entrega"
-                  value={userDetails.id}
-                  {...register('traspasos_entrega', { required: true })}
-                  className="form-select"
-                >
-                  <option value={userDetails.id}>{userDetails.name} {userDetails.last_name} {"("}{userDetails.vacunatorio_nombre}{")"}</option>
-                </select>
-                {errors.traspaso_entrega && <p className="text-danger">Este campo es requerido</p>}
-              </div>
-
-
   {/* Vacuna a traspasar: */}
-              <div className="mb-3">
-                <label htmlFor="vacuna" className="form-label text-light">
-                  Vacuna a traspasar:
-                </label>
-                <select
-                  id="vacuna"
-                  name="vacuna"
-                  {...register('vacuna_traspaso', { required: true })}
-                  className="form-select"
-                  value={stock.id} 
-                  disabled
-                >
-                  <option value={stock.vacuna}>{stock.nombre_vacuna} - Stock: {stock.stock}</option>
-                </select>
-                {errors.vacuna_traspaso && <p className="text-danger">Este campo es requerido</p>}
-              </div>
-
+              <h3>{stock.nombre_vacuna}</h3>
+              
+  {/* Responsable de entrega: */}
+              <p>Responsable entrega: {userDetails.name} {userDetails.last_name} {"("+stock.nombre_vacunatorio+")" }</p>
 
   {/* Vacunatorio de destino: */}
               <div className="mb-3">
