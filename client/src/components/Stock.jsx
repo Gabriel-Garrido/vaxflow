@@ -17,6 +17,7 @@ export function Stock() {
       try {
         const response = await getAllStock();
         console.log(response.data);
+        
         setStock(response.data);
         setLoading(false);
       } catch (error) {
@@ -96,7 +97,7 @@ export function Stock() {
                 <StockCard stock={item} />
               </div>
             </div>
-          </div>:<></>
+          </div>:<div key={item.id}></div>
         ))}
       </div>
     </div>
