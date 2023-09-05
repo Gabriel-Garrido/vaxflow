@@ -91,17 +91,26 @@ export function Traspaso({ stock }) {
   const selectedVacunaId = watch('vacuna_traspaso');
   const selectedStock = stocks.find(stock => stock.id === selectedVacunaId);
 
-  const onSubmit = handleSubmit(async data => {
-    if (isAuthenticated) { // Verifica autenticación antes de realizar la acción
-      await createTraspaso(data);
-      navigate('/home');
+  const onSubmit = handleSubmit(async (data) => {
+    if (isAuthenticated) {
+      // Convierte las cadenas en números
+      data.cantidad_traspasada = parseInt(data.cantidad_traspasada, 10);
+      data.responsable_recepcion = parseInt(data.traspaso_recepcion, 10);
+      data.responsable_entrega = parseInt(data.traspasos_entrega, 10);
+      data.vacunatorio_destino = parseInt(data.vacunatorio_destino,10)
+  
+      if (!isNaN(data.cantidad_traspasada) && !isNaN(data.traspaso_recepcion)) {
+        await createTraspaso(data);
+        navigate('/home');
+      } else {
+        console.error('Los valores de cantidad y recepción no son números válidos.');
+      }
     } else {
       console.error('User is not authenticated');
       // Puedes manejar el feedback al usuario
-      navigate("/login")
+      navigate("/login");
     }
   });
-
 
 
   return (
@@ -120,7 +129,7 @@ export function Traspaso({ stock }) {
             {...register('traspasos_entrega', { required: true })}
             className="form-select"
           >
-            <option value={stock.vacuna}>{userDetails.name} {userDetails.last_name} {"("}{userDetails.vacunatorio_nombre}{")"}</option>
+            <option value={userDetails.id}>{userDetails.name} {userDetails.last_name} {"("}{userDetails.vacunatorio_nombre}{")"}</option>
           </select>
           {errors.traspaso_entrega && <p className="text-danger">Este campo es requerido</p>}
         </div>
