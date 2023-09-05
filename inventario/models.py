@@ -51,6 +51,11 @@ class AdministracionVacuna(models.Model):
 
             super(AdministracionVacuna, self).save(*args, **kwargs)
 
+from django.db import models, transaction
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from authentication.models import CustomUser
+
 class TraspasoVacuna(models.Model):
     vacuna_traspaso = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='traspasos_enviados')
     vacunatorio_destino = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE) 
@@ -58,14 +63,11 @@ class TraspasoVacuna(models.Model):
     cantidad_traspasada = models.PositiveIntegerField()
     responsable_entrega = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_entrega')
     responsable_recepcion = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_recepcion')
-    is_accepted=models.BooleanField(blank=True, default=False)
+    is_accepted = models.BooleanField(blank=True, default=False)
 
     def clean(self):
         if self.cantidad_traspasada <= 0:
             raise ValidationError("La cantidad de vacunas traspasada debe ser mayor que 0.")
-
-        if self.cantidad_traspasada > self.vacuna_traspaso.stock:
-            raise ValidationError("No hay suficientes vacunas disponibles para traspaso.")
 
     def save(self, *args, **kwargs):
         with transaction.atomic():
@@ -73,17 +75,23 @@ class TraspasoVacuna(models.Model):
             if self.cantidad_traspasada > self.vacuna_traspaso.stock:
                 raise ValidationError("La cantidad de vacunas traspasada es mayor que el stock disponible.")
 
-            # Crear o actualizar VacunaStock en el vacunatorio destino
-            vacuna_destino, created = VacunaStock.objects.get_or_create(
+            # Intentar obtener el VacunaStock en el vacunatorio destino
+            vacuna_destino = VacunaStock.objects.filter(
                 tipo_vacuna=self.vacuna_traspaso.tipo_vacuna,
-                vacunatorio=self.vacunatorio_destino,
-                defaults={
-                    'stock': 0,  # Establecemos el stock en 0 para actualizarlo posteriormente
-                    'fecha_descongelacion': self.vacuna_traspaso.fecha_descongelacion,
-                    'fecha_caducidad_descongelacion': self.vacuna_traspaso.fecha_caducidad_descongelacion
-                }
-            )
-            
+                vacunatorio=self.vacunatorio_destino
+            ).first()
+
+            if not vacuna_destino:
+                # Si no existe VacunaStock en el destino, créalo
+                vacuna_destino = VacunaStock.objects.create(
+                    tipo_vacuna=self.vacuna_traspaso.tipo_vacuna,
+                    vacunatorio=self.vacunatorio_destino,
+                    stock=0,  # Establecemos el stock en 0 para actualizarlo posteriormente
+                    fecha_descongelacion=self.vacuna_traspaso.fecha_descongelacion,
+                    fecha_caducidad_descongelacion=self.vacuna_traspaso.fecha_caducidad_descongelacion,
+                    hora_descongelacion=self.vacuna_traspaso.hora_descongelacion  # Agregar la hora de descongelación
+                )
+
             # Sumar la cantidad traspasada al stock en el destino
             vacuna_destino.stock += self.cantidad_traspasada
             vacuna_destino.save()
@@ -93,6 +101,7 @@ class TraspasoVacuna(models.Model):
             self.vacuna_traspaso.save()
 
             super(TraspasoVacuna, self).save(*args, **kwargs)
+
 
 class EliminacionVacuna(models.Model):
     vacuna = models.ForeignKey(VacunaStock, on_delete=models.CASCADE)
