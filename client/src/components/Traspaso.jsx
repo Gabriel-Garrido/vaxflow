@@ -113,129 +113,157 @@ export function Traspaso({ stock }) {
   });
 
 
+
+
   return (
     <div>
       <form onSubmit={onSubmit} className="bg-dark p-4 rounded">
+        <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel" >
+          <div className="carousel-inner">
+            <div className="carousel-item active">
+              
 
-{/* Responsable de entrega: */}
-        <div className="mb-3">
-          <label htmlFor="traspaso_entrega" className="form-label text-light">
-            Responsable de entrega:
-          </label>
-          <select
-            id="traspaso_entrega"
-            name="traspaso_entrega"
-            value={userDetails.id}
-            {...register('traspasos_entrega', { required: true })}
-            className="form-select"
-          >
-            <option value={userDetails.id}>{userDetails.name} {userDetails.last_name} {"("}{userDetails.vacunatorio_nombre}{")"}</option>
-          </select>
-          {errors.traspaso_entrega && <p className="text-danger">Este campo es requerido</p>}
-        </div>
-
-
-{/* Vacuna a traspasar: */}
-        <div className="mb-3">
-          <label htmlFor="vacuna" className="form-label text-light">
-            Vacuna a traspasar:
-          </label>
-          <select
-            id="vacuna"
-            name="vacuna"
-            {...register('vacuna_traspaso', { required: true })}
-            className="form-select"
-            value={stock.id} 
-            disabled
-          >
-            <option value={stock.vacuna}>{stock.nombre_vacuna} - Stock: {stock.stock}</option>
-          </select>
-          {errors.vacuna_traspaso && <p className="text-danger">Este campo es requerido</p>}
-        </div>
+  {/* Responsable de entrega: */}
+              <div className="mb-3">
+                <label htmlFor="traspaso_entrega" className="form-label text-light">
+                  Responsable de entrega:
+                </label>
+                <select
+                  id="traspaso_entrega"
+                  name="traspaso_entrega"
+                  value={userDetails.id}
+                  {...register('traspasos_entrega', { required: true })}
+                  className="form-select"
+                >
+                  <option value={userDetails.id}>{userDetails.name} {userDetails.last_name} {"("}{userDetails.vacunatorio_nombre}{")"}</option>
+                </select>
+                {errors.traspaso_entrega && <p className="text-danger">Este campo es requerido</p>}
+              </div>
 
 
-{/* Vacunatorio de destino: */}
-        <div className="mb-3">
-          <label htmlFor="vacunatorio" className="form-label text-light">
-            Vacunatorio de destino:
-          </label>
-          <select
-            id="vacunatorio"
-            name="vacunatorio"
-            {...register('vacunatorio_destino', { required: true })}
-            className="form-select"
-            onChange={handleVacunatorioDestinoChange}
-          >
-            <option value=""></option>
-            {vacunatorios.map((vacunatorio) => (
-              // Filtra el vacunatorio actual del usuario
-              userDetails.vacunatorio !== vacunatorio.id && (
-                <option key={vacunatorio.id} value={vacunatorio.id}>
-                  {vacunatorio.nombre}
-                </option>
-              ))
-            )}
-          </select>
-          {errors.vacunatorio_destino && <p className="text-danger">Este campo es requerido</p>}
-        </div>
+  {/* Vacuna a traspasar: */}
+              <div className="mb-3">
+                <label htmlFor="vacuna" className="form-label text-light">
+                  Vacuna a traspasar:
+                </label>
+                <select
+                  id="vacuna"
+                  name="vacuna"
+                  {...register('vacuna_traspaso', { required: true })}
+                  className="form-select"
+                  value={stock.id} 
+                  disabled
+                >
+                  <option value={stock.vacuna}>{stock.nombre_vacuna} - Stock: {stock.stock}</option>
+                </select>
+                {errors.vacuna_traspaso && <p className="text-danger">Este campo es requerido</p>}
+              </div>
 
 
-{/* Cantidad: */}
-        <div className="mb-3">
-          <label htmlFor="cantidad" className="form-label text-light">
-            Cantidad:
-          </label>
-          <input
-            type="number"
-            id="cantidad"
-            name="cantidad"
-            {...register('cantidad_traspasada', {
-              required: true,
-              min: 1,
-              max: selectedStock?.stock || Infinity,
-            })}
-            disabled={!selectedVacunaId}
-            className="form-control"
-          />
-          {errors.cantidad_traspasada && (
-            <p className="text-danger">
-              {errors.cantidad_traspasada.type === 'required' && 'Debe ingresar un número'}
-              {errors.cantidad_traspasada.type === 'min' && 'La cantidad debe ser mayor a 0'}
-              {errors.cantidad_traspasada.type === 'max' &&
-                'La cantidad no puede ser mayor al stock'}
-            </p>
-          )}
-        </div>
+  {/* Vacunatorio de destino: */}
+              <div className="mb-3">
+                <label htmlFor="vacunatorio" className="form-label text-light">
+                  Vacunatorio de destino:
+                </label>
+                <select
+                  id="vacunatorio"
+                  name="vacunatorio"
+                  {...register('vacunatorio_destino', { required: true })}
+                  className="form-select"
+                  onChange={handleVacunatorioDestinoChange}
+                >
+                  <option value=""></option>
+                  {vacunatorios.map((vacunatorio) => (
+                    // Filtra el vacunatorio actual del usuario
+                    userDetails.vacunatorio !== vacunatorio.id && (
+                      <option key={vacunatorio.id} value={vacunatorio.id}>
+                        {vacunatorio.nombre}
+                      </option>
+                    ))
+                  )}
+                </select>
+                {errors.vacunatorio_destino && <p className="text-danger">Este campo es requerido</p>}
+              </div>
 
 
-{/* Responsable de recepción: */}
-        <div className="mb-3">
-          <label htmlFor="traspaso_recepcion" className="form-label text-light">
-            Responsable de recepción:
-          </label>
-          <select
-            id="traspaso_recepcion"
-            name="traspaso_recepcion"
-            {...register('traspaso_recepcion', { required: true })}
-            className="form-select"
-          >
-            <option value=""></option>
-            {usuariosAsociados.map((usuario) => (
-              <option key={usuario.id} value={usuario.id}>
-                {usuario.name} {usuario.last_name}
-              </option>
-            ))}
-          </select>
-          {errors.traspaso_recepcion && <p className="text-danger">Este campo es requerido</p>}
-        </div>
+  {/* Cantidad: */}
+              <div className="mb-3">
+                <label htmlFor="cantidad" className="form-label text-light">
+                  Cantidad:
+                </label>
+                <input
+                  type="number"
+                  id="cantidad"
+                  name="cantidad"
+                  {...register('cantidad_traspasada', {
+                    required: true,
+                    min: 1,
+                    max: selectedStock?.stock || Infinity,
+                  })}
+                  disabled={!selectedVacunaId}
+                  className="form-control"
+                />
+                {errors.cantidad_traspasada && (
+                  <p className="text-danger">
+                    {errors.cantidad_traspasada.type === 'required' && 'Debe ingresar un número'}
+                    {errors.cantidad_traspasada.type === 'min' && 'La cantidad debe ser mayor a 0'}
+                    {errors.cantidad_traspasada.type === 'max' &&
+                      'La cantidad no puede ser mayor al stock'}
+                  </p>
+                )}
+              </div>
 
-{/* Boton */}
-        <div className="mb-3 text-center">
-          <button type="submit" disabled={!isValid} className="btn btn-primary me-2 fs-3 mt-2">
-            Realizar traspaso
-          </button>
+
+  {/* Responsable de recepción: */}
+              <div className="mb-3">
+                <label htmlFor="traspaso_recepcion" className="form-label text-light">
+                  Responsable de recepción:
+                </label>
+                <select
+                  id="traspaso_recepcion"
+                  name="traspaso_recepcion"
+                  {...register('traspaso_recepcion', { required: true })}
+                  className="form-select"
+                >
+                  <option value=""></option>
+                  {usuariosAsociados.map((usuario) => (
+                    <option key={usuario.id} value={usuario.id}>
+                      {usuario.name} {usuario.last_name}
+                    </option>
+                  ))}
+                </select>
+                {errors.traspaso_recepcion && <p className="text-danger">Este campo es requerido</p>}
+              </div>
+              <div className='text-center'>
+                <button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next" disabled={!isValid}>Realizar traspaso
+                </button>
+              </div>
+            </div>
+
+
+  {/* Carousel page 2 */}
+            <div className="carousel-item">
+
+  {/* Resumen del traspaso */}
+              <div className="text-center">
+                <h3>Resumen del Traspaso</h3>
+                <p>Traspasarás {watch('cantidad_traspasada')} dosis {stock.nombre_vacuna}</p>
+                <p>Destino: {vacunatorios.find(v => v.id === parseInt(watch('vacunatorio_destino')))?.nombre} {"("+usuariosAsociados.find(u => u.id === parseInt(watch('traspaso_recepcion')))?.name+" "+usuariosAsociados.find(u => u.id === parseInt(watch('traspaso_recepcion')))?.last_name+")"}</p>
+              </div>
+
+
+  {/* Boton */}
+              <div className="mb-3 text-center">
+                <button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">{"<"}
+                </button>
+                <button type="submit" disabled={!isValid} className="btn btn-primary me-2 fs-3 mt-2">
+                  Confirmar traspaso
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
-</div>
+    </div>
   );
 }
