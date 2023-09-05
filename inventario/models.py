@@ -100,10 +100,7 @@ class TraspasoVacuna(models.Model):
             self.vacuna_traspaso.stock -= self.cantidad_traspasada
             self.vacuna_traspaso.save()
 
-
             super(TraspasoVacuna, self).save(*args, **kwargs)
-            if self.vacuna_traspaso.stock == 0:
-                self.vacuna_traspaso.delete()
 
 
 class EliminacionVacuna(models.Model):

@@ -53,7 +53,7 @@ export function Stock() {
       {/* Acordeón de Bootstrap */}
       <div className="accordion" id="stockAccordion">
         {stock.map(item => (
-          item.vacunatorio === userDetails.vacunatorio?
+          item.vacunatorio === userDetails.vacunatorio?item.stock!=0?
 
           <div className="accordion-item" key={item.id}>
             <h2 className="accordion-header" id={`heading${item.id}`}>
@@ -97,7 +97,7 @@ export function Stock() {
                 <StockCard stock={item} />
               </div>
             </div>
-          </div>:<div key={item.id}></div>
+          </div>:<div key={item.id}></div>:<div key={item.id}></div>
         ))}
       </div>
     </div>
