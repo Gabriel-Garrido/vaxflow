@@ -6,6 +6,8 @@ import { useAuth } from '../AuthContext';
 import { logout } from '../api/authentication';
 
 export function Traspaso({ stock }) {
+
+  const[loading, setLoading] = useState(true)
   const navigate = useNavigate();
   const [stocks, setStocks] = useState([]);
   const [vacunatorios, setVacunatorios] = useState([]);
@@ -41,12 +43,14 @@ export function Traspaso({ stock }) {
   };
 
   useEffect(() => {
+    setLoading(true)
     console.log(stock);
     async function loadStocks() {
       try {
         const response = await getAllStock();
         console.log(response.data);
         setStocks(response.data);
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching stock:', error);
         if (
@@ -63,9 +67,11 @@ export function Traspaso({ stock }) {
     }
     
     async function loadVacunatorios() {
+      setLoading(true)
       try {
         const res = await getAllVacunatorios();
         setVacunatorios(res.data);
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching stock:', error);
         if (
@@ -93,6 +99,7 @@ export function Traspaso({ stock }) {
   const selectedStock = stocks.find(stock => stock.id === selectedVacunaId);
 
   const onSubmit = handleSubmit(async (data) => {
+    setLoading(true)
     if (isAuthenticated) {
       // Convierte las cadenas en números
       data.cantidad_traspasada = parseInt(data.cantidad_traspasada, 10);
@@ -106,11 +113,13 @@ export function Traspaso({ stock }) {
         navigate('/home');
       } else {
         console.error('Los valores de cantidad y recepción no son números válidos.');
+        setLoading(false)
       }
     } else {
       console.error('User is not authenticated');
       // Puedes manejar el feedback al usuario
       navigate("/login");
+      setLoading(false)
     }
   });
 
@@ -118,6 +127,11 @@ export function Traspaso({ stock }) {
 
 
   return (
+    <div>
+    {loading?(
+      <div> Loading
+    </div>)
+    :(
     <div>
       <form onSubmit={onSubmit} className="bg-dark p-4 rounded">
         <div id={`carousel${stock.id}`} className="carousel slide" data-bs-ride="carousel" >
@@ -142,7 +156,7 @@ export function Traspaso({ stock }) {
                   {...register('vacunatorio_destino', { required: true })}
                   className="form-select"
                   onChange={handleVacunatorioDestinoChange}
-                >
+                  >
                   <option value=""></option>
                   {vacunatorios.map((vacunatorio) => (
                     // Filtra el vacunatorio actual del usuario
@@ -173,7 +187,7 @@ export function Traspaso({ stock }) {
                   })}
                   disabled={!selectedVacunaId}
                   className="form-control"
-                />
+                  />
                 {errors.cantidad_traspasada && (
                   <p className="text-danger">
                     {errors.cantidad_traspasada.type === 'required' && 'Debe ingresar un número'}
@@ -195,7 +209,7 @@ export function Traspaso({ stock }) {
                   name="traspaso_recepcion"
                   {...register('traspaso_recepcion', { required: true })}
                   className="form-select"
-                >
+                  >
                   <option value=""></option>
                   {usuariosAsociados.map((usuario) => (
                     <option key={usuario.id} value={usuario.id}>
@@ -235,6 +249,7 @@ export function Traspaso({ stock }) {
           </div>
         </div>
       </form>
-    </div>
+    </div>)}
+  </div>
   );
 }

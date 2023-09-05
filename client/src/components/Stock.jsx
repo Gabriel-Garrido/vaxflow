@@ -11,7 +11,9 @@ export function Stock() {
   const navigate = useNavigate(); 
   const { isAuthenticated, setIsAuthenticated, user, setUser, userDetails} = useAuth();
 
+
   useEffect(() => {
+    setLoading(true)
     console.log(user);
     async function fetchStock() {
       try {
@@ -29,6 +31,7 @@ export function Stock() {
           logout();
           setIsAuthenticated(false)
           navigate('/login');
+          setLoading(false)
         } else {
           setLoading(false);
         }

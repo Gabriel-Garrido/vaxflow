@@ -16,7 +16,7 @@ export function Navigation() {
   };
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <nav className="navbar navbar-expand navbar-dark bg-dark fixed-top">
       <div className="container">
         <h1 className="navbar-brand">
           <Link to="/">VaxFlow</Link>
@@ -36,11 +36,6 @@ export function Navigation() {
           <ul className="navbar-nav ms-auto">
             {isAuthenticated ? (
               <>
-                <li className="nav-item">
-                  <Link to="/traspaso" className="nav-link">
-                    Nuevo traspaso
-                  </Link>
-                </li>
                 <li className="nav-item dropdown">
                   <a
                     className="nav-link dropdown-toggle"
