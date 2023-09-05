@@ -6,7 +6,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     vacunatorio_nombre = serializers.CharField(source='vacunatorio.nombre', read_only=True)
     class Meta:
         model = CustomUser
-        fields = ('username', 'rut', 'name', 'last_name', 'phone', 'email', 'vacunatorio', 'vacunatorio_nombre')
+        fields = ('id', 'username', 'rut', 'name', 'last_name', 'phone', 'email', 'vacunatorio', 'vacunatorio_nombre')
         
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     # Aquí puedes personalizar el serializador según tus necesidades

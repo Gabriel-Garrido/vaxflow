@@ -58,6 +58,7 @@ class TraspasoVacuna(models.Model):
     cantidad_traspasada = models.PositiveIntegerField()
     responsable_entrega = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_entrega')
     responsable_recepcion = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_recepcion')
+    is_accepted=models.BooleanField(blank=True, default=False)
 
     def clean(self):
         if self.cantidad_traspasada <= 0:

@@ -1,6 +1,10 @@
 from rest_framework import viewsets
 from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock
 from .serializer import VacunatorioSerializer, VacunaSerializer, AdministracionVacunaSerializer, TraspasoVacunaSerializer, EliminacionVacunaSerializer, VacunaStockSerializer
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from authentication.models import CustomUser
+from authentication.serializers import CustomUserSerializer
 
 class VacunatorioViewSet(viewsets.ModelViewSet):
     queryset = Vacunatorio.objects.all()
@@ -25,3 +29,11 @@ class TraspasoVacunaViewSet(viewsets.ModelViewSet):
 class EliminacionVacunaViewSet(viewsets.ModelViewSet):
     queryset = EliminacionVacuna.objects.all()
     serializer_class = EliminacionVacunaSerializer
+
+class UsuariosByVacunatorioView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        vacunatorio_id = self.kwargs.get('vacunatorio_id')
+        return CustomUser.objects.filter(vacunatorio_id=vacunatorio_id)

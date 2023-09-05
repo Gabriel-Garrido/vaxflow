@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllStock, getAllVacunatorios, createTraspaso } from '../api/inventario';
+import { getAllStock, getAllVacunatorios, createTraspaso, getAllUsuariosByVacunatorioId } from '../api/inventario';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
@@ -10,6 +10,7 @@ export function Traspaso({ stock }) {
   const [stocks, setStocks] = useState([]);
   const [vacunatorios, setVacunatorios] = useState([]);
   const { isAuthenticated, setIsAuthenticated, userDetails } = useAuth()
+  const [usuariosAsociados, setUsuariosAsociados] = useState([]);
   const {
     register,
     handleSubmit,
@@ -22,6 +23,21 @@ export function Traspaso({ stock }) {
       cantidad_traspasada: 1, // Valor predeterminado para cantidad
     },
   });
+
+  const cargarUsuariosAsociados = async (vacunatorioId) => {
+    try {
+      const response = await getAllUsuariosByVacunatorioId(vacunatorioId);
+      setUsuariosAsociados(response.data);
+      console.log(" carga usuarios", response.data);
+    } catch (error) {
+      console.error('Error fetching usuarios asociados:', error);
+    }
+  };
+
+  const handleVacunatorioDestinoChange = (event) => {
+    const selectedVacunatorioId = event.target.value;
+    cargarUsuariosAsociados(selectedVacunatorioId);
+  };
 
   useEffect(() => {
     console.log(stock);
@@ -139,6 +155,7 @@ export function Traspaso({ stock }) {
             name="vacunatorio"
             {...register('vacunatorio_destino', { required: true })}
             className="form-select"
+            onChange={handleVacunatorioDestinoChange}
           >
             <option value=""></option>
             {vacunatorios.map((vacunatorio) => (
@@ -187,13 +204,19 @@ export function Traspaso({ stock }) {
           <label htmlFor="traspaso_recepcion" className="form-label text-light">
             Responsable de recepción:
           </label>
-          <input
-            type="text"
+          <select
             id="traspaso_recepcion"
             name="traspaso_recepcion"
             {...register('traspaso_recepcion', { required: true })}
-            className="form-control"
-          />
+            className="form-select"
+          >
+            <option value=""></option>
+            {usuariosAsociados.map((usuario) => (
+              <option key={usuario.id} value={usuario.id}>
+                {usuario.name} {usuario.last_name}
+              </option>
+            ))}
+          </select>
           {errors.traspaso_recepcion && <p className="text-danger">Este campo es requerido</p>}
         </div>
 
