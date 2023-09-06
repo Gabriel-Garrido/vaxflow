@@ -37,3 +37,7 @@ class UsuariosByVacunatorioView(generics.ListAPIView):
     def get_queryset(self):
         vacunatorio_id = self.kwargs.get('vacunatorio_id')
         return CustomUser.objects.filter(vacunatorio_id=vacunatorio_id)
+    
+class GetAllTraspasosView(generics.ListAPIView):
+    queryset = TraspasoVacuna.objects.all()
+    serializer_class = TraspasoVacunaSerializer

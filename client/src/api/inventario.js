@@ -59,3 +59,13 @@ export const getAllUsuariosByVacunatorioId = (vacunatorioId) => {
         throw error; // Puedes relanzar el error para que sea manejado por quien llame a esta función
     }
 };
+
+export const getAllTraspasos = () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        return inventarioApi.get('/traspasos/', { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+        console.error('Error en getAllTraspasos:', error);
+        throw error;
+    }
+};

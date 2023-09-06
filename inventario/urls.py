@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
 from rest_framework import routers
-from .views import VacunatorioViewSet, VacunaViewSet, AdministracionVacunaViewSet, TraspasoVacunaViewSet, EliminacionVacunaViewSet, VacunaStockViewSet, UsuariosByVacunatorioView
+from .views import VacunatorioViewSet, VacunaViewSet, AdministracionVacunaViewSet, TraspasoVacunaViewSet, EliminacionVacunaViewSet, VacunaStockViewSet, UsuariosByVacunatorioView, GetAllTraspasosView
 
 router = routers.DefaultRouter()
 router.register(r'vacunatorios', VacunatorioViewSet)
@@ -16,4 +16,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('docs/', include_docs_urls(title="Inventario API")),
     path('api/usuarios/vacunatorio/<int:vacunatorio_id>/', UsuariosByVacunatorioView.as_view(), name='usuarios-por-vacunatorio'),
+    path('traspasos/', GetAllTraspasosView.as_view(), name='get-all-traspasos'),
 ]

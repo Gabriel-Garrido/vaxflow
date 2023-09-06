@@ -1,11 +1,21 @@
+import { Historial } from '../components/Historial'
 import { Stock } from '../components/Stock'
 
 export function Home() {
     
     return (
-    <div className='row'>
-        <div className='col-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3 '>
-            <Stock />
+    <div className='container row mt-4'>
+        <div className='col-lg-4 d-none d-lg-block'>
+            <div className='col-12'>
+                <Historial />
+            </div>
+
+        </div>
+        <div className='col'>
+            <div className='col-12 col-md-10 offset-md-1 '>
+                <Stock />
+            </div>
+
         </div>
     </div>
 )}
