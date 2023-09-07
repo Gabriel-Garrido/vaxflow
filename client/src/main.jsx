@@ -6,7 +6,7 @@ import { AuthProvider } from './AuthContext';
 import 'bootstrap/dist/css/bootstrap.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <div className='bg-dark'>
+  <div className='my-body'>
   <React.StrictMode>
     <AuthProvider>
       <App />

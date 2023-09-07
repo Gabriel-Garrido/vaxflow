@@ -4,12 +4,12 @@ import { Traspaso } from './Traspaso';
 
 export function StockCard({ stock }) {
   return (
-    <div key={stock.id} className="card text-white mb-3">
+    <div key={stock.id} className="card text-white">
       <div className="card-body text-start row">
         <div className='col-6'>
           {stock.fecha_descongelacion && stock.hora_descongelacion && (
-            <p className="mb-0">
-              <strong>Descongeladas el:</strong> <br /> {' '}
+            <p className="mb-0 custom-stock-card">
+              <strong><i class="fa-solid fa-temperature-arrow-up"></i> Descongelación: </strong> <br /> {' '}
               {format(new Date(stock.fecha_descongelacion), 'dd MMM yyyy', { locale: es })}{' '}
               - {format(new Date(`1970-01-01T${stock.hora_descongelacion}`), 'hh:mm')}
             </p>
@@ -17,14 +17,14 @@ export function StockCard({ stock }) {
           )}
           <br />
           {stock.fecha_caducidad_descongelacion && (
-            <p className="mb-0">
-              <strong>Caduca el:</strong> <br /> {' '}
+            <p className="mb-0 custom-stock-card">
+              <strong><i class="fa-solid fa-hourglass-half"></i> Caducidad por descong:</strong> <br /> {' '}
               {format(new Date(stock.fecha_caducidad_descongelacion), 'dd MMM yyyy', { locale: es })}{' '}
               - {format(new Date(`1970-01-01T${stock.hora_descongelacion}`), 'hh:mm')}
             </p>
           )}
           <hr />
-          <p className="mb-0">
+          <p className="mb-0 custom-stock-card">
             <strong>Caducidad fabricante:</strong>{' '}
             {format(new Date(stock.caducidad_fabricante), 'eee dd MMM yyyy', { locale: es })}
           </p>
@@ -36,23 +36,10 @@ export function StockCard({ stock }) {
       <div className="btn-group d-flex" role="group">
         {/* Botón modal traspaso */}
         <button type="button" className="btn btn-primary flex-fill" data-bs-toggle="modal" data-bs-target={`#offcanvas${stock.id}`}>
-          Traspaso
-        </button>
-      </div>
-    </div>
-    <div className="col-12 mb-2">
-      <div className="btn-group d-flex" role="group">
-        {/* Botón modal registro de administradas */}
-        <button type="button" className="btn btn-primary flex-fill" data-bs-toggle="modal" data-bs-target={`#offcanvas${stock.id}`}>
-          Registrar administradas del día
-        </button>
-      </div>
-    </div>
-    <div className="col-12 mt-4">
-      <div className="btn-group d-flex" role="group">
-        {/* Botón modal eliminación */}
-        <button type="button" className="btn btn-danger flex-fill" data-bs-toggle="modal" data-bs-target={`#offcanvas${stock.id}`}>
-          Eliminar
+          <div>
+            <div><i class="fa-regular fa-paper-plane fs-4"></i></div>
+            <div>Entregar vacunas</div>
+          </div>
         </button>
       </div>
     </div>

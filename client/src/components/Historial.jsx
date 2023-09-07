@@ -47,15 +47,15 @@ export function Historial() {
   });
 
   return (
-    <div className='card text-bg-dark mt-4'>
-      <h2 className='card-title'>Historial de Traspasos</h2>
-      <div className="mb-3 card-body">
-        <label htmlFor="tipoTraspaso" className="form-label">
+    <div className='card text-bg-dark' style={{ maxHeight: '75vh', overflowY: 'auto' }}>
+      <h2 className='card-title fs-3 mt-2'>Historial de Traspasos</h2>
+      <div className="card-body text-center">
+        <label htmlFor="tipoTraspaso" className="form-label-sm">
           Tipo de Traspaso:
         </label>
         <select
           id="tipoTraspaso"
-          className="form-select"
+          className="form-select-sm"
           value={tipoTraspaso}
           onChange={(e) => setTipoTraspaso(e.target.value)}
         >
@@ -64,58 +64,72 @@ export function Historial() {
           <option value="recibidos">Recibidos</option>
         </select>
       </div>
-      <div className="mb-3">
-        <label htmlFor="fechaInicio" className="form-label">
+      <div className="mb-1 text-center">
+        <label htmlFor="fechaInicio" className="form-label-sm ">
           Fecha de Inicio:
         </label>
         <input
           type="date"
           id="fechaInicio"
-          className="form-control"
+          className="form-control-sm"
           value={fechaInicio}
           onChange={(e) => setFechaInicio(e.target.value)}
         />
       </div>
-      <div className="mb-3">
-        <label htmlFor="fechaFin" className="form-label">
+      <div className="mb-2 text-center">
+        <label htmlFor="fechaFin" className="form-label-sm">
           Fecha de Fin:
         </label>
         <input
           type="date"
           id="fechaFin"
-          className="form-control"
+          className="form-control-sm"
           value={fechaFin}
           onChange={(e) => setFechaFin(e.target.value)}
         />
       </div>
-      <table className="table">
+      <table className="table table-dark text-center">
         <thead>
           <tr>
-            <th>Fecha de Traspaso</th>
-            <th>Tipo de Traspaso</th>
-            <th>Vacuna</th>
-            <th>Cantidad</th>
+            <th><i class="fa-solid fa-calendar-check"></i></th>
+            <th><i class="fa-solid fa-syringe"></i></th>
+            <th><i class="fa-solid fa-right-left"></i></th>
           </tr>
         </thead>
         <tbody>
-  {filteredTraspasosByFecha.map((traspaso) => (
-    <tr key={traspaso.id}>
-      <td>{new Date(traspaso.fecha_traspaso).toLocaleDateString()}</td>
-      <td>
-        {traspaso.responsable_entrega === userDetails.id
-          ? 'Enviado'
-          : 'Recibido'}
-      </td>
-      <td>
-        {traspaso.vacuna_traspaso && traspaso.vacuna_traspaso.tipo_vacuna
-          ? traspaso.vacuna_traspaso.tipo_vacuna.nombre
-          : 'N/A'}
-      </td>
-      <td>{traspaso.cantidad_traspasada}</td>
-    </tr>
-  ))}
-</tbody>
-
+          {filteredTraspasosByFecha.map((traspaso) => (
+            <tr key={traspaso.id} className='custom-tabe-style text-center'>
+              <td >
+                {new Date(traspaso.fecha_traspaso).toLocaleDateString()}
+              </td>
+              {traspaso.responsable_entrega === userDetails.id ? (<>
+                <td>
+                  <strong>
+                    {traspaso.cantidad_traspasada} dosis de <br /> {traspaso.vacuna_traspaso_nombre}
+                  </strong>{' '}
+                </td>
+                <td>
+                <i className="fa-regular fa-paper-plane fs-6"></i> <br /><strong>{traspaso.vacunatorio_destino_nombre}</strong>
+                </td>
+                </>
+              ) : (
+                <>
+                <td>
+                  <strong>
+                    {traspaso.cantidad_traspasada} dosis de <br /> {traspaso.vacuna_traspaso_nombre}
+                  </strong>{' '}
+                </td>
+                <td>
+                <i className="fa-regular fa-circle-down fs-6"></i><br /> <strong>{traspaso.vacunatorio_origen_nombre}</strong>
+                </td>
+                </>
+              )}
+              {/* <td>
+                {traspaso.vacuna_traspaso ? traspaso.vacuna_traspaso_nombre : 'N/A'}
+              </td> */}
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );

@@ -50,8 +50,8 @@ export function Stock() {
   }
   console.log(stock);
   return (
-    <div className="container mt-5 card">
-      <h3 className="text-center text-primary card-header">Stock vacunatorio {userDetails.vacunatorio_nombre}</h3>
+    <div className="container card" style={{ maxHeight: '100vh', overflowY: 'auto' }}>
+      <h3 className="text-center text-primary card-header fs-3">Stock vacunatorio {userDetails.vacunatorio_nombre}</h3>
 
       {/* Acordeón de Bootstrap */}
       <div className="accordion" id="stockAccordion">
@@ -61,31 +61,32 @@ export function Stock() {
           <div className="accordion-item" key={item.id}>
             <h2 className="accordion-header" id={`heading${item.id}`}>
               <button
-                className="accordion-button"
+                className=" btn btn-success w-100"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target={`#collapse${item.id}`}
                 aria-expanded="false"
                 aria-controls={`collapse${item.id}`}
               >
-                <div className="container row">
+                <div className="row">
                   
                   <div className='col-3'>
                     <img
                   src={`../../public/images/Pfizer bivalente.jpg`}
                   alt={item.nombre}
                   className="img-fluid"
-                  style={{ maxWidth: '100px', maxHeight: '80px' }}
+                  style={{ maxWidth: '60px', maxHeight: '50px' }}
                 />
                   </div>
                 
-                <div className='col-7'>
-                  <h1 className="mb-0"> {item.nombre_vacuna} </h1>
-                  <h5>Lote: {item.lote}</h5>
+                <div className='col-6'>
+                  <h1 className="mb-0 fs-5"> {item.nombre_vacuna} </h1>
+                  <h5 className='fs-6'>Lote: {item.lote}</h5>
                 </div>
-                <div className='col-2'>
-                  <span className="badge rounded-pill bg-primary fs-6">{item.stock} dosis</span>
+                <div className='col-1'>
+                  <span className=" fs-6 badge rounded-pill bg-primary fs-6">{item.stock} dosis</span>
                 </div>
+                <div className='col-1'></div>
                 
               </div>
               </button>

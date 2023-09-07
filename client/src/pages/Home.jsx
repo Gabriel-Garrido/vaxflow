@@ -6,7 +6,7 @@ export function Home() {
     return (
     <div className='container row mt-4'>
         <div className='col-lg-4 d-none d-lg-block'>
-            <div className='col-12'>
+            <div className=' container col-12'>
                 <Historial />
             </div>
 

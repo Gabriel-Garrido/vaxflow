@@ -27,7 +27,7 @@ function App() {
     
     <BrowserRouter>
       <Navigation />     
-      <div className="main-container mt-4 mb-4">
+      <div className="main-container" style={{ minHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}>
         <Routes>      
           {isAuthenticated ? (
             <>

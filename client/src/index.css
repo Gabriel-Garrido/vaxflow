@@ -1,16 +1,67 @@
-
-.main-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+/* Agrega estas clases para definir los tamaños de fuente personalizados */
+.custom-tabe-style {
+  font-size: 10px !important;
 }
+
+.custom-stock-card {
+  font-size: 14px !important;
+}
+
+.my-body {
+  background: #41b0b0; 
+}
+
+/* Puedes mantener tus clases .fs-* existentes, pero asegúrate de que estén definidas antes de las clases de Bootstrap */
+.fs-1, .fs-1 * {
+  font-size: 20px !important;
+}
+
+.fs-2, .fs-2 * {
+  font-size: 18px !important;
+}
+
+.fs-3, .fs-3 * {
+  font-size: 16px !important;
+}
+
+.fs-4, .fs-4 * {
+  font-size: 14px !important;
+}
+
+.fs-5, .fs-5 * {
+  font-size: 12px !important;
+}
+
+.fs-6, .fs-6 * {
+  font-size: 10px !important;
+}
+
+/* Estilo para el navbar */
+.navbar {
+  height: 8vh !important; /* Ajustamos la altura del navbar */
+}
+
+/* Estilo para el footer */
+.footer {
+  height: 10vh !important; /* Ajustamos la altura del footer */
+  background-color: #2e3240; /* Establecemos un fondo para el footer */
+  color: white; /* Color de texto para el footer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilo para el contenedor principal */
+.main-container {
+  flex-grow: 1; /* Permitimos que el contenido crezca en altura */
+  overflow-y: auto; /* Añadimos una barra de desplazamiento si es necesario */
+  padding: 10px; /* Agregamos un espacio alrededor del contenido */
+  background: #f0f0f0; /* Color de fondo del contenido principal */
+}
+
 
 .stock-item:hover {
   background: rgb(185, 184, 184);
-}
-
-.navbar {
-  background: linear-gradient(to right, #282c37, #1a1d23);
 }
 
 /* Estilo para la card de login con degradado */
