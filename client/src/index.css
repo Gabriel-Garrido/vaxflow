@@ -7,9 +7,6 @@
   font-size: 14px !important;
 }
 
-.my-body {
-  background: #41b0b0; 
-}
 
 /* Puedes mantener tus clases .fs-* existentes, pero asegúrate de que estén definidas antes de las clases de Bootstrap */
 .fs-1, .fs-1 * {
@@ -55,8 +52,10 @@
 .main-container {
   flex-grow: 1; /* Permitimos que el contenido crezca en altura */
   overflow-y: auto; /* Añadimos una barra de desplazamiento si es necesario */
-  padding: 10px; /* Agregamos un espacio alrededor del contenido */
+  padding: 0px; /* Agregamos un espacio alrededor del contenido */
   background: #140c2a; /* Color de fondo del contenido principal */
+  display: flex;
+  justify-content: center;
 }
 
 

@@ -27,7 +27,7 @@ function App() {
     
     <BrowserRouter>
       <Navigation />     
-      <div className="main-container" style={{ minHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}>
+      <div className="main-container" style={{ minHeight: 'calc(100vh - 100px)', overflowY: 'auto', width: '100%' }}>
         <Routes>      
           {isAuthenticated ? (
             <>
