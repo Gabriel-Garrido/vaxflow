@@ -50,7 +50,7 @@ export function Stock() {
   }
   console.log(stock);
   return (
-    <div className="container card" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
+    <div className="container card " style={{ maxHeight: '75vh', overflowY: 'auto' }}>
       <h3 className="text-center text-primary card-header fs-3">Stock vacunatorio {userDetails.vacunatorio_nombre}</h3>
 
       {/* Acordeón de Bootstrap */}
