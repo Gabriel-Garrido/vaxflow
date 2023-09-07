@@ -97,7 +97,7 @@ export function Historial() {
           </tr>
         </thead>
         <tbody>
-          {filteredTraspasosByFecha.map((traspaso) => (
+          {filteredTraspasosByFecha.reverse().map((traspaso) => (
             <tr key={traspaso.id} className='custom-tabe-style text-center'>
               <td >
                 {new Date(traspaso.fecha_traspaso).toLocaleDateString()}

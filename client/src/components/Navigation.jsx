@@ -16,10 +16,10 @@ export function Navigation() {
   };
 
   return (
-    <nav className="navbar navbar-expand-md bg-light sticky-top">
+    <nav className="navbar navbar-expand-md bg-dark sticky-top">
   <div className="container">
     <h1 className="navbar-brand">
-      <Link to="/"><i class="fa-solid fa-syringe"></i> VaxFlow</Link>
+      <Link className="text-decoration-none fs-2" to="/"><i class="fa-solid fa-syringe fs-1"></i> VaxFlow</Link>
     </h1>
     <button
       className="navbar-toggler"
@@ -38,13 +38,13 @@ export function Navigation() {
           <>
             <li className="nav-item dropdown">
               <a
-                className="nav-link dropdown-toggle"
+                className="nav-link dropdown-toggle text-decoration-none fs-5 text-white"
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <i className="fa-solid fa-user"></i> {user}
+                <i className="fa-solid fa-user fs-4"></i> {user}
               </a>
               <ul className="dropdown-menu">
                 <li>

@@ -56,7 +56,7 @@
   flex-grow: 1; /* Permitimos que el contenido crezca en altura */
   overflow-y: auto; /* Añadimos una barra de desplazamiento si es necesario */
   padding: 10px; /* Agregamos un espacio alrededor del contenido */
-  background: #f0f0f0; /* Color de fondo del contenido principal */
+  background: #140c2a; /* Color de fondo del contenido principal */
 }
 
 
