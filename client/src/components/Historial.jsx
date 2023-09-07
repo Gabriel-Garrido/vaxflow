@@ -7,6 +7,7 @@ export function Historial() {
   const [tipoTraspaso, setTipoTraspaso] = useState('todos');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
+  
   const { userDetails } = useAuth();
 
   useEffect(() => {
