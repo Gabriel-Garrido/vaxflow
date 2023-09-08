@@ -16,8 +16,7 @@ export function Login() {
         localStorage.setItem('user', JSON.stringify(username));
         setIsAuthenticated(true);
         setUser(username);
-        navigate('/home');
-      }
+        window.location.reload();      }
     } catch (error) {
       console.error('Login error:', error);
     }

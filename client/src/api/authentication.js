@@ -36,7 +36,9 @@ export const getUserDetails = async () => {
     if (error.response && error.response.status === 401) {
       // Token inválido o expirado, realizar alguna acción aquí, por ejemplo, logout.
       logout();
+      window.location.reload()
     }
+    window.location.reload()
     throw error;
   }
 };
@@ -44,11 +46,9 @@ export const getUserDetails = async () => {
 // Función para cerrar la sesión
 export const logout = () => {
   // Eliminar el token y otros datos relacionados con la sesión
-  localStorage.removeItem('accessToken');
-  
+  localStorage.clear()
   delete authApi.defaults.headers.common['Authorization'];
 
-  // Realizar una solicitud de logout al servidor si es necesario
   return authApi.post('logout/');
 };
 

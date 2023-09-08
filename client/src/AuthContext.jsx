@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getUserDetails } from './api/authentication';
+import { getAllStock } from './api/inventario';
 
 const AuthContext = createContext();
 
@@ -7,6 +8,8 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
+  const [stock, setStock] = useState([]);
+
 
   const fetchUserDetails = async () => {
     try {
@@ -20,6 +23,25 @@ export function AuthProvider({ children }) {
       // Maneja errores de obtención de userDetails si es necesario
     }
   };
+
+  const fetchStock = async () => {
+    try {
+      // Verificar si userDetails está disponible antes de continuar
+      if (!userDetails) {
+        return;
+      }
+
+      const response = await getAllStock();
+      setStock(response.data);
+    } catch (error) {
+      console.error('Error fetching stock:', error);
+      if (error.response && error.response.status === 401) {
+        logout();
+        setIsAuthenticated(false);
+        navigate('/login');
+      }
+    }
+  }
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -42,7 +64,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser, userDetails, setUserDetails, fetchUserDetails}}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser, userDetails, setUserDetails, fetchUserDetails, fetchStock, stock}}>
       {children}
     </AuthContext.Provider>
   );

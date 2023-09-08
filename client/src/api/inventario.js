@@ -11,6 +11,7 @@ export const getAllStock = () => {
     } catch (error) {
         // Aquí puedes manejar el error, por ejemplo, registrándolo en la consola
         console.error('Error en getAllStock:', error);
+        
         throw error; // Puedes relanzar el error para que sea manejado por quien llame a esta función
     }
 };

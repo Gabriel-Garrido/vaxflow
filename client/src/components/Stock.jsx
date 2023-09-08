@@ -6,36 +6,13 @@ import { useAuth } from '../AuthContext';
 import { StockCard } from './StockCard';
 
 export function Stock() {
-  const [stock, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated, user, userDetails } = useAuth();
+  const { isAuthenticated, setIsAuthenticated, user, userDetails, fetchStock, stock } = useAuth();
 
   useEffect(() => {
     setLoading(true);
-
-    async function fetchStock() {
-      try {
-        // Verificar si userDetails está disponible antes de continuar
-        if (!userDetails) {
-          setLoading(false);
-          return;
-        }
-
-        const response = await getAllStock();
-        setStock(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching stock:', error);
-        if (error.response && error.response.status === 401) {
-          logout();
-          setIsAuthenticated(false);
-          navigate('/login');
-        }
-        setLoading(false);
-      }
-    }
-
+    fetchStock()
   }, []);
 
   // Verificar si userDetails es nulo y manejarlo adecuadamente
