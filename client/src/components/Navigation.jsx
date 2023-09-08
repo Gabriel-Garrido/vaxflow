@@ -16,10 +16,10 @@ export function Navigation() {
   };
 
   return (
-    <nav className="navbar navbar-expand-md bg-dark sticky-top">
+    <nav className="navbar navbar-expand bg-dark sticky-top">
   <div className="container">
     <h1 className="navbar-brand">
-      <Link className="text-decoration-none fs-2" to="/"><i className="fa-solid fa-syringe fs-1"></i> VaxFlow</Link>
+      <Link className="text-decoration-none fs-2 text-success" to="/"><i class="fa-solid fa-syringe fs-1"></i> VaxFlow</Link>
     </h1>
     <button
       className="navbar-toggler"

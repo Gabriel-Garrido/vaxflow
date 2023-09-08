@@ -18,7 +18,7 @@ export function Home() {
                     <Stock />
                 </div>
             </div>
-            <div className='col-lg-2 d-none d-xl-block'>
+            <div className='col-lg-3 d-none d-xl-block'>
                 <div className='container col-12'>
                     <Reportes />
                 </div>
@@ -27,7 +27,7 @@ export function Home() {
     
         {/* Small screen */}
         <nav className='d-flex mb-0 d-xl-none'>
-            <div className="nav nav-tabs align-content-top col-12 d-xl-none text-center row" id="nav-tab" role="tablist">
+            <div className="nav nav-tabs align-content-top col-12 d-xl-none text-center" id="nav-tab" role="tablist">
                 <button className="nav-link active col-4" id="nav-historial-tab" data-bs-toggle="tab" data-bs-target="#nav-historial" type="button" role="tab" aria-controls="nav-historial" aria-selected="true"><i className="fa-solid fa-book fs-3"></i></button>
                 <button className="nav-link col-4" id="nav-stock-tab" data-bs-toggle="tab" data-bs-target="#nav-stock" type="button" role="tab" aria-controls="nav-stock" aria-selected="false"><i className="fa-solid fa-syringe fs-3"></i></button>
                 <button className="nav-link col-4" id="nav-reporte-tab" data-bs-toggle="tab" data-bs-target="#nav-reporte" type="button" role="tab" aria-controls="nav-reporte" aria-selected="false"><i className="fa-solid fa-pencil fs-3"></i></button>

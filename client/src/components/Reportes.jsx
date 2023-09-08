@@ -57,7 +57,7 @@ export function Reportes() {
 
   return (
 <div className='card text-bg-dark' style={{ height: '75vh', overflowY: 'auto' }}>  
-<h2 className='card-title fs-4 mt-2'>Reporte Diario</h2>
+<h2 className='card-title fs-4 mt-2 text-success text-center'>Reporte Diario</h2>
 <div className="card-body text-center">
   <form className="mt-3">
     <div className="mb-3">
