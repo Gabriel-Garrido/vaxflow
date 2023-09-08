@@ -92,9 +92,9 @@ export function Historial() {
       <table className="table table-dark text-center">
         <thead>
           <tr>
-            <th><i class="fa-solid fa-calendar-check"></i></th>
-            <th><i class="fa-solid fa-syringe"></i></th>
-            <th><i class="fa-solid fa-right-left"></i></th>
+            <th><i className="fa-solid fa-calendar-check"></i></th>
+            <th><i className="fa-solid fa-syringe"></i></th>
+            <th><i className="fa-solid fa-right-left"></i></th>
           </tr>
         </thead>
         <tbody>

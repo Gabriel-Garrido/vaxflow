@@ -45,10 +45,11 @@ export function Stock() {
     
   }, [navigate]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  console.log(stock);
+  if (!userDetails) {
+    return <div>Cargando detalles de usuario...</div>
+  }else{
+
+  
   return (
     <div className="container card" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
       <h3 className="text-center text-primary card-header fs-3">Stock vacunatorio {userDetails.vacunatorio_nombre}</h3>
@@ -106,4 +107,4 @@ export function Stock() {
       </div>
     </div>
   );
-}
+}}

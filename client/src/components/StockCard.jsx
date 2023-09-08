@@ -9,7 +9,7 @@ export function StockCard({ stock }) {
         <div className='col-6'>
           {stock.fecha_descongelacion && stock.hora_descongelacion && (
             <p className="mb-0 custom-stock-card">
-              <strong><i class="fa-solid fa-temperature-arrow-up"></i> Descongelación: </strong> <br /> {' '}
+              <strong><i className="fa-solid fa-temperature-arrow-up"></i> Descongelación: </strong> <br /> {' '}
               {format(new Date(stock.fecha_descongelacion), 'dd MMM yyyy', { locale: es })}{' '}
               - {format(new Date(`1970-01-01T${stock.hora_descongelacion}`), 'hh:mm')}
             </p>
@@ -18,7 +18,7 @@ export function StockCard({ stock }) {
           <br />
           {stock.fecha_caducidad_descongelacion && (
             <p className="mb-0 custom-stock-card">
-              <strong><i class="fa-solid fa-hourglass-half"></i> Caducidad por descong:</strong> <br /> {' '}
+              <strong><i className="fa-solid fa-hourglass-half"></i> Caducidad por descong:</strong> <br /> {' '}
               {format(new Date(stock.fecha_caducidad_descongelacion), 'dd MMM yyyy', { locale: es })}{' '}
               - {format(new Date(`1970-01-01T${stock.hora_descongelacion}`), 'hh:mm')}
             </p>
@@ -37,7 +37,7 @@ export function StockCard({ stock }) {
         {/* Botón modal traspaso */}
         <button type="button" className="btn btn-primary flex-fill" data-bs-toggle="modal" data-bs-target={`#offcanvas${stock.id}`}>
           <div>
-            <div><i class="fa-regular fa-paper-plane fs-4"></i></div>
+            <div><i className="fa-regular fa-paper-plane fs-4"></i></div>
             <div>Entregar vacunas</div>
           </div>
         </button>
