@@ -22,6 +22,7 @@ export function AuthProvider({ children }) {
       console.error('-----error en fetchUserDetails------')
       logout();
       setIsAuthenticated(false);
+      window.location.reload()
       // Maneja errores de obtención de userDetails si es necesario
     }
   };

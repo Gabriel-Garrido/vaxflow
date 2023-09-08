@@ -34,6 +34,7 @@ export function Traspaso({ stock }) {
       console.log(" carga usuarios", response.data);
     } catch (error) {
       console.error('Error fetching usuarios asociados:', error);
+      navigate('/login');
     }
   };
 
@@ -53,6 +54,7 @@ export function Traspaso({ stock }) {
         setLoading(false)
       } catch (error) {
         console.error('Error fetching stock:', error);
+        navigate('/login');
         if (
           error.response &&
           error.response.status === 401
