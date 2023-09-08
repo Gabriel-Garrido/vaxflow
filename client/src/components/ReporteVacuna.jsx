@@ -4,7 +4,7 @@ import { useAuth } from '../AuthContext';
 
 
 
-export function ReporteVacuna({ vacunaNombre, vacunaId }) {
+export function ReporteVacuna({ vacuna }) {
   const [eliminadas, setEliminadas] = useState(0);
   const [administradas, setAdministradas] = useState(0);
   const { userDetails } = useAuth();
@@ -16,14 +16,14 @@ export function ReporteVacuna({ vacunaNombre, vacunaId }) {
     try {
       // Guardar datos de eliminación
       await createEliminacionVacuna({
-        vacuna: vacunaId,
+        vacuna: vacuna.id,
         cantidad_eliminada: eliminadas,
         responsable_eliminacion: userDetails.id
       });
 
       // Guardar datos de administración
       await createAdministracionVacuna({
-        vacuna: vacunaId,
+        vacuna: vacuna.id,
         cantidad_administrada: administradas,
       });
 
@@ -53,7 +53,7 @@ export function ReporteVacuna({ vacunaNombre, vacunaId }) {
   return (
     <div className="card text-white">
       <div className="card-body text-start">
-        <h5 className="card-title">{vacunaNombre}</h5>
+        <h5 className="card-title">{vacuna.nombre_vacuna}</h5>
         <div className="mb-3">
           <label className="form-label">Eliminadas</label>
           <input
