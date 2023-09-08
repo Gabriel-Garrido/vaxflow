@@ -37,6 +37,7 @@ export const getUserDetails = async () => {
       // Token inválido o expirado, realizar alguna acción aquí, por ejemplo, logout.
       logout();
       window.location.reload()
+
     }
     window.location.reload()
     throw error;

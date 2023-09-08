@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getUserDetails } from './api/authentication';
+import { getUserDetails, logout } from './api/authentication';
 import { getAllStock } from './api/inventario';
 
-const AuthContext = createContext();
 
+const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -20,6 +20,8 @@ export function AuthProvider({ children }) {
       }
     } catch (error) {
       console.error('-----error en fetchUserDetails------')
+      logout();
+      setIsAuthenticated(false);
       // Maneja errores de obtención de userDetails si es necesario
     }
   };
@@ -38,7 +40,6 @@ export function AuthProvider({ children }) {
       if (error.response && error.response.status === 401) {
         logout();
         setIsAuthenticated(false);
-        navigate('/login');
       }
     }
   }
@@ -54,12 +55,14 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(true);
         fetchUserDetails(); // Obtiene userDetails al iniciar sesión
       } else {
-        localStorage.clear();
+        logout();
         setIsAuthenticated(false);
+
       }
     } else {
-      localStorage.clear();
+      logout();
       setIsAuthenticated(false);
+
     }
   }, []);
 

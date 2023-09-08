@@ -9,21 +9,18 @@ export function Historial() {
   const [fechaFin, setFechaFin] = useState('');
   const [loading, setLoading] = useState(true);
 
-
   const { userDetails } = useAuth();
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     async function fetchTraspasos() {
       try {
         const response = await getAllTraspasos();
         setTraspasos(response.data);
-        setLoading(false)
-
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         console.error('Error fetching traspasos:', error);
-        setLoading(false)
-
       }
     }
 
@@ -31,49 +28,42 @@ export function Historial() {
   }, []);
 
   const filteredTraspasos = traspasos.filter((traspaso) => {
-    setLoading(true)
-
     if (tipoTraspaso === 'todos' || tipoTraspaso === 'enviados') {
       if (traspaso.responsable_entrega === userDetails.id) {
-        setLoading(false)
         return true;
       }
     }
     if (tipoTraspaso === 'todos' || tipoTraspaso === 'recibidos') {
       if (traspaso.responsable_recepcion === userDetails.id) {
-        setLoading(false)
         return true;
       }
     }
-    setLoading(false)
     return false;
   });
 
   const filteredTraspasosByFecha = filteredTraspasos.filter((traspaso) => {
-    setLoading(true)
     if (fechaInicio && fechaFin) {
       const fechaTraspaso = new Date(traspaso.fecha_traspaso);
       const fechaInicioFilter = new Date(fechaInicio);
       const fechaFinFilter = new Date(fechaFin);
-      setLoading(false)
       return fechaTraspaso >= fechaInicioFilter && fechaTraspaso <= fechaFinFilter;
     }
-    setLoading(false)
     return true;
   });
 
   if (loading) {
     return (
-    <div>
-      <div className="text-center">
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       </div>
-    </div>)
-  }else{
-
-  return (
+    );
+  } else {
+    
+    return (
     <div className='card text-bg-dark' style={{ maxHeight: '75vh', overflowY: 'auto' }}>
       <h2 className='card-title fs-3 mt-2 text-center text-success'>Historial de Traspasos</h2>
       <div className="card-body text-center">
