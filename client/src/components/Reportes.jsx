@@ -4,7 +4,7 @@ import { useAuth } from '../AuthContext';
 import { ReporteVacuna } from './ReporteVacuna';
 
 export function Reportes() {
-  const { userDetails } = useAuth();
+  const { userDetails, fetchUserDetails } = useAuth();
   const [vacunasConStock, setVacunasConStock] = useState([]);
 
   useEffect(() => {

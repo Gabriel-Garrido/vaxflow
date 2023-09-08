@@ -4,39 +4,57 @@ const authApi = axios.create({
   baseURL: 'http://localhost:8000/auth/',
 });
 
+// Función para realizar el inicio de sesión
 export const login = async (credentials) => {
   try {
     const response = await authApi.post('token/', credentials);
     const token = response.data.access;
+
+    // Almacenar el token en el almacenamiento local
     localStorage.setItem('accessToken', token);
+
+    // Configurar el token en las cabeceras para futuras solicitudes
     authApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    return response
+
+    return response;
   } catch (error) {
+    // Manejar errores de inicio de sesión
     throw error;
   }
 };
 
+// Función para obtener los detalles del usuario
 export const getUserDetails = async () => {
   try {
     const response = await authApi.get('user/', {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
     return response.data;
   } catch (error) {
-    logout()
+    if (error.response && error.response.status === 401) {
+      // Token inválido o expirado, realizar alguna acción aquí, por ejemplo, logout.
+      logout();
+    }
+    throw error;
   }
 };
 
+// Función para cerrar la sesión
 export const logout = () => {
-  localStorage.removeItem('accessToken', 'user');
+  // Eliminar el token y otros datos relacionados con la sesión
+  localStorage.removeItem('accessToken');
+  
   delete authApi.defaults.headers.common['Authorization'];
+
+  // Realizar una solicitud de logout al servidor si es necesario
   return authApi.post('logout/');
 };
 
-export const changePassword = (newPassword) => authApi.post('change-password/', newPassword);
-
+// Función para verificar si el usuario está autenticado
 export const isAuthenticated = () => {
   return localStorage.getItem('accessToken') !== null;
 };
+
+export const changePassword = (newPassword) => authApi.post('change-password/', newPassword);
