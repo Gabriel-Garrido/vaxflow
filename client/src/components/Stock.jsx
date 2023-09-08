@@ -50,16 +50,16 @@ export function Stock() {
   }else{
 
   return (
-    <div className="container card" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
-      <h3 className="text-center text-primary card-header fs-3">Stock vacunatorio {userDetails.vacunatorio_nombre}</h3>
+    <div className="container card " style={{ maxHeight: '75vh', overflowY: 'auto' }}>
+      <h3 className="text-center text-primary card-header fs-3 text-success mb-3">Stock vacunatorio {userDetails.vacunatorio_nombre}</h3>
 
       {/* Acordeón de Bootstrap */}
       <div className="accordion" id="stockAccordion">
         {stock.map(item => (
           item.vacunatorio === userDetails.vacunatorio?item.stock!=0?
 
-          <div className="accordion-item" key={item.id}>
-            <h2 className="accordion-header" id={`heading${item.id}`}>
+          <div className="accordion-item bg-secondary" key={item.id}>
+            <h2 className="accordion-header bg-success" id={`heading${item.id}`}>
               <button
                 className=" btn btn-success w-100"
                 type="button"
@@ -97,7 +97,7 @@ export function Stock() {
               aria-labelledby={`heading${item.id}`}
               data-bs-parent="#stockAccordion"
             >
-              <div className="accordion-body">
+              <div className="accordion-body bg-secondary">
                 <StockCard stock={item} />
               </div>
             </div>

@@ -70,24 +70,22 @@ export const getAllTraspasos = () => {
     }
 };
 
-export const createAdministracionVacuna = async (administracionVacunaData) => {
-    try {
-        const token = localStorage.getItem('accessToken');
-        await inventarioApi.post('/administraciones/', administracionVacunaData, { headers: { Authorization: `Bearer ${token}` } });
-        // Puedes agregar lógica adicional después de guardar los datos si es necesario
-    } catch (error) {
-        console.error('Error en createAdministracionVacuna:', error);
-        throw error;
-    }
-};
-
 export const createEliminacionVacuna = async (eliminacionVacunaData) => {
     try {
         const token = localStorage.getItem('accessToken');
         await inventarioApi.post('/eliminaciones/', eliminacionVacunaData, { headers: { Authorization: `Bearer ${token}` } });
-        // Puedes agregar lógica adicional después de guardar los datos si es necesario
     } catch (error) {
         console.error('Error en createEliminacionVacuna:', error);
+        throw error;
+    }
+};
+
+export const createAdministracionVacuna = async (administracionVacunaData) => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        await inventarioApi.post('/administraciones/', administracionVacunaData, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+        console.error('Error en createAdministracionVacuna:', error);
         throw error;
     }
 };

@@ -7,7 +7,7 @@ export function Historial() {
   const [tipoTraspaso, setTipoTraspaso] = useState('todos');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
-  
+
   const { userDetails } = useAuth();
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export function Historial() {
 
   return (
     <div className='card text-bg-dark' style={{ maxHeight: '75vh', overflowY: 'auto' }}>
-      <h2 className='card-title fs-3 mt-2'>Historial de Traspasos</h2>
+      <h2 className='card-title fs-3 mt-2 text-center text-success'>Historial de Traspasos</h2>
       <div className="card-body text-center">
         <label htmlFor="tipoTraspaso" className="form-label-sm">
           Tipo de Traspaso:
@@ -92,9 +92,9 @@ export function Historial() {
       <table className="table table-dark text-center">
         <thead>
           <tr>
-            <th><i className="fa-solid fa-calendar-check"></i></th>
-            <th><i className="fa-solid fa-syringe"></i></th>
-            <th><i className="fa-solid fa-right-left"></i></th>
+            <th><i className="fa-solid fa-calendar-check text-success"></i></th>
+            <th><i className="fa-solid fa-syringe text-success"></i></th>
+            <th><i className="fa-solid fa-right-left text-success"></i></th>
           </tr>
         </thead>
         <tbody>
