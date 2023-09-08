@@ -8,8 +8,11 @@ export function ReporteVacuna({ vacunaNombre, vacunaId }) {
   const [eliminadas, setEliminadas] = useState(0);
   const [administradas, setAdministradas] = useState(0);
   const { userDetails } = useAuth();
+  const [loading, setLoading] = useState(true);
+
 
   const handleGuardar = async () => {
+    setLoading(true)
     try {
       // Guardar datos de eliminación
       await createEliminacionVacuna({
@@ -28,12 +31,24 @@ export function ReporteVacuna({ vacunaNombre, vacunaId }) {
       setEliminadas(0);
       setAdministradas(0);
 
-      // Puedes agregar lógica adicional después de guardar los datos si es necesario
+      setLoading(false)
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       // Maneja el error de acuerdo a tus necesidades
+      setLoading(false)
     }
   };
+
+  if (!userDetails) {
+    return (
+    <div>
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>)
+  }else{
 
   return (
     <div className="card text-white">
@@ -63,4 +78,5 @@ export function ReporteVacuna({ vacunaNombre, vacunaId }) {
       </div>
     </div>
   );
+}
 }

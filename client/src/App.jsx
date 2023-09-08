@@ -5,23 +5,44 @@ import { Navigation } from "./components/Navigation";
 import { Login } from "./pages/Login";
 import { ChangePassword } from "./pages/ChangePassword";
 import { Footer } from "./components/Footer"
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from "./AuthContext";
-import { getUserDetails } from "./api/authentication";
+import { getUserDetails, logout } from "./api/authentication";
 
 function App() {
   const { isAuthenticated, user, setUserDetails } = useAuth();
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
+    setLoading(true)
+
     console.log('is authenticated?  ' + isAuthenticated +'  user: ' + user);
     if (isAuthenticated){
     getUserDetails()
         .then((userDetailsData) => {
           console.log('Detalles del usuario recibidos:', userDetailsData);
           setUserDetails(userDetailsData);
-        })}
+          setLoading(false)
 
-  }, [isAuthenticated])
+        })} else {
+          setLoading(false)
+
+
+        }
+    setLoading(false)
+
+  }, [])
+
+  if (loading) {
+    return (
+    <div>
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>)
+  }else{
 
   return (
     
@@ -46,6 +67,7 @@ function App() {
       <Footer />
     </BrowserRouter>
   );
+}
 }
 
 export default App;

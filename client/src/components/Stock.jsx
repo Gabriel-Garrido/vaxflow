@@ -19,7 +19,6 @@ export function Stock() {
       try {
         const response = await getAllStock();
         console.log(response.data);
-        
         setStock(response.data);
         setLoading(false);
       } catch (error) {
@@ -46,7 +45,14 @@ export function Stock() {
   }, [navigate]);
 
   if (!userDetails) {
-    return <div>Cargando detalles de usuario...</div>
+    return (
+    <div>
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>)
   }else{
 
   return (

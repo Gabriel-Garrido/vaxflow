@@ -7,16 +7,23 @@ export function Historial() {
   const [tipoTraspaso, setTipoTraspaso] = useState('todos');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
+  const [loading, setLoading] = useState(true);
+
 
   const { userDetails } = useAuth();
 
   useEffect(() => {
+    setLoading(true)
     async function fetchTraspasos() {
       try {
         const response = await getAllTraspasos();
         setTraspasos(response.data);
+        setLoading(false)
+
       } catch (error) {
         console.error('Error fetching traspasos:', error);
+        setLoading(false)
+
       }
     }
 
@@ -24,28 +31,47 @@ export function Historial() {
   }, []);
 
   const filteredTraspasos = traspasos.filter((traspaso) => {
+    setLoading(true)
+
     if (tipoTraspaso === 'todos' || tipoTraspaso === 'enviados') {
       if (traspaso.responsable_entrega === userDetails.id) {
+        setLoading(false)
         return true;
       }
     }
     if (tipoTraspaso === 'todos' || tipoTraspaso === 'recibidos') {
       if (traspaso.responsable_recepcion === userDetails.id) {
+        setLoading(false)
         return true;
       }
     }
+    setLoading(false)
     return false;
   });
 
   const filteredTraspasosByFecha = filteredTraspasos.filter((traspaso) => {
+    setLoading(true)
     if (fechaInicio && fechaFin) {
       const fechaTraspaso = new Date(traspaso.fecha_traspaso);
       const fechaInicioFilter = new Date(fechaInicio);
       const fechaFinFilter = new Date(fechaFin);
+      setLoading(false)
       return fechaTraspaso >= fechaInicioFilter && fechaTraspaso <= fechaFinFilter;
     }
+    setLoading(false)
     return true;
   });
+
+  if (loading) {
+    return (
+    <div>
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>)
+  }else{
 
   return (
     <div className='card text-bg-dark' style={{ maxHeight: '75vh', overflowY: 'auto' }}>
@@ -134,4 +160,5 @@ export function Historial() {
       </table>
     </div>
   );
+}
 }

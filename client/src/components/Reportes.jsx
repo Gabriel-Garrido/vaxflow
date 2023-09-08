@@ -31,8 +31,16 @@ export function Reportes() {
   }, [userDetails]);
 
   if (!userDetails) {
-    return <div>Cargando detalles de usuario...</div>
+    return (
+    <div>
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>)
   }else{
+
   return (
     <div className="card text-dark">
       <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2>

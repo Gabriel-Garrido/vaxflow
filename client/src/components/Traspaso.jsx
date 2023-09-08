@@ -124,14 +124,19 @@ export function Traspaso({ stock }) {
   });
 
 
-
+  if (loading) {
+    return (
+    <div>
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>)
+  }else{
 
   return (
     <div>
-    {loading?(
-      <div> Loading
-    </div>)
-    :(
     <div>
       <form onSubmit={onSubmit} className="bg-dark p-4 rounded">
         <div id={`carousel${stock.id}`} className="carousel slide" data-bs-ride="carousel" >
@@ -249,7 +254,8 @@ export function Traspaso({ stock }) {
           </div>
         </div>
       </form>
-    </div>)}
+    </div>
   </div>
   );
+}
 }

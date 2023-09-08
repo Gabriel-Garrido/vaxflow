@@ -4,7 +4,7 @@ import { Stock } from '../components/Stock'
 
 
 export function Home() {
-    
+
     return (
         <div className='container mt-2'>
         <div className='row'>
