@@ -30,6 +30,9 @@ export function Reportes() {
     fetchVacunasConStock();
   }, [userDetails]);
 
+  if (!userDetails) {
+    return <div>Cargando detalles de usuario...</div>
+  }else{
   return (
     <div className="card text-dark">
       <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2>
@@ -40,4 +43,4 @@ export function Reportes() {
       </div>
     </div>
   );
-}
+}}

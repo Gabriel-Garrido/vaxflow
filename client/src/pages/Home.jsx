@@ -33,8 +33,8 @@ export function Home() {
                 <button className="nav-link col-4" id="nav-reporte-tab" data-bs-toggle="tab" data-bs-target="#nav-reporte" type="button" role="tab" aria-controls="nav-reporte" aria-selected="false"><i className="fa-solid fa-pencil fs-3"></i></button>
             </div>
         </nav>
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-historial" role="tabpanel" aria-labelledby="nav-historial-tab" tabindex="0">
+        <div className="tab-content d-xl-none" id="nav-tabContent">
+            <div className="tab-pane fade show active" id="nav-historial" role="tabpanel" aria-labelledby="nav-historial-tab" tabIndex="0">
                 <Historial />
             </div>
             <div className="tab-pane fade" id="nav-stock" role="tabpanel" aria-labelledby="nav-stock-tab" tabIndex="0">
