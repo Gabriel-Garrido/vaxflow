@@ -5,7 +5,7 @@ import { logout } from '../api/authentication';
 import { useAuth } from '../AuthContext';
 import { StockCard } from './StockCard';
 
-export function Stock() {
+export function Stock({ size }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { isAuthenticated, setIsAuthenticated, user, userDetails, fetchStock, stock } = useAuth();
@@ -73,7 +73,7 @@ export function Stock() {
                   data-bs-parent="#stockAccordion"
                 >
                   <div className="accordion-body bg-secondary">
-                    <StockCard stock={item} />
+                    <StockCard stock={item} size={size}/>
                   </div>
                 </div>
               </div>

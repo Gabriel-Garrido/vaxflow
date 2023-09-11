@@ -8,31 +8,35 @@ export function Reportes() {
   const [vacunasConStock, setVacunasConStock] = useState([]);
 
   useEffect(() => {
-
-    fetchStock()
-
+    fetchStock();
   }, [userDetails]);
+
+  useEffect(() => {
+    // Filtrar las vacunas con stock mayor o igual a 1
+    const vacunasFiltradas = stock.filter((vacuna) => vacuna.stock >= 1);
+    setVacunasConStock(vacunasFiltradas);
+  }, [stock]);
 
   if (!userDetails) {
     return (
-    <div>
-      <div className="text-center">
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       </div>
-    </div>)
-  }else{
-
-  return (
-    <div className="card text-dark">
-      <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2>
-      <div className="card-body text-center">
-        {stock.map((vacuna) => (
-          
-          <ReporteVacuna key={vacuna.id} vacuna={vacuna} />
-        ))}
+    );
+  } else {
+    return (
+      <div className="card text-dark">
+        <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2>
+        <div className="card-body text-center">
+          {vacunasConStock.map((vacuna) => (
+            <ReporteVacuna key={vacuna.id} vacuna={vacuna} />
+          ))}
+        </div>
       </div>
-    </div>
-  );
-}}
+    );
+  }
+}

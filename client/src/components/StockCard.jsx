@@ -2,9 +2,9 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Traspaso } from './Traspaso';
 
-export function StockCard({ stock }) {
+export function StockCard({ stock, size }) {
   return (
-    <div key={stock.id} className="card text-white">
+    <div key={stock.id + size} className="card text-white">
       <div className="card-body text-start row">
         <div className='col-6'>
           {stock.fecha_descongelacion && stock.hora_descongelacion && (
@@ -35,7 +35,7 @@ export function StockCard({ stock }) {
     <div className="col-12 mb-2">
       <div className="btn-group d-flex" role="group">
         {/* Botón modal traspaso */}
-        <button type="button" className="btn btn-primary flex-fill" data-bs-toggle="modal" data-bs-target={`#offcanvas${stock.id}`}>
+        <button type="button" className="btn btn-primary flex-fill" data-bs-toggle="modal" data-bs-target={`#offcanvas${stock.id + size}`}>
           <div>
             <div><i className="fa-regular fa-paper-plane fs-4"></i></div>
             <div>Entregar vacunas</div>
@@ -50,11 +50,11 @@ export function StockCard({ stock }) {
 
 
         {/* Modal */}
-        <div className="modal fade" tabIndex="-1" id={`offcanvas${stock.id}`} aria-labelledby={`offcanvas${stock.id}Label`} aria-hidden="true">
+        <div className="modal fade" tabIndex="-1" id={`offcanvas${stock.id + size}`} aria-labelledby={`offcanvas${stock.id + size}Label`} aria-hidden="true">
           <div className="modal-dialog modal-dialog-start">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id={`offcanvas${stock.id}Label`}>Offcanvas</h5>
+                <h5 className="modal-title" id={`offcanvas${stock.id + size}Label`}>Offcanvas</h5>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body text-center">

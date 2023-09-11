@@ -15,7 +15,7 @@ export function Home() {
             </div>
             <div className='col d-none d-xl-block'>
                 <div className='col-12 col-md-10 offset-md-1'>
-                    <Stock />
+                    <Stock size="lg"/>
                 </div>
             </div>
             <div className='col-lg-3 d-none d-xl-block'>
@@ -38,7 +38,7 @@ export function Home() {
                 <Historial />
             </div>
             <div className="tab-pane fade" id="nav-stock" role="tabpanel" aria-labelledby="nav-stock-tab" tabIndex="0">
-                <Stock />
+                <Stock size="sm"/>
             </div>
             <div className="tab-pane fade" id="nav-reporte" role="tabpanel" aria-labelledby="nav-reporte-tab" tabIndex="0">
                 <Reportes />
