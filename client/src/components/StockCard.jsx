@@ -59,7 +59,7 @@ export function StockCard({ stock, size }) {
               </div>
               <div className="modal-body text-center">
                 <div className="text-start">
-                  <Traspaso stock={stock} />
+                  <Traspaso stock={stock} size={size} />
                 </div>
                 <button type="button" className="btn btn-secondary mt-3 fs-3" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
               </div>

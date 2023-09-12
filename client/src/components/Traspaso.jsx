@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { logout } from '../api/authentication';
 
-export function Traspaso({ stock }) {
+export function Traspaso({ stock, size }) {
 
   const[loading, setLoading] = useState(true)
   const navigate = useNavigate();
@@ -141,7 +141,7 @@ export function Traspaso({ stock }) {
     <div>
     <div>
       <form onSubmit={onSubmit} className="bg-dark p-4 rounded">
-        <div id={`carousel${stock.id}`} className="carousel slide" data-bs-ride="carousel" >
+        <div id={`carousel${stock.id + size}`} className="carousel slide" data-bs-ride="carousel" >
           <div className="carousel-inner">
             <div className="carousel-item active">
               
@@ -227,7 +227,7 @@ export function Traspaso({ stock }) {
                 {errors.traspaso_recepcion && <p className="text-danger">Este campo es requerido</p>}
               </div>
               <div className='text-center'>
-                <button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target={`#carousel${stock.id}`}data-bs-slide="next" disabled={!isValid}>Realizar traspaso
+                <button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target={`#carousel${stock.id + size}`}data-bs-slide="next" disabled={!isValid}>Realizar traspaso
                 </button>
               </div>
             </div>
@@ -246,7 +246,7 @@ export function Traspaso({ stock }) {
 
   {/* Boton */}
               <div className="mb-3 text-center">
-                <button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target={`#carousel${stock.id}`} data-bs-slide="prev">{"<"}
+                <button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target={`#carousel${stock.id + size}`} data-bs-slide="prev">{"<"}
                 </button>
                 <button type="submit" disabled={!isValid} className="btn btn-primary me-2 fs-3 mt-2">
                   Confirmar traspaso
