@@ -12,11 +12,33 @@ export function Stock({ size }) {
 
   useEffect(() => {
     setLoading(true);
-    fetchStock()
+    fetchStock();
   }, []);
 
+  // Función para calcular los días restantes hasta la caducidad
+  const calcularDiasRestantes = (item) => {
+    const fechaCaducidad = item.fecha_caducidad_descongelacion || item.caducidad_fabricante;
+    const fechaActual = new Date();
+    const fechaCaducidadDate = new Date(fechaCaducidad);
+    const diferenciaDias = Math.ceil((fechaCaducidadDate - fechaActual) / (1000 * 60 * 60 * 24));
+    return diferenciaDias - 1;
+  };
+
+  // Función para determinar la clase de color del botón
+  const determinarClaseColor = (diasRestantes) => {
+    if (diasRestantes > 10) {
+      return 'btn-success';
+    } else if (diasRestantes >= 5 && diasRestantes <= 10) {
+      return 'btn-warning';
+    } else if (diasRestantes >= 0 && diasRestantes < 5) {
+      return 'btn-danger';
+    } else {
+      return 'btn-dark';
+    }
+  };
+
   // Verificar si userDetails es nulo y manejarlo adecuadamente
-  if (!userDetails) {
+  if (!userDetails | !stock) {
     return (
       <div>
         <div className="text-center">
@@ -37,9 +59,9 @@ export function Stock({ size }) {
           {stock.map((item) =>
             item.vacunatorio === userDetails.vacunatorio && item.stock !== 0 ? (
               <div className="accordion-item bg-secondary" key={item.id}>
-                <h2 className="accordion-header bg-success" id={`heading${item.id}`}>
+                <h2 className={`accordion-header ${determinarClaseColor(calcularDiasRestantes(item))}`} id={`heading${item.id}`}>
                   <button
-                    className=" btn btn-success w-100"
+                    className={`btn w-100 ${determinarClaseColor(calcularDiasRestantes(item))}`}
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target={`#collapse${item.id}`}
@@ -58,6 +80,12 @@ export function Stock({ size }) {
                       <div className="col-6">
                         <h1 className="mb-0 fs-5"> {item.nombre_vacuna} </h1>
                         <h5 className="fs-6">Lote: {item.lote}</h5>
+                        {item.fecha_caducidad_descongelacion && (
+                          <h6>Días restantes: {calcularDiasRestantes(item)}</h6>
+                        )}
+                        {!item.fecha_caducidad_descongelacion && (
+                          <h6>Días restantes: {calcularDiasRestantes(item)}</h6>
+                        )}
                       </div>
                       <div className="col-1">
                         <span className=" fs-6 badge rounded-pill bg-primary fs-6">{item.stock} dosis</span>
@@ -73,7 +101,7 @@ export function Stock({ size }) {
                   data-bs-parent="#stockAccordion"
                 >
                   <div className="accordion-body bg-secondary">
-                    <StockCard stock={item} size={size}/>
+                    <StockCard stock={item} size={size} />
                   </div>
                 </div>
               </div>

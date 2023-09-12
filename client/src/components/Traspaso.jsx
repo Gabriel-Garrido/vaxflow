@@ -8,6 +8,7 @@ import { logout } from '../api/authentication';
 export function Traspaso({ stock, size }) {
 
   const[loading, setLoading] = useState(true)
+  const [processing, setProcessing] = useState(false)
   const navigate = useNavigate();
   const [stocks, setStocks] = useState([]);
   const [vacunatorios, setVacunatorios] = useState([]);
@@ -28,6 +29,7 @@ export function Traspaso({ stock, size }) {
   });
 
   const cargarUsuariosAsociados = async (vacunatorioId) => {
+    
     try {
       const response = await getAllUsuariosByVacunatorioId(vacunatorioId);
       setUsuariosAsociados(response.data);
@@ -82,6 +84,7 @@ export function Traspaso({ stock, size }) {
         ) {
           logout();
           setIsAuthenticated(false)
+          setLoading(false)
           navigate('/login');
         } else {
           setLoading(false);
@@ -92,7 +95,9 @@ export function Traspaso({ stock, size }) {
     if (isAuthenticated) {
       loadStocks();
       loadVacunatorios();
+      setLoading(false)
     } else {
+      setLoading(false)
       navigate("/login")
     }
   }, [navigate]); // Asegúrate de que la autenticación sea una dependencia
@@ -101,8 +106,8 @@ export function Traspaso({ stock, size }) {
   const selectedStock = stocks.find(stock => stock.id === selectedVacunaId);
 
   const onSubmit = handleSubmit(async (data) => {
-    setLoading(true)
-    if (isAuthenticated) {
+    setProcessing(true)
+        if (isAuthenticated) {
       // Convierte las cadenas en números
       data.cantidad_traspasada = parseInt(data.cantidad_traspasada, 10);
       data.responsable_recepcion = parseInt(data.traspaso_recepcion, 10);
@@ -246,11 +251,15 @@ export function Traspaso({ stock, size }) {
 
   {/* Boton */}
               <div className="mb-3 text-center">
-                <button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target={`#carousel${stock.id + size}`} data-bs-slide="prev">{"<"}
+                {processing?(
+                <div class="spinner-border" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>):
+                (<div><button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target={`#carousel${stock.id + size}`} data-bs-slide="prev">{"<"}
                 </button>
                 <button type="submit" disabled={!isValid} className="btn btn-primary me-2 fs-3 mt-2">
                   Confirmar traspaso
-                </button>
+                </button></div>)}
               </div>
             </div>
           </div>
