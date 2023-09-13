@@ -31,21 +31,34 @@ export function StockCard({ stock, size }) {
         </div>
 
         <div className="container col-6">
-  <div className="row text-center">
-    <div className="col-12 mb-2">
-      <div className="btn-group d-flex" role="group">
-        {/* Botón modal traspaso */}
-        <button type="button" className="btn btn-primary flex-fill" data-bs-toggle="modal" data-bs-target={`#offcanvas${stock.id + size}`}>
-          <div>
-            <div><i className="fa-regular fa-paper-plane fs-4"></i></div>
-            <div>Entregar vacunas</div>
+          <div className="row text-center">
+            <div className="col-12 mb-2">
+              <div className="btn-group d-flex" role="group">
+                {/* Botón modal traspaso */}
+                <button type="button" className="btn btn-primary flex-fill" data-bs-toggle="modal" data-bs-target={`#offcanvas${stock.id + size}`}>
+                  <div>
+                    <div><i className="fa-regular fa-paper-plane fs-4"></i></div>
+                    <div>Entregar vacunas</div>
+                  </div>
+                </button>
+                {/* Botón "Reportar número de administradas" */}
+                <button type="button" className="btn btn-success flex-fill ms-2" data-bs-toggle="modal" data-bs-target={`#reportarAdministradas${stock.id + size}`}>
+                  <div>
+                    <div><i className="fa-solid fa-syringe fs-4"></i></div>
+                    <div>Reportar número de administradas</div>
+                  </div>
+                </button>
+                {/* Botón "Reportar vacunas eliminadas" */}
+                <button type="button" className="btn btn-danger flex-fill ms-2" data-bs-toggle="modal" data-bs-target={`#reportarEliminadas${stock.id + size}`}>
+                  <div>
+                    <div><i className="fa-regular fa-trash-alt fs-4"></i></div>
+                    <div>Reportar vacunas eliminadas</div>
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
-        </button>
-      </div>
-    </div>
-    
-  </div>
-</div>
+        </div>
 
 
 
@@ -65,6 +78,16 @@ export function StockCard({ stock, size }) {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Modal "Reportar número de administradas" */}
+        <div className="modal fade" tabIndex="-1" id={`reportarAdministradas${stock.id + size}`} aria-labelledby={`reportarAdministradas${stock.id + size}Label`} aria-hidden="true">
+          {/* Contenido del modal para reportar administradas */}
+        </div>
+
+        {/* Modal "Reportar vacunas eliminadas" */}
+        <div className="modal fade" tabIndex="-1" id={`reportarEliminadas${stock.id + size}`} aria-labelledby={`reportarEliminadas${stock.id + size}Label`} aria-hidden="true">
+          {/* Contenido del modal para reportar eliminadas */}
         </div>
       </div>
     </div>
