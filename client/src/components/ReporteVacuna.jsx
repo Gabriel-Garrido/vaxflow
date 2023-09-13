@@ -1,82 +1,75 @@
-import React, { useState } from 'react';
-import { createEliminacionVacuna, createAdministracionVacuna } from '../api/inventario';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
-
-
+import { getAllTraspasos } from '../api/inventario';
 
 export function ReporteVacuna({ vacuna }) {
-  const [eliminadas, setEliminadas] = useState(0);
-  const [administradas, setAdministradas] = useState(0);
   const { userDetails } = useAuth();
+  const [enviadas, setEnviadas] = useState([]);
+  const [recibidas, setRecibidas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    setLoading(true);
 
-  const handleGuardar = async () => {
-    setLoading(true)
-    try {
-      // Guardar datos de eliminación
-      await createEliminacionVacuna({
-        vacuna: vacuna.id,
-        cantidad_eliminada: eliminadas,
-        responsable_eliminacion: userDetails.id
-      });
+    async function fetchTraspasos() {
+      try {
+        const response = await getAllTraspasos();
+        const today = new Date().toISOString().split('T')[0];
+        const traspasosEnviados = response.data.filter(
+          (traspaso) =>
+            traspaso.responsable_entrega === userDetails.id &&
+            traspaso.vacuna_traspaso === vacuna.id &&
+            traspaso.fecha_traspaso.split('T')[0] === today
+        );
 
-      // Guardar datos de administración
-      await createAdministracionVacuna({
-        vacuna: vacuna.id,
-        cantidad_administrada: administradas,
-      });
+        const traspasosRecibidos = response.data.filter(
+          (traspaso) =>
+            traspaso.responsable_recepcion === userDetails.id &&
+            traspaso.vacuna_traspaso === vacuna.id &&
+            traspaso.fecha_traspaso.split('T')[0] === today
+        );
 
-      // Limpia los campos después de guardar
-      setEliminadas(0);
-      setAdministradas(0);
-
-      setLoading(false)
-    } catch (error) {
-      console.error('Error al guardar los datos:', error);
-      // Maneja el error de acuerdo a tus necesidades
-      setLoading(false)
+        setEnviadas(traspasosEnviados);
+        setRecibidas(traspasosRecibidos);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error('Error fetching traspasos:', error);
+      }
     }
-  };
 
-  if (!userDetails) {
+    fetchTraspasos();
+  }, [userDetails, vacuna.id]);
+
+  if (loading) {
     return (
-    <div>
-      <div className="text-center">
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       </div>
-    </div>)
-  }else{
-
-  return (
-    <div className="card text-white">
-      <div className="card-body text-start">
-        <h5 className="card-title">{vacuna.nombre_vacuna}</h5>
-        <div className="mb-3">
-          <label className="form-label">Eliminadas</label>
-          <input
-            type="number"
-            className="form-control"
-            value={eliminadas}
-            onChange={(e) => setEliminadas(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Administradas</label>
-          <input
-            type="number"
-            className="form-control"
-            value={administradas}
-            onChange={(e) => setAdministradas(e.target.value)}
-          />
-        </div>
-        <button type="button" className="btn btn-primary" onClick={handleGuardar}>
-          Guardar
-        </button>
+    );
+  } else {
+    return (
+      <div className="container">
+        <h5 className="card-title text-success mt-4">{vacuna.nombre_vacuna} {vacuna.lote} {vacuna.fecha_descongelacion}</h5>
+        <ul className="list-group list-group-flush">
+          {enviadas.map((traspaso) => (
+            <li key={traspaso.id} className="list-group-item">
+               Entregadas a {traspaso.vacunatorio_destino_nombre}: {traspaso.cantidad_traspasada}
+            </li>
+          ))}
+        </ul>
+        <ul className="list-group list-group-flush">
+          {recibidas.map((traspaso) => (
+            <li key={traspaso.id} className="list-group-item">
+               Recibidas de {traspaso.vacunatorio_origen_nombre}: {traspaso.cantidad_traspasada}
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
-  );
-}
+    );
+  }
 }
