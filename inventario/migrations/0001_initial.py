@@ -45,18 +45,7 @@ class Migration(migrations.Migration):
                 ('vacunatorio', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.vacunatorio')),
             ],
         ),
-        migrations.CreateModel(
-            name='TraspasoVacuna',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fecha_traspaso', models.DateTimeField(auto_now_add=True)),
-                ('cantidad_traspasada', models.PositiveIntegerField()),
-                ('responsable_entrega', models.CharField(max_length=100)),
-                ('responsable_recepcion', models.CharField(max_length=100)),
-                ('vacuna_traspaso', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='traspasos_enviados', to='inventario.vacunastock')),
-                ('vacunatorio_destino', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.vacunatorio')),
-            ],
-        ),
+        
         migrations.CreateModel(
             name='EliminacionVacuna',
             fields=[

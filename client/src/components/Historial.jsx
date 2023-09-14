@@ -29,7 +29,7 @@ export function Historial() {
 
   const filteredTraspasos = traspasos.filter((traspaso) => {
     if (tipoTraspaso === 'todos' || tipoTraspaso === 'enviados') {
-      if (traspaso.responsable_entrega === userDetails.id) {
+      if (traspaso.responsable_entrega.vacunatorio === userDetails.vacunatorio) {
         return true;
       }
     }
@@ -141,9 +141,6 @@ export function Historial() {
                 </td>
                 </>
               )}
-              {/* <td>
-                {traspaso.vacuna_traspaso ? traspaso.vacuna_traspaso_nombre : 'N/A'}
-              </td> */}
             </tr>
           ))}
         </tbody>

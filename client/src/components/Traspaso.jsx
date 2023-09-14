@@ -22,6 +22,7 @@ export function Traspaso({ stock, size }) {
   } = useForm({
     mode: 'all', // Habilitar validación en cada cambio
     defaultValues: {
+      vacunatorio_origen: userDetails.vacunatorio,
       vacuna_traspaso: stock.id,
       traspasos_entrega: userDetails.id,
       cantidad_traspasada: 1, // Valor predeterminado para cantidad

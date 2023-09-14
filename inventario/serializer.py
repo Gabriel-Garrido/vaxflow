@@ -34,6 +34,7 @@ class TraspasoVacunaSerializer(serializers.ModelSerializer):
     vacunatorio_destino_nombre = serializers.CharField(source='vacunatorio_destino.nombre', read_only=True)
     responsable_entrega_nombre = serializers.CharField(source='responsable_entrega.name', read_only=True)
     responsable_recepcion_nombre = serializers.CharField(source='responsable_recepcion.name', read_only=True)
+    
 
     class Meta:
         model = TraspasoVacuna

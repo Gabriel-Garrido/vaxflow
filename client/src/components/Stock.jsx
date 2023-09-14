@@ -37,8 +37,10 @@ export function Stock({ size }) {
       return 'btn-dark';
     }
   };
+  console.log('---userDetails---');
 
-  // Verificar si userDetails es nulo y manejarlo adecuadamente
+  console.log(userDetails);
+
   if (loading) {
     return (
       <div>

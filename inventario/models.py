@@ -58,7 +58,8 @@ from authentication.models import CustomUser
 
 class TraspasoVacuna(models.Model):
     vacuna_traspaso = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='traspasos_enviados')
-    vacunatorio_destino = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE) 
+    vacunatorio_origen = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE, related_name='traspasos_origen')
+    vacunatorio_destino = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE, related_name='traspasos_destino')
     fecha_traspaso = models.DateTimeField(auto_now_add=True)
     cantidad_traspasada = models.PositiveIntegerField()
     responsable_entrega = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_entrega')
@@ -108,6 +109,8 @@ class EliminacionVacuna(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     cantidad_eliminada = models.PositiveIntegerField()
     responsable_eliminacion = models.CharField(max_length=100)
+    vacunatorio_eliminacion = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE)
+
 
     def save(self, *args, **kwargs):
         if self.cantidad_eliminada > self.vacuna.stock:

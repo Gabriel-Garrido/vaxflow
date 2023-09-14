@@ -82,7 +82,20 @@ export function StockCard({ stock, size }) {
 
         {/* Modal "Reportar número de administradas" */}
         <div className="modal fade" tabIndex="-1" id={`reportarAdministradas${stock.id + size}`} aria-labelledby={`reportarAdministradas${stock.id + size}Label`} aria-hidden="true">
-          {/* Contenido del modal para reportar administradas */}
+        <div className="modal-dialog modal-dialog-start">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id={`reportarAdministradas${stock.id + size}Label`}>Reportar número de administradas</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body text-center">
+                <div className="text-start">
+                  <Traspaso stock={stock} size={size} />
+                </div>
+                <button type="button" className="btn btn-secondary mt-3 fs-3" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Modal "Reportar vacunas eliminadas" */}
