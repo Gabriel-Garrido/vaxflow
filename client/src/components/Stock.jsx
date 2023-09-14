@@ -50,8 +50,8 @@ export function Stock({ size }) {
     );
   } else {
     return (
-      <div className="container card" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
-        <h3 className="text-center text-primary card-header fs-3 text-success mb-3">
+      <div className="container card " style={{ maxHeight: '75vh', overflowY: 'auto' }}>
+        <h3 className="card-title fs-3 mt-2 text-success text-center">
           Stock vacunatorio {userDetails.vacunatorio_nombre}
         </h3>
 
@@ -81,13 +81,13 @@ export function Stock({ size }) {
                         <h1 className="mb-0 fs-5"> {item.nombre_vacuna} </h1>
                         <h5 className="fs-6">Lote: {item.lote}</h5>
                         {item.fecha_caducidad_descongelacion && (
-                          <h6>Días restantes: {calcularDiasRestantes(item)}</h6>
+                          <h6>Vigencia: {calcularDiasRestantes(item)} dias</h6>
                         )}
                         {!item.fecha_caducidad_descongelacion && (
-                          <h6>Días restantes: {calcularDiasRestantes(item)}</h6>
+                          <h6>Días restantes: {calcularDiasRestantes(item)} dias</h6>
                         )}
                       </div>
-                      <div className="col-1">
+                      <div className="col-1 ">
                         <span className=" fs-6 badge rounded-pill bg-primary fs-6">{item.stock} dosis</span>
                       </div>
                       <div className="col-1"></div>

@@ -65,7 +65,7 @@ export function Historial() {
     
     return (
     <div className='card text-bg-dark' style={{ maxHeight: '75vh', overflowY: 'auto' }}>
-      <h2 className='card-title fs-3 mt-2 text-center text-success'>Historial de Traspasos</h2>
+      <h2 className='card-title fs-3 mt-2 text-success text-center'>Historial de Traspasos</h2>
       <div className="card-body text-center">
         <label htmlFor="tipoTraspaso" className="form-label-sm">
           Tipo de Traspaso:
