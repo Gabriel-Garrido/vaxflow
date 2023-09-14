@@ -13,6 +13,7 @@ export function Stock({ size }) {
   useEffect(() => {
     setLoading(true);
     fetchStock();
+    setLoading(false)
   }, []);
 
   // Función para calcular los días restantes hasta la caducidad
@@ -38,7 +39,7 @@ export function Stock({ size }) {
   };
 
   // Verificar si userDetails es nulo y manejarlo adecuadamente
-  if (!userDetails | !stock) {
+  if (loading) {
     return (
       <div>
         <div className="text-center">

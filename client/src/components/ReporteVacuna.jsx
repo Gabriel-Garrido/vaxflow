@@ -12,12 +12,17 @@ export function ReporteVacuna({ vacuna, traspasos }) {
     setLoading(true);
     getEnviadas()
     getRecibidas()
+    console.log("---vacuna---");
+    console.log(vacuna);
+
    setLoading(false)
   }, [traspasos]);
 
 function getEnviadas() {
   const envios = traspasos.filter((traspaso) => {
-    return traspaso.vacunatorio_destino != userDetails.vacunatorio
+    console.log("---traspaso---");
+    console.log(traspaso);
+    return traspaso.vacunatorio_destino != userDetails.vacunatorio && vacuna.id == traspaso.vacuna_traspaso
   })
   console.log('---envidas hoy---')
   console.log(envios);
@@ -26,7 +31,7 @@ function getEnviadas() {
 
 function getRecibidas() {
   const recepciones = traspasos.filter((traspaso) => {
-    return traspaso.vacunatorio_destino == userDetails.vacunatorio
+    return traspaso.vacunatorio_destino == userDetails.vacunatorio && vacuna.id == traspaso.vacuna_traspaso
   })
   console.log('---recibidas hoy---')
   console.log(recepciones);
@@ -49,6 +54,7 @@ function getRecibidas() {
         <h5 className="card-title text-success fs-6">{vacuna.nombre_vacuna} {vacuna.lote}</h5>
         <ul className="list-group list-group-flush text-start">
           {enviadas.map((traspaso) => (
+            
             <li key={traspaso.id} className="list-group-item">
               <i className="fa-regular fa-paper-plane fs-6"></i> Entregadas a {traspaso.vacunatorio_destino_nombre}: {traspaso.cantidad_traspasada}
             </li>
