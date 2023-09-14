@@ -51,11 +51,11 @@ export function Stock({ size }) {
   } else {
     return (
       <div className="container card " style={{ maxHeight: '75vh', overflowY: 'auto' }}>
-        <h3 className="card-title fs-3 mt-2 text-success text-center">
+        <h3 className="card-title fs-4 mt-2 text-success text-center">
           Stock vacunatorio {userDetails.vacunatorio_nombre}
         </h3>
 
-        <div className="accordion" id="stockAccordion">
+        <div className="accordion fs-5" id="stockAccordion">
           {stock.map((item) =>
             item.vacunatorio === userDetails.vacunatorio && item.stock !== 0 ? (
               <div className="accordion-item bg-secondary" key={item.id}>

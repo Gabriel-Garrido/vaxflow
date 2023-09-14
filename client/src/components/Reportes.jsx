@@ -52,7 +52,7 @@ export function Reportes() {
   } else {
     return (
       <div className="card text-dark">
-        <h2 className="card-title fs-3 mt-2 text-success text-center">Reporte Diario</h2> <hr />
+        <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2> <hr />
         <div className="card-body text-center" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {vacunasConStock.map((vacuna) => (
             <ReporteVacuna key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} />

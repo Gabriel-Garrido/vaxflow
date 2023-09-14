@@ -10,27 +10,27 @@
 
 /* Puedes mantener tus clases .fs-* existentes, pero asegúrate de que estén definidas antes de las clases de Bootstrap */
 .fs-1, .fs-1 * {
-  font-size: 20px !important;
-}
-
-.fs-2, .fs-2 * {
   font-size: 18px !important;
 }
 
-.fs-3, .fs-3 * {
+.fs-2, .fs-2 * {
   font-size: 16px !important;
 }
 
-.fs-4, .fs-4 * {
+.fs-3, .fs-3 * {
   font-size: 14px !important;
 }
 
-.fs-5, .fs-5 * {
+.fs-4, .fs-4 * {
   font-size: 12px !important;
 }
 
-.fs-6, .fs-6 * {
+.fs-5, .fs-5 * {
   font-size: 10px !important;
+}
+
+.fs-6, .fs-6 * {
+  font-size: 8px !important;
 }
 
 /* Estilo para el navbar */
