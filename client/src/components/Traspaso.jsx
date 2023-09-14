@@ -33,7 +33,6 @@ export function Traspaso({ stock, size }) {
     try {
       const response = await getAllUsuariosByVacunatorioId(vacunatorioId);
       setUsuariosAsociados(response.data);
-      console.log(" carga usuarios", response.data);
     } catch (error) {
       console.error('Error fetching usuarios asociados:', error);
       navigate('/login');
@@ -47,11 +46,9 @@ export function Traspaso({ stock, size }) {
 
   useEffect(() => {
     setLoading(true)
-    console.log(stock);
     async function loadStocks() {
       try {
         const response = await getAllStock();
-        console.log(response.data);
         setStocks(response.data);
         setLoading(false)
       } catch (error) {

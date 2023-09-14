@@ -16,18 +16,28 @@ export function Reportes() {
   useEffect(() => {
     const vacunasFiltradas = stock.filter((vacuna) => vacuna.vacunatorio==userDetails.vacunatorio);
     setVacunasConStock(vacunasFiltradas);
+    console.log('----vacunasFiltradas----');
+    console.log(vacunasFiltradas);
   }, [stock]);
 
   const fetchTodaysTraspasos = async () => {
     try {
       const response = await getAllTraspasos();
-      const today = new Date().toISOString().split('T')[0];
-      const todaysTraspasos = response.data.filter((traspaso) => traspaso.fecha_traspaso.split('T')[0] === today);
+      const today = new Date().toDateString(); // Obtiene la fecha de hoy en formato de cadena
+      console.log('------traspasos------');
+      console.log(response.data);
+      const todaysTraspasos = response.data.filter((traspaso) => {
+        const traspasoDate = new Date(traspaso.fecha_traspaso).toDateString();
+        return traspasoDate === today;
+      });
+      console.log('------hoy------');
+      console.log(todaysTraspasos);
       setTodaysTraspasos(todaysTraspasos);
     } catch (error) {
       console.error('Error fetching traspasos:', error);
     }
   };
+  
 
   if (!userDetails) {
     return (
@@ -45,7 +55,7 @@ export function Reportes() {
         <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2>
         <div className="card-body text-center">
           {vacunasConStock.map((vacuna) => (
-            <ReporteVacuna key={vacuna.id} vacuna={vacuna} todaysTraspasos={todaysTraspasos} stock={stock} />
+            <ReporteVacuna key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} stock={stock} userDetails={userDetails} />
           ))}
         </div>
       </div>

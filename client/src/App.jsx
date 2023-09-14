@@ -20,7 +20,7 @@ function App() {
     if (isAuthenticated){
     getUserDetails()
         .then((userDetailsData) => {
-          console.log('Detalles del usuario recibidos:', userDetailsData);
+          console.log('-----------UserDetails---------:', userDetailsData);
           setUserDetails(userDetailsData);
           setLoading(false)
 

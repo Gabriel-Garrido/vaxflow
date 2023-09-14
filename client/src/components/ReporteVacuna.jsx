@@ -2,44 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
 import { getAllTraspasos } from '../api/inventario';
 
-export function ReporteVacuna({ vacuna }) {
-  const { userDetails } = useAuth();
+export function ReporteVacuna({ vacuna, traspasos }) {
+  const { userDetails, stock } = useAuth();
   const [enviadas, setEnviadas] = useState([]);
   const [recibidas, setRecibidas] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
+    getEnviadas()
+    getRecibidas()
+   setLoading(false)
+  }, [traspasos]);
 
-    async function fetchTraspasos() {
-      try {
-        const response = await getAllTraspasos();
-        const today = new Date().toISOString().split('T')[0];
-        const traspasosEnviados = response.data.filter(
-          (traspaso) =>
-            traspaso.responsable_entrega === userDetails.id &&
-            traspaso.vacuna_traspaso === vacuna.id &&
-            traspaso.fecha_traspaso.split('T')[0] === today
-        );
+function getEnviadas() {
+  const envios = traspasos.filter((traspaso) => {
+    return traspaso.vacunatorio_destino != userDetails.vacunatorio
+  })
+  console.log('---envidas hoy---')
+  console.log(envios);
+  setEnviadas(envios)
+}
 
-        const traspasosRecibidos = response.data.filter(
-          (traspaso) =>
-            traspaso.responsable_recepcion === userDetails.id &&
-            traspaso.vacuna_traspaso === vacuna.id &&
-            traspaso.fecha_traspaso.split('T')[0] === today
-        );
-
-        setEnviadas(traspasosEnviados);
-        setRecibidas(traspasosRecibidos);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        console.error('Error fetching traspasos:', error);
-      }
-    }
-
-    fetchTraspasos();
-  }, [userDetails, vacuna.id]);
+function getRecibidas() {
+  const recepciones = traspasos.filter((traspaso) => {
+    return traspaso.vacunatorio_destino == userDetails.vacunatorio
+  })
+  console.log('---recibidas hoy---')
+  console.log(recepciones);
+  setRecibidas(recepciones)
+}
 
   if (loading) {
     return (

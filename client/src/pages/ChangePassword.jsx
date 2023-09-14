@@ -7,7 +7,6 @@ export function ChangePassword() {
   const handleChangePassword = async () => {
     try {
       await changePassword({ new_password: newPassword });
-      console.log('Password changed successfully');
       // Puedes manejar el feedback al usuario o redirigir después de cambiar la contraseña
     } catch (error) {
       console.error('Change password error:', error);
