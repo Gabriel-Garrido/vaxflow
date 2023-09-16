@@ -39,7 +39,7 @@ export function ReporteVacuna({ vacuna, traspasos, userDetails, eliminaciones })
         const today = new Date().toDateString();
         const eliminacionesHoy = eliminaciones.filter((eliminacion) => {
           eliminacion
-          return new Date(eliminacion.fecha).toDateString() === today;
+          return new Date(eliminacion.fecha).toDateString() === today && vacuna.id === eliminacion.vacuna;
         });
         setEliminadas(eliminacionesHoy);
         setLoading(false); 

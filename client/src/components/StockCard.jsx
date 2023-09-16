@@ -75,11 +75,11 @@ export function StockCard({ stock, size }) {
         <div className="container col-6">
           <div className="row text-center">
             <div className="col-12 mb-2">
-              <div className="btn-group d-flex" role="group">
-                {/* Botón modal traspaso */}
+              <div className="row ">
+                {/* Botón "Entrgar vacunas" */}
                 <button
                   type="button"
-                  className="btn btn-primary flex-fill"
+                  className="btn btn-primary flex-fill col-12 mb-1"
                   data-bs-toggle="modal"
                   data-bs-target={`#offcanvas${stock.id + size}`}
                 >
@@ -93,7 +93,7 @@ export function StockCard({ stock, size }) {
                 {/* Botón "Reportar número de administradas" */}
                 <button
                   type="button"
-                  className="btn btn-success flex-fill ms-2"
+                  className="btn btn-success col-12 mb-1"
                   data-bs-toggle="modal"
                   data-bs-target={`#reportarAdministradas${stock.id + size}`}
                 >
@@ -107,7 +107,7 @@ export function StockCard({ stock, size }) {
                 {/* Botón "Reportar vacunas eliminadas" */}
                 <button
                   type="button"
-                  className="btn btn-danger flex-fill ms-2"
+                  className="btn btn-danger col-12"
                   data-bs-toggle="modal"
                   data-bs-target={`#reportarEliminadas${stock.id + size}`}
                 >
@@ -123,7 +123,7 @@ export function StockCard({ stock, size }) {
           </div>
         </div>
 
-        {/* Modal */}
+        {/* Modal Traspaso*/}
         <div
           className="modal fade"
           tabIndex="-1"
