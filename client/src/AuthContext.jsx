@@ -52,8 +52,8 @@ export function AuthProvider({ children }) {
     if (savedUser && savedToken) {
       const parsedUser = JSON.parse(savedUser);
       if (parsedUser && savedToken.trim() !== '') {
-        setUser(parsedUser);
         setIsAuthenticated(true);
+        setUser(parsedUser);
         fetchUserDetails(); // Obtiene userDetails al iniciar sesión
       } else {
         logout();

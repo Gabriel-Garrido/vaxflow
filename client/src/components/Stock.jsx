@@ -5,10 +5,10 @@ import { logout } from '../api/authentication';
 import { useAuth } from '../AuthContext';
 import { StockCard } from './StockCard';
 
-export function Stock({ size }) {
+export function Stock({ size, userDetails }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated, user, userDetails, fetchStock, stock } = useAuth();
+  const { isAuthenticated, setIsAuthenticated, user, fetchStock, stock } = useAuth();
 
   useEffect(() => {
     setLoading(true);

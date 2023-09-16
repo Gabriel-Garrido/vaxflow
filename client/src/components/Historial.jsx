@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { getAllTraspasos } from '../api/inventario';
 import { useAuth } from '../AuthContext';
 
-export function Historial() {
+export function Historial({userDetails}) {
   const [traspasos, setTraspasos] = useState([]);
   const [tipoTraspaso, setTipoTraspaso] = useState('todos');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const { userDetails } = useAuth();
 
   useEffect(() => {
     setLoading(true);

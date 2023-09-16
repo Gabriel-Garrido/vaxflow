@@ -1,26 +1,39 @@
+import { useAuth } from '../AuthContext';
 import { Historial } from '../components/Historial'
 import { Reportes } from '../components/Reportes'
 import { Stock } from '../components/Stock'
 
-
 export function Home() {
+    const { isAuthenticated, setIsAuthenticated, user, userDetails, fetchStock, stock } = useAuth();
 
+
+    if (!userDetails) {
+        return (
+          <div>
+            <div className="text-center">
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+        );
+      } else {
     return (
         <div className='container mt-2'>
         <div className='row'>
             <div className='col-lg-4 d-none d-xl-block'>
                 <div className='container col-12'>
-                    <Historial />
+                    <Historial userDetails={userDetails} />
                 </div>
             </div>
             <div className='col d-none d-xl-block'>
                 <div className='col-12 col-md-10 offset-md-1'>
-                    <Stock size="lg"/>
+                    <Stock userDetails={userDetails} size="lg"/>
                 </div>
             </div>
             <div className='col-lg-3 d-none d-xl-block'>
                 <div className='container col-12'>
-                    <Reportes />
+                    <Reportes userDetails={userDetails} />
                 </div>
             </div>
         </div>
@@ -35,15 +48,15 @@ export function Home() {
         </nav>
         <div className="tab-content d-xl-none" id="nav-tabContent">
             <div className="tab-pane fade show active" id="nav-historial" role="tabpanel" aria-labelledby="nav-historial-tab" tabIndex="0">
-                <Historial />
+                <Historial userDetails={userDetails} />
             </div>
             <div className="tab-pane fade" id="nav-stock" role="tabpanel" aria-labelledby="nav-stock-tab" tabIndex="0">
-                <Stock size="sm"/>
+                <Stock userDetails={userDetails} size="sm"/>
             </div>
             <div className="tab-pane fade" id="nav-reporte" role="tabpanel" aria-labelledby="nav-reporte-tab" tabIndex="0">
-                <Reportes />
+                <Reportes userDetails={userDetails} />
             </div>
         </div>
         {/* //Small screen */}
     </div>
-)}
+)}}

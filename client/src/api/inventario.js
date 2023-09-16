@@ -90,3 +90,13 @@ export const createAdministracionVacuna = async (administracionVacunaData) => {
         throw error;
     }
 };
+
+export const getAllEliminaciones = async () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        return inventarioApi.get('/eliminaciones/', { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+        console.error('Error en getAllEliminaciones:', error);
+        throw error;
+    }
+};

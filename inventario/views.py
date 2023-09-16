@@ -5,6 +5,8 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from authentication.models import CustomUser
 from authentication.serializers import CustomUserSerializer
+from rest_framework.response import Response
+from rest_framework import status
 
 class VacunatorioViewSet(viewsets.ModelViewSet):
     queryset = Vacunatorio.objects.all()
@@ -41,3 +43,15 @@ class UsuariosByVacunatorioView(generics.ListAPIView):
 class GetAllTraspasosView(generics.ListAPIView):
     queryset = TraspasoVacuna.objects.all()
     serializer_class = TraspasoVacunaSerializer
+
+class getAllEliminacionesView(generics.ListAPIView):
+    queryset = EliminacionVacuna.objects.all()
+    serializer_class = EliminacionVacunaSerializer
+
+    def list(self, request, *args, **kwargs):
+        try:
+            queryset = self.filter_queryset(self.get_queryset())
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

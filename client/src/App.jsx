@@ -10,28 +10,21 @@ import { AuthProvider, useAuth } from "./AuthContext";
 import { getUserDetails, logout } from "./api/authentication";
 
 function App() {
-  const { isAuthenticated, user, setUserDetails } = useAuth();
+  const { isAuthenticated, user, setUserDetails, fetchUserDetails } = useAuth();
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     setLoading(true)
-
     console.log('is authenticated?  ' + isAuthenticated +'  user: ' + user);
     if (isAuthenticated){
-    getUserDetails()
-        .then((userDetailsData) => {
-          console.log('-----------UserDetails---------:', userDetailsData);
-          setUserDetails(userDetailsData);
+      fetchUserDetails()
+      setLoading(false)
+      } else {
           setLoading(false)
-
-        })} else {
-          setLoading(false)
-
-
         }
     setLoading(false)
 
-  }, [])
+  }, [isAuthenticated])
 
   if (loading) {
     return (

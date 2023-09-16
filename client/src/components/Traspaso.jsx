@@ -250,8 +250,8 @@ export function Traspaso({ stock, size }) {
   {/* Boton */}
               <div className="mb-3 text-center">
                 {processing?(
-                <div class="spinner-border" role="status">
-                  <span class="visually-hidden">Loading...</span>
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
                 </div>):
                 (<div><button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target={`#carousel${stock.id + size}`} data-bs-slide="prev">{"<"}
                 </button>
