@@ -28,12 +28,12 @@ export function Historial({userDetails}) {
 
   const filteredTraspasos = traspasos.filter((traspaso) => {
     if (tipoTraspaso === 'todos' || tipoTraspaso === 'enviados') {
-      if (traspaso.responsable_entrega.vacunatorio === userDetails.vacunatorio) {
+      if (traspaso.vacunatorio_origen === userDetails.vacunatorio) {
         return true;
       }
     }
     if (tipoTraspaso === 'todos' || tipoTraspaso === 'recibidos') {
-      if (traspaso.responsable_recepcion === userDetails.id) {
+      if (traspaso.vacunatorio_destino === userDetails.vacunatorio) {
         return true;
       }
     }

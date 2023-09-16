@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getAllEliminaciones, getAllStock, getAllTraspasos } from '../api/inventario';
+import { getAllEliminaciones, getAllTraspasos } from '../api/inventario';
 import { useAuth } from '../AuthContext';
 import { ReporteVacuna } from './ReporteVacuna';
 
 export function Reportes({userDetails}) {
-  const { fetchUserDetails, fetchStock, stock } = useAuth();
+  const { fetchStock, stock } = useAuth();
   const [todaysTraspasos, setTodaysTraspasos] = useState([]);
   const [vacunasConStock, setVacunasConStock] = useState([])
   const [eliminaciones, setEliminaciones] = useState([])

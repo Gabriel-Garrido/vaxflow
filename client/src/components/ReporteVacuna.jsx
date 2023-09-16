@@ -19,17 +19,28 @@ export function ReporteVacuna({ vacuna, traspasos, userDetails, eliminaciones })
   function getEnviadas() {
     if (traspasos) {
       const envios = traspasos.filter((traspaso) => {
-        return traspaso.vacunatorio_destino !== userDetails.vacunatorio && vacuna.id === traspaso.vacuna_traspaso;
+        return traspaso.vacunatorio_origen === userDetails.vacunatorio && vacuna.id === traspaso.vacuna_traspaso;
       });
+      console.log('---enviadas---')
+      console.log(envios);;
       setEnviadas(envios);
     }
   }
 
   function getRecibidas() {
+    console.log('------Get Recibidas --------------------------------------------------------------------------' + vacuna.nombre_vacuna);
     if (traspasos) {
       const recepciones = traspasos.filter((traspaso) => {
-        return traspaso.vacunatorio_destino === userDetails.vacunatorio && vacuna.id === traspaso.vacuna_traspaso;
+        if (traspaso.vacunatorio_destino === userDetails.vacunatorio) {
+          console.log('vacuna => ')
+          console.log(vacuna)
+          console.log('traspaso =>')
+          console.log(traspaso);
+        return 
+        }
       });
+      console.log('---recibidas---')
+      console.log(recepciones);;
       setRecibidas(recepciones);
     }
   }
@@ -62,7 +73,7 @@ export function ReporteVacuna({ vacuna, traspasos, userDetails, eliminaciones })
         {enviadas.length > 0 && (
           <ul className="list-group list-group-flush text-start">
             {enviadas.map((traspaso) => (
-              <li key={traspaso.id} className="list-group-item">
+              <li key={`enviada${traspaso.id}`} className="list-group-item">
                 <i className="fa-regular fa-paper-plane fs-6"></i> Entregadas a {traspaso.vacunatorio_destino_nombre}: {traspaso.cantidad_traspasada}
               </li>
             ))}
@@ -71,7 +82,7 @@ export function ReporteVacuna({ vacuna, traspasos, userDetails, eliminaciones })
         {recibidas.length > 0 && (
           <ul className="list-group list-group-flush text-start">
             {recibidas.map((traspaso) => (
-              <li key={traspaso.id} className="list-group-item">
+              <li key={`recibida${traspaso.id}`} className="list-group-item">
                 <i className="fa-regular fa-circle-down fs-6"></i> Recibidas de {traspaso.vacunatorio_origen_nombre}: {traspaso.cantidad_traspasada}
               </li>
             ))}
