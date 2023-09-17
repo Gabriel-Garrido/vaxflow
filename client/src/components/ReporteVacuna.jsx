@@ -91,60 +91,62 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     );
   } else {
     return (
-      <div className="container custom-tabe-style">
-        <h5 className="card-title text-success fs-6">
+      <div className="container card custom-tabe-style mt-2">
+        <ul className="list-group  list-group-flush text-start">
+
+        <h5 className="card-title text-success fs-6 mt-2">
           {vacuna.nombre_vacuna} {vacuna.lote}
         </h5>
-        <ul className="list-group list-group-flush text-start">
+        <>
           <li key={`inicial${vacuna.id}`} className="list-group-item">
             <strong>Stock Inicial:</strong> {stockInicial}
           </li>
-        </ul>
+        </>
         {recibidas.length > 0 && (
-          <ul className="list-group list-group-flush text-start">
+          <>
             {recibidas.map((traspaso) => (
               <li key={`recibida${traspaso.id}`} className="list-group-item">
                 <i className="fa-regular fa-circle-down fs-6"></i> Recibidas de{' '}
                 {traspaso.vacunatorio_origen_nombre}: {traspaso.cantidad_traspasada}
               </li>
             ))}
-          </ul>
+          </>
         )}
         {enviadas.length > 0 && (
-          <ul className="list-group list-group-flush text-start">
+          <>
             {enviadas.map((traspaso) => (
               <li key={`enviada${traspaso.id}`} className="list-group-item">
                 <i className="fa-regular fa-paper-plane fs-6"></i> Entregadas a{' '}
                 {traspaso.vacunatorio_destino_nombre}: {traspaso.cantidad_traspasada}
               </li>
             ))}
-          </ul>
+          </>
         )}
         {administradas.length > 0 && (
-          <ul className="list-group list-group-flush text-start">
+          <>
             {administradas.map((administracion) => (
               <li key={administracion.id} className="list-group-item">
                 <i className="fa-solid fa-syringe fs-6"></i> Administradas:{' '}
                 {administracion.cantidad_administrada}
               </li>
             ))}
-          </ul>
+          </>
         )}
         {eliminadas.length > 0 && (
-          <ul className="list-group list-group-flush text-start">
+          <>
             {eliminadas.map((eliminacion) => (
               <li key={eliminacion.id} className="list-group-item">
                 <i className="fa-regular fa-trash-alt fs-6"></i> Eliminadas:{' '}
                 {eliminacion.cantidad_eliminada}
               </li>
             ))}
-          </ul>
+          </>
         )}
-        
-        <ul className="list-group list-group-flush text-start mb-2">
+        <>
           <li key={`final${vacuna.id}`} className="list-group-item">
           <strong>Stock Final:</strong> {vacuna.stock}
           </li>
+        </>
         </ul>
       </div>
     );

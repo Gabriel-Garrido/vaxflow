@@ -66,7 +66,8 @@ export function Historial({ userDetails }) {
         <h2 className='card-title fs-4 mt-2 text-success text-center'>Historial de Traspasos</h2>
         <div className="card-body">
           <div className="row justify-content-center mb-1">
-            <div className="col-md-4 col-sm-12 text-center">
+
+            <div className="col-xxl-4 col-sm-12 text-center">
               <label htmlFor="tipoTraspaso" className="form-label-sm">Traspaso:</label>
               <select
                 id="tipoTraspaso"
@@ -79,7 +80,8 @@ export function Historial({ userDetails }) {
                 <option value="recibidos">Recibidos</option>
               </select>
             </div>
-            <div className="col-md-4 col-sm-6 text-center">
+
+            <div className="col-xxl-4 col-sm-6 text-center">
               <label htmlFor="fechaInicio" className="form-label-sm">Desde:</label>
               <input
                 type="date"
@@ -89,7 +91,8 @@ export function Historial({ userDetails }) {
                 onChange={(e) => setFechaInicio(e.target.value)}
               />
             </div>
-            <div className="col-md-4 col-sm-6 text-center">
+
+            <div className="col-xxl-4 col-sm-6 text-center">
               <label htmlFor="fechaFin" className="form-label-sm">Hasta:</label>
               <input
                 type="date"
@@ -99,6 +102,7 @@ export function Historial({ userDetails }) {
                 onChange={(e) => setFechaFin(e.target.value)}
               />
             </div>
+            
           </div>
         </div>
         <table className="table table-dark text-center">
