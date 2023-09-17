@@ -14,15 +14,16 @@ export function Stock({ size, userDetails }) {
     setLoading(true);
     fetchStock();
     setLoading(false)
+    console.log(stock);
   }, []);
 
   // Función para calcular los días restantes hasta la caducidad
   const calcularDiasRestantes = (item) => {
     const fechaCaducidad = item.fecha_caducidad_descongelacion || item.caducidad_fabricante;
-    const fechaActual = new Date();
+    const fechaActual = new Date()
     const fechaCaducidadDate = new Date(fechaCaducidad);
     const diferenciaDias = Math.ceil((fechaCaducidadDate - fechaActual) / (1000 * 60 * 60 * 24));
-    return diferenciaDias - 1;
+    return diferenciaDias;
   };
 
   // Función para determinar la clase de color del botón
@@ -87,7 +88,7 @@ export function Stock({ size, userDetails }) {
                           <h6>Vigencia: {calcularDiasRestantes(item)} dias</h6>
                         )}
                         {!item.fecha_caducidad_descongelacion && (
-                          <h6>Días restantes: {calcularDiasRestantes(item)} dias</h6>
+                          <h6>Vigencia: {calcularDiasRestantes(item)} dias</h6>
                         )}
                       </div>
                       <div className="col-1 ">

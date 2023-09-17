@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import pytz
+from django.utils import timezone
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -110,9 +112,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+fecha_actual_utc = timezone.now()
 
-TIME_ZONE = 'UTC'
+zona_horaria_chile = pytz.timezone('America/Santiago')
+fecha_actual_chile = fecha_actual_utc.astimezone(zona_horaria_chile)
+
+LANGUAGE_CODE = 'es-CL'
+
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 

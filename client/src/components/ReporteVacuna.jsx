@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { format, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, administraciones, stock }) {
   const [enviadas, setEnviadas] = useState([]);
@@ -91,9 +93,15 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
       <div className="container card custom-tabe-style mt-2">
         <ul className="list-group  list-group-flush text-start">
 
-        <h5 className="card-title text-success fs-6 mt-2">
+        <strong className="card-title text-success fs-6 mt-2">
           {vacuna.nombre_vacuna} {vacuna.lote}
-        </h5>
+        </strong>
+        {vacuna.fecha_caducidad_descongelacion && (
+          <h6 className="card-title text-success fs-6 ">Vigencia descongelación: {format(new Date(`${vacuna.fecha_caducidad_descongelacion}T${vacuna.hora_descongelacion}`), 'dd MMM yyyy HH:mm', { locale: es })}</h6>
+        )}
+        {!vacuna.fecha_caducidad_descongelacion && (
+          <h6 className="card-title text-success fs-6 ">Vigencia fabricante: {format(parseISO(vacuna.caducidad_fabricante), 'dd MMM yyyy')}</h6>
+        )}
         <>
           <li key={`inicial${vacuna.id}`} className="list-group-item">
             <strong>Stock Inicial:</strong> {stockInicial}

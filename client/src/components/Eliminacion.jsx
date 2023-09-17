@@ -35,7 +35,6 @@ export function Eliminacion({ stock, size }) {
       await createEliminacionVacuna(eliminacionVacunaData);
 
       window.location.reload();
-      setProcessing(false);
 
       // Redirigir o hacer algo después de la eliminación exitosa
     } catch (error) {
