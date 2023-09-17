@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllEliminaciones, getAllTraspasos } from '../api/inventario';
+import { getAllAdministraciones, getAllEliminaciones, getAllTraspasos } from '../api/inventario';
 import { useAuth } from '../AuthContext';
 import { ReporteVacuna } from './ReporteVacuna';
 
@@ -7,6 +7,7 @@ export function Reportes({ userDetails }) {
   const { fetchStock, stock } = useAuth();
   const [todaysTraspasos, setTodaysTraspasos] = useState([]);
   const [eliminaciones, setEliminaciones] = useState([]);
+  const [administraciones, setAdministraciones] = useState([])
   const [vacunasConStock, setVacunasConStock] = useState([]);
 
 
@@ -14,6 +15,7 @@ export function Reportes({ userDetails }) {
     fetchStock();
     fetchTodaysTraspasos();
     fetchAllEliminaciones();
+    fetchAllAdministraciones()
   }, [userDetails]);
 
   useEffect(() => {
@@ -46,6 +48,15 @@ export function Reportes({ userDetails }) {
     }
   };
 
+  const fetchAllAdministraciones = async () => {
+    try {
+      const response = await getAllAdministraciones();
+      setAdministraciones(response.data);
+    } catch (error) {
+      console.error('Error en cargar todas las administraciones', error);
+    }
+  };
+
   if (!userDetails) {
     return (
       <div>
@@ -62,7 +73,7 @@ export function Reportes({ userDetails }) {
         <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2> <hr />
         <div className="card-body text-center" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {vacunasConStock.map((vacuna) => (
-            <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} stock={stock} />
+            <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} administraciones={administraciones} stock={stock} />
           ))}
         </div>
       </div>

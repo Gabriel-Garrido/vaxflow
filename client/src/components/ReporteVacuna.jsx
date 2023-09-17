@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, stock }) {
+export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, administraciones, stock }) {
   const [enviadas, setEnviadas] = useState([]);
   const [recibidas, setRecibidas] = useState([]);
   const [eliminadas, setEliminadas] = useState([]);
+  const [administradas, setAdministradas] = useState([])
   const [loading, setLoading] = useState(true);
   const [stockInicial, setStockInicial] = useState(0);
 
@@ -12,6 +13,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
     getEnviadas();
     getRecibidas();
     getEliminadas();
+    getAdministradas()
     totalStockInicial();
     setLoading(false);
   }, [traspasos, eliminaciones, vacuna, userDetails, stock]);
@@ -21,13 +23,16 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
     const totalCantidadEliminada = eliminadas.reduce((acumulador, eliminacion) => {
       return acumulador + eliminacion.cantidad_eliminada;
     }, 0);
+    const totalCantidadAdministrada = administradas.reduce((acumulador, administracion) => {
+      return acumulador + administracion.cantidad_administrada;
+    }, 0);
     const totalCantidadEnviadas = enviadas.reduce((acumulador, administracion) => {
       return acumulador + administracion.cantidad_traspasada;
     }, 0);
     const totalCantidadRecibidas = recibidas.reduce((acumulador, recepcion) => {
       return acumulador + recepcion.cantidad_traspasada;
     }, 0);
-    setStockInicial(vacuna.stock + totalCantidadEliminada + totalCantidadEnviadas - totalCantidadRecibidas)
+    setStockInicial(vacuna.stock + totalCantidadEliminada + totalCantidadEnviadas + totalCantidadAdministrada - totalCantidadRecibidas)
   }
 
   function getEnviadas() {
@@ -61,6 +66,16 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
       return new Date(eliminacion.fecha).toDateString() === today && vacuna.id === eliminacion.vacuna;
     });
     setEliminadas(eliminacionesHoy);
+    setLoading(false);
+  }
+
+  async function getAdministradas() {
+    setLoading(true);
+    const today = new Date().toDateString();
+    const administracionesHoy = administraciones.filter((administracion) => {
+      return new Date(administracion.fecha).toDateString() === today && vacuna.id === administracion.vacuna;
+    });
+    setAdministradas(administracionesHoy);
     setLoading(false);
   }
 
@@ -111,6 +126,16 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
               <li key={eliminacion.id} className="list-group-item">
                 <i className="fa-regular fa-trash-alt fs-6"></i> Eliminadas:{' '}
                 {eliminacion.cantidad_eliminada}
+              </li>
+            ))}
+          </ul>
+        )}
+        {administradas.length > 0 && (
+          <ul className="list-group list-group-flush text-start">
+            {administradas.map((administracion) => (
+              <li key={administracion.id} className="list-group-item">
+                <i className="fa-solid fa-syringe fs-6"></i> Administradas:{' '}
+                {administracion.cantidad_administrada}
               </li>
             ))}
           </ul>

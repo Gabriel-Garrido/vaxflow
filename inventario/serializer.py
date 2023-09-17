@@ -21,11 +21,6 @@ class VacunaSerializer(serializers.ModelSerializer):
         model = Vacuna
         fields = '__all__'
 
-class AdministracionVacunaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AdministracionVacuna
-        fields = '__all__'
-
 class TraspasoVacunaSerializer(serializers.ModelSerializer):
     vacuna_traspaso_nombre = serializers.CharField(source='vacuna_traspaso.tipo_vacuna.nombre', read_only=True)
     vacuna_traspaso_lote = serializers.CharField(source='vacuna_traspaso.tipo_vacuna.lote', read_only=True)
