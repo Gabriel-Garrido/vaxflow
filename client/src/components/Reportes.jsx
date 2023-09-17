@@ -10,7 +10,6 @@ export function Reportes({ userDetails }) {
   const [administraciones, setAdministraciones] = useState([])
   const [vacunasConStock, setVacunasConStock] = useState([]);
 
-
   useEffect(() => {
     fetchStock();
     fetchTodaysTraspasos();
@@ -57,7 +56,7 @@ export function Reportes({ userDetails }) {
     }
   };
 
-  if (!userDetails) {
+  if (!userDetails || !eliminaciones || !administraciones || !todaysTraspasos) {
     return (
       <div>
         <div className="text-center">
@@ -73,7 +72,7 @@ export function Reportes({ userDetails }) {
           <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2>
         <div className="card-body text-center" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {vacunasConStock.map((vacuna) => (
-            vacuna.stock == 0 || !eliminaciones || !administraciones || !todaysTraspasos?<></>: 
+              !eliminaciones || !administraciones || !todaysTraspasos?<></>: 
             <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} administraciones={administraciones} stock={stock} />
           ))}
         </div>

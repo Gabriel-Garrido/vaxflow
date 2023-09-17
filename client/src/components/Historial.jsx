@@ -26,29 +26,31 @@ export function Historial({ userDetails }) {
     fetchTraspasos();
   }, []);
 
-  const filteredTraspasos = traspasos.filter((traspaso) => {
-    if (tipoTraspaso === 'todos' || tipoTraspaso === 'enviados') {
-      if (traspaso.vacunatorio_origen === userDetails.vacunatorio) {
-        return true;
-      }
-    }
-    if (tipoTraspaso === 'todos' || tipoTraspaso === 'recibidos') {
-      if (traspaso.vacunatorio_destino === userDetails.vacunatorio) {
-        return true;
-      }
+  const filterTraspasos = (traspaso) => {
+    if (tipoTraspaso === 'todos' ||
+        (tipoTraspaso === 'enviados' && traspaso.vacunatorio_origen === userDetails.vacunatorio) ||
+        (tipoTraspaso === 'recibidos' && traspaso.vacunatorio_destino === userDetails.vacunatorio)) {
+      return true;
     }
     return false;
-  });
+  };
 
-  const filteredTraspasosByFecha = filteredTraspasos.filter((traspaso) => {
+  const filterTraspasosByFecha = (traspaso) => {
     if (fechaInicio && fechaFin) {
       const fechaTraspaso = new Date(traspaso.fecha_traspaso);
       const fechaInicioFilter = new Date(fechaInicio);
       const fechaFinFilter = new Date(fechaFin);
+      // Comparamos las fechas excluyendo las horas, minutos, segundos y milisegundos
+      fechaTraspaso.setHours(0, 0, 0, 0);
+      fechaInicioFilter.setHours(0, 1, 1, 0);
+      fechaFinFilter.setHours(23, 60, 59, 0);
       return fechaTraspaso >= fechaInicioFilter && fechaTraspaso <= fechaFinFilter;
     }
     return true;
-  });
+  };
+
+  const filteredTraspasos = traspasos.filter(filterTraspasos);
+  const filteredTraspasosByFecha = filteredTraspasos.filter(filterTraspasosByFecha);
 
   if (loading) {
     return (
@@ -66,7 +68,6 @@ export function Historial({ userDetails }) {
         <h2 className='card-title fs-4 mt-2 text-success text-center'>Historial de Traspasos</h2>
         <div className="card-body">
           <div className="row justify-content-center mb-1">
-
             <div className="col-xxl-4 col-sm-12 text-center">
               <label htmlFor="tipoTraspaso" className="form-label-sm">Traspaso:</label>
               <select
@@ -80,7 +81,6 @@ export function Historial({ userDetails }) {
                 <option value="recibidos">Recibidos</option>
               </select>
             </div>
-
             <div className="col-xxl-4 col-sm-6 text-center">
               <label htmlFor="fechaInicio" className="form-label-sm">Desde:</label>
               <input
@@ -91,7 +91,6 @@ export function Historial({ userDetails }) {
                 onChange={(e) => setFechaInicio(e.target.value)}
               />
             </div>
-
             <div className="col-xxl-4 col-sm-6 text-center">
               <label htmlFor="fechaFin" className="form-label-sm">Hasta:</label>
               <input
@@ -102,7 +101,6 @@ export function Historial({ userDetails }) {
                 onChange={(e) => setFechaFin(e.target.value)}
               />
             </div>
-            
           </div>
         </div>
         <table className="table table-dark text-center">

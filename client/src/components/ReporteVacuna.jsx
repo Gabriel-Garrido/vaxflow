@@ -9,17 +9,16 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   const [stockInicial, setStockInicial] = useState(0);
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     getEnviadas();
     getRecibidas();
     getEliminadas();
     getAdministradas()
     totalStockInicial();
-    setLoading(false);
+    setLoading(false)
   }, [traspasos, eliminaciones, vacuna, userDetails, stock]);
 
   function totalStockInicial() {
-
     const totalCantidadEliminada = eliminadas.reduce((acumulador, eliminacion) => {
       return acumulador + eliminacion.cantidad_eliminada;
     }, 0);
@@ -33,6 +32,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
       return acumulador + recepcion.cantidad_traspasada;
     }, 0);
     setStockInicial(vacuna.stock + totalCantidadEliminada + totalCantidadEnviadas + totalCantidadAdministrada - totalCantidadRecibidas)
+    setLoading(false)
   }
 
   function getEnviadas() {
@@ -60,23 +60,19 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   }
 
   async function getEliminadas() {
-    setLoading(true);
     const today = new Date().toDateString();
     const eliminacionesHoy = eliminaciones.filter((eliminacion) => {
       return new Date(eliminacion.fecha).toDateString() === today && vacuna.id === eliminacion.vacuna;
     });
-    setEliminadas(eliminacionesHoy);
-    setLoading(false);
+    setEliminadas(eliminacionesHoy);;
   }
 
   async function getAdministradas() {
-    setLoading(true);
     const today = new Date().toDateString();
     const administracionesHoy = administraciones.filter((administracion) => {
       return new Date(administracion.fecha).toDateString() === today && vacuna.id === administracion.vacuna;
     });
     setAdministradas(administracionesHoy);
-    setLoading(false);
   }
 
   if (loading) {
@@ -91,6 +87,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     );
   } else {
     return (
+      
       <div className="container card custom-tabe-style mt-2">
         <ul className="list-group  list-group-flush text-start">
 
