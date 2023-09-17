@@ -1,11 +1,12 @@
-// reportevacunas.jsx
 import React, { useState, useEffect } from 'react';
 
-export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones }) {
+export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, stock }) {
   const [enviadas, setEnviadas] = useState([]);
   const [recibidas, setRecibidas] = useState([]);
   const [eliminadas, setEliminadas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [stockInicial, setStockInicial] = useState(0);
+  const [stockFinal, setStockFinal] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -13,7 +14,24 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones })
     getRecibidas();
     getEliminadas();
     setLoading(false);
-  }, [traspasos, eliminaciones, vacuna, userDetails]);
+  }, [traspasos, eliminaciones, vacuna, userDetails, stock]);
+
+  useEffect(() => {
+    // Calcular el stock inicial del día
+    const stockInicialDelDia = stock.reduce((total, item) => {
+      if (item.vacunatorio === userDetails.vacunatorio && item.vacuna === vacuna.id) {
+        return total + item.stock;
+      }
+      return total;
+    }, 0);
+    setStockInicial(stockInicialDelDia);
+  }, [stock, userDetails, vacuna]);
+
+  useEffect(() => {
+    // Calcular el stock final del día
+    const stockFinalDelDia = stockInicial + enviadas.reduce((total, traspaso) => total + traspaso.cantidad_traspasada, 0) - eliminadas.reduce((total, eliminacion) => total + eliminacion.cantidad_eliminada, 0);
+    setStockFinal(stockFinalDelDia);
+  }, [stockInicial, enviadas, eliminadas]);
 
   function getEnviadas() {
     const today = new Date().toDateString();
@@ -65,6 +83,9 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones })
         <h5 className="card-title text-success fs-6">
           {vacuna.nombre_vacuna} {vacuna.lote}
         </h5>
+        <div className="mb-3">
+          <strong>Stock Inicial del Día:</strong> {stockInicial}
+        </div>
         {enviadas.length > 0 && (
           <ul className="list-group list-group-flush text-start">
             {enviadas.map((traspaso) => (
@@ -95,6 +116,9 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones })
             ))}
           </ul>
         )}
+        <div className="mt-3">
+          <strong>Stock Final del Día:</strong> {stockFinal}
+        </div>
       </div>
     );
   }

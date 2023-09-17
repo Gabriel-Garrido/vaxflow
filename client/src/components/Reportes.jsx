@@ -62,7 +62,7 @@ export function Reportes({ userDetails }) {
         <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2> <hr />
         <div className="card-body text-center" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {vacunasConStock.map((vacuna) => (
-            <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} />
+            <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} stock={stock} />
           ))}
         </div>
       </div>
