@@ -2,43 +2,12 @@ import React, { useState, useRef } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Traspaso } from './Traspaso';
-import { createEliminacionVacuna } from '../api/inventario';
+import { createEliminacionVacuna, createAdministracionVacuna } from '../api/inventario';
 import { useAuth } from '../AuthContext';
 import { Eliminacion } from './Eliminacion';
+import { Administracion } from './Administracion';
 
 export function StockCard({ stock, size }) {
-  const [cantidadEliminada, setCantidadEliminada] = useState(0);
-  const { userDetails } = useAuth();
-  const [processing, setProcessing] = useState(false);
-
-  // Define una referencia al modal de eliminación
-  const eliminacionModalRef = useRef(null);
-
-  const handleEliminacionVacuna = async (e) => {
-    e.preventDefault();
-
-    try {
-      setProcessing(true);
-
-      const eliminacionVacunaData = {
-        vacuna: stock.id,
-        cantidad_eliminada: parseInt(cantidadEliminada),
-        responsable_eliminacion: userDetails.id,
-        vacunatorio_eliminacion: userDetails.vacunatorio,
-      };
-
-      await createEliminacionVacuna(eliminacionVacunaData);
-
-      // Cierra el modal después de reportar la eliminación utilizando la referencia
-      eliminacionModalRef.current?.hide();
-      setCantidadEliminada(0);
-      setProcessing(false);
-    } catch (error) {
-      console.error('Error en reportar eliminación de vacunas:', error);
-      setProcessing(false);
-      // Manejar errores aquí, por ejemplo, mostrar un mensaje de error al usuario
-    }
-  };
 
   return (
     <div key={stock.id + size} className="card text-white">
@@ -184,7 +153,7 @@ export function StockCard({ stock, size }) {
               </div>
               <div className="modal-body text-center">
                 <div className="text-start">
-                  <Traspaso stock={stock} size={size} />
+                  <Administracion stock={stock}/>
                 </div>
                 <button
                   type="button"

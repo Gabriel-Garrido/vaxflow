@@ -100,3 +100,13 @@ export const getAllEliminaciones = async () => {
         throw error;
     }
 };
+
+export const getAllAdministraciones = async () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        return inventarioApi.get('/administraciones/', { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+        console.error('Error en getAllAdministraciones:', error);
+        throw error;
+    }
+};

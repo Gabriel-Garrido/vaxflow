@@ -55,3 +55,15 @@ class getAllEliminacionesView(generics.ListAPIView):
             return Response(serializer.data)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class getAllAdministracionesView(generics.ListAPIView):
+    queryset = AdministracionVacuna.objects.all()
+    serializer_class = AdministracionVacunaSerializer
+
+    def list(self, request, *args, **kwargs):
+        try:
+            queryset = self.filter_queryset(self.get_queryset())
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

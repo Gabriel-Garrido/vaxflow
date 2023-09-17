@@ -40,9 +40,12 @@ class TraspasoVacunaSerializer(serializers.ModelSerializer):
         model = TraspasoVacuna
         fields = '__all__'
 
-
 class EliminacionVacunaSerializer(serializers.ModelSerializer):
     class Meta:
         model = EliminacionVacuna
         fields = '__all__'
 
+class AdministracionVacunaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdministracionVacuna
+        fields = '__all__'

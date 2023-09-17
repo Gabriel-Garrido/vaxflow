@@ -34,28 +34,6 @@ class VacunaStock(models.Model):
         fecha_descongelacion_str = f" - Descongelación: {self.fecha_descongelacion}" if self.fecha_descongelacion else ""
         return f"{self.vacunatorio.nombre} => {self.tipo_vacuna.nombre} - {str(self.stock)} - {str(fecha_descongelacion_str)}"
 
-
-class AdministracionVacuna(models.Model):
-    vacuna = models.ForeignKey(VacunaStock, on_delete=models.CASCADE)
-    fecha = models.DateTimeField(auto_now_add=True)
-    cantidad_administrada = models.PositiveIntegerField()
-
-    def save(self, *args, **kwargs):
-        if self.cantidad_administrada > self.vacuna.stock:
-            raise ValidationError("La cantidad de vacunas administradas es mayor que el stock disponible.")
-
-        with transaction.atomic():
-            # Restar la cantidad administrada del stock de la vacuna
-            self.vacuna.stock -= self.cantidad_administrada
-            self.vacuna.save()
-
-            super(AdministracionVacuna, self).save(*args, **kwargs)
-
-from django.db import models, transaction
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from authentication.models import CustomUser
-
 class TraspasoVacuna(models.Model):
     vacuna_traspaso = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='traspasos_enviados')
     vacunatorio_origen = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE, related_name='traspasos_origen')
@@ -123,3 +101,18 @@ class EliminacionVacuna(models.Model):
 
             super(EliminacionVacuna, self).save(*args, **kwargs)
 
+class AdministracionVacuna(models.Model):
+    vacuna = models.ForeignKey(VacunaStock, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+    cantidad_administrada = models.PositiveIntegerField()
+
+    def save(self, *args, **kwargs):
+        if self.cantidad_administrada > self.vacuna.stock:
+            raise ValidationError("La cantidad de vacunas administradas es mayor que el stock disponible.")
+
+        with transaction.atomic():
+            # Restar la cantidad administrada del stock de la vacuna
+            self.vacuna.stock -= self.cantidad_administrada
+            self.vacuna.save()
+
+            super(AdministracionVacuna, self).save(*args, **kwargs)

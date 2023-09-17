@@ -12,19 +12,23 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
     getEnviadas();
     getRecibidas();
     getEliminadas();
+    totalStockInicial();
     setLoading(false);
   }, [traspasos, eliminaciones, vacuna, userDetails, stock]);
 
-  useEffect(() => {
-    // Calcular el stock inicial del día
-    const stockInicialDelDia = stock.reduce((total, item) => {
-      if (item.vacunatorio === userDetails.vacunatorio && item.vacuna === vacuna.id) {
-        return total + item.stock;
-      }
-      return total;
+  function totalStockInicial() {
+
+    const totalCantidadEliminada = eliminadas.reduce((acumulador, eliminacion) => {
+      return acumulador + eliminacion.cantidad_eliminada;
     }, 0);
-    setStockInicial(stockInicialDelDia);
-  }, [stock, userDetails, vacuna]);
+    const totalCantidadEnviadas = enviadas.reduce((acumulador, administracion) => {
+      return acumulador + administracion.cantidad_traspasada;
+    }, 0);
+    const totalCantidadRecibidas = recibidas.reduce((acumulador, recepcion) => {
+      return acumulador + recepcion.cantidad_traspasada;
+    }, 0);
+    setStockInicial(vacuna.stock + totalCantidadEliminada + totalCantidadEnviadas - totalCantidadRecibidas)
+  }
 
   function getEnviadas() {
     const today = new Date().toDateString();
