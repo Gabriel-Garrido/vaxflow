@@ -77,6 +77,7 @@ export function Historial({ userDetails }) {
         <div className="card-body">
           <div className="row justify-content-center mb-1">
 
+            {/* ----filtro traspaso---- */}
             <div className="col-6 text-center">
               <label htmlFor="tipoTraspaso" className="form-label-sm">Traspaso:</label>
               <select
@@ -91,6 +92,7 @@ export function Historial({ userDetails }) {
               </select>
             </div>
 
+            {/* ----filtro vacuna---- */}
             <div className="col-6 text-center">
               <label htmlFor="vacunaNombre" className="form-label-sm">Vacuna:</label>
               <input
@@ -102,6 +104,7 @@ export function Historial({ userDetails }) {
               />
             </div>
 
+            {/* ----filtros fecha desde---- */}
             <div className="col-6 text-center">
               <label htmlFor="fechaInicio" className="form-label-sm">Desde:</label>
               <input
@@ -113,6 +116,7 @@ export function Historial({ userDetails }) {
               />
             </div>
 
+            {/* ----filtro fecha hasta---- */}
             <div className="col-6 text-center">
               <label htmlFor="fechaFin" className="form-label-sm">Hasta:</label>
               <input
@@ -126,7 +130,8 @@ export function Historial({ userDetails }) {
 
           </div>
         </div>
-        
+
+        {/* ----tabla---- */}
         <table className="table table-dark text-center">
           <thead>
             <tr>
@@ -141,7 +146,7 @@ export function Historial({ userDetails }) {
                 <td>
                   {new Date(traspaso.fecha_traspaso).toLocaleDateString()}
                 </td>
-                {traspaso.responsable_entrega === userDetails.id ? (
+                {traspaso.vacunatorio_origen === userDetails.vacunatorio ? (
                   <>
                     <td>
                       <strong>
