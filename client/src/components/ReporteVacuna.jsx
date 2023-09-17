@@ -6,7 +6,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
   const [eliminadas, setEliminadas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stockInicial, setStockInicial] = useState(0);
-  const [stockFinal, setStockFinal] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -26,12 +25,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
     }, 0);
     setStockInicial(stockInicialDelDia);
   }, [stock, userDetails, vacuna]);
-
-  useEffect(() => {
-    // Calcular el stock final del día
-    const stockFinalDelDia = stockInicial + enviadas.reduce((total, traspaso) => total + traspaso.cantidad_traspasada, 0) - eliminadas.reduce((total, eliminacion) => total + eliminacion.cantidad_eliminada, 0);
-    setStockFinal(stockFinalDelDia);
-  }, [stockInicial, enviadas, eliminadas]);
 
   function getEnviadas() {
     const today = new Date().toDateString();
@@ -83,9 +76,11 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
         <h5 className="card-title text-success fs-6">
           {vacuna.nombre_vacuna} {vacuna.lote}
         </h5>
-        <div className="mb-3">
-          <strong>Stock Inicial del Día:</strong> {stockInicial}
-        </div>
+        <ul className="list-group list-group-flush text-start">
+          <li key={`inicial${vacuna.id}`} className="list-group-item">
+            <strong>Stock Inicial:</strong> {stockInicial}
+          </li>
+        </ul>
         {enviadas.length > 0 && (
           <ul className="list-group list-group-flush text-start">
             {enviadas.map((traspaso) => (
@@ -116,9 +111,12 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, s
             ))}
           </ul>
         )}
-        <div className="mt-3">
-          <strong>Stock Final del Día:</strong> {stockFinal}
-        </div>
+        
+        <ul className="list-group list-group-flush text-start mb-2">
+          <li key={`final${vacuna.id}`} className="list-group-item">
+          <strong>Stock Final:</strong> {vacuna.stock}
+          </li>
+        </ul>
       </div>
     );
   }
