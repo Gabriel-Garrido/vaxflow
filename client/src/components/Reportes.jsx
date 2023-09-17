@@ -69,10 +69,11 @@ export function Reportes({ userDetails }) {
     );
   } else {
     return (
-      <div className="card text-dark">
-        <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2> <hr />
+      <div className='card text-bg-dark' style={{ maxHeight: '75vh', overflowY: 'auto' }}>
+          <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2> <hr />
         <div className="card-body text-center" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {vacunasConStock.map((vacuna) => (
+            vacuna.stock == 0 || !eliminaciones || !administraciones || !todaysTraspasos?<></>: 
             <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} administraciones={administraciones} stock={stock} />
           ))}
         </div>

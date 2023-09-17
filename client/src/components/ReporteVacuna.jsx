@@ -100,16 +100,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
             <strong>Stock Inicial:</strong> {stockInicial}
           </li>
         </ul>
-        {enviadas.length > 0 && (
-          <ul className="list-group list-group-flush text-start">
-            {enviadas.map((traspaso) => (
-              <li key={`enviada${traspaso.id}`} className="list-group-item">
-                <i className="fa-regular fa-paper-plane fs-6"></i> Entregadas a{' '}
-                {traspaso.vacunatorio_destino_nombre}: {traspaso.cantidad_traspasada}
-              </li>
-            ))}
-          </ul>
-        )}
         {recibidas.length > 0 && (
           <ul className="list-group list-group-flush text-start">
             {recibidas.map((traspaso) => (
@@ -120,12 +110,12 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
             ))}
           </ul>
         )}
-        {eliminadas.length > 0 && (
+        {enviadas.length > 0 && (
           <ul className="list-group list-group-flush text-start">
-            {eliminadas.map((eliminacion) => (
-              <li key={eliminacion.id} className="list-group-item">
-                <i className="fa-regular fa-trash-alt fs-6"></i> Eliminadas:{' '}
-                {eliminacion.cantidad_eliminada}
+            {enviadas.map((traspaso) => (
+              <li key={`enviada${traspaso.id}`} className="list-group-item">
+                <i className="fa-regular fa-paper-plane fs-6"></i> Entregadas a{' '}
+                {traspaso.vacunatorio_destino_nombre}: {traspaso.cantidad_traspasada}
               </li>
             ))}
           </ul>
@@ -136,6 +126,16 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
               <li key={administracion.id} className="list-group-item">
                 <i className="fa-solid fa-syringe fs-6"></i> Administradas:{' '}
                 {administracion.cantidad_administrada}
+              </li>
+            ))}
+          </ul>
+        )}
+        {eliminadas.length > 0 && (
+          <ul className="list-group list-group-flush text-start">
+            {eliminadas.map((eliminacion) => (
+              <li key={eliminacion.id} className="list-group-item">
+                <i className="fa-regular fa-trash-alt fs-6"></i> Eliminadas:{' '}
+                {eliminacion.cantidad_eliminada}
               </li>
             ))}
           </ul>
