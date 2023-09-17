@@ -7,6 +7,7 @@ export function Historial({ userDetails }) {
   const [tipoTraspaso, setTipoTraspaso] = useState('todos');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
+  const [vacunaNombre, setVacunaNombre] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,7 +41,6 @@ export function Historial({ userDetails }) {
       const fechaTraspaso = new Date(traspaso.fecha_traspaso);
       const fechaInicioFilter = new Date(fechaInicio);
       const fechaFinFilter = new Date(fechaFin);
-      // Comparamos las fechas excluyendo las horas, minutos, segundos y milisegundos
       fechaTraspaso.setHours(0, 0, 0, 0);
       fechaInicioFilter.setHours(0, 1, 1, 0);
       fechaFinFilter.setHours(23, 60, 59, 0);
@@ -49,8 +49,16 @@ export function Historial({ userDetails }) {
     return true;
   };
 
+  const filterTraspasosByVacunaNombre = (traspaso) => {
+    if (vacunaNombre && traspaso.vacuna_traspaso_nombre) {
+      return traspaso.vacuna_traspaso_nombre.toLowerCase().includes(vacunaNombre.toLowerCase());
+    }
+    return true;
+  };
+
   const filteredTraspasos = traspasos.filter(filterTraspasos);
   const filteredTraspasosByFecha = filteredTraspasos.filter(filterTraspasosByFecha);
+  const filteredTraspasosByVacunaNombre = filteredTraspasosByFecha.filter(filterTraspasosByVacunaNombre);
 
   if (loading) {
     return (
@@ -68,7 +76,8 @@ export function Historial({ userDetails }) {
         <h2 className='card-title fs-4 mt-2 text-success text-center'>Historial de Traspasos</h2>
         <div className="card-body">
           <div className="row justify-content-center mb-1">
-            <div className="col-xxl-4 col-sm-12 text-center">
+
+            <div className="col-6 text-center">
               <label htmlFor="tipoTraspaso" className="form-label-sm">Traspaso:</label>
               <select
                 id="tipoTraspaso"
@@ -81,7 +90,19 @@ export function Historial({ userDetails }) {
                 <option value="recibidos">Recibidos</option>
               </select>
             </div>
-            <div className="col-xxl-4 col-sm-6 text-center">
+
+            <div className="col-6 text-center">
+              <label htmlFor="vacunaNombre" className="form-label-sm">Vacuna:</label>
+              <input
+                type="text"
+                id="vacunaNombre"
+                className="form-control form-control-sm custom-tabe-style"
+                value={vacunaNombre}
+                onChange={(e) => setVacunaNombre(e.target.value)}
+              />
+            </div>
+
+            <div className="col-6 text-center">
               <label htmlFor="fechaInicio" className="form-label-sm">Desde:</label>
               <input
                 type="date"
@@ -91,7 +112,8 @@ export function Historial({ userDetails }) {
                 onChange={(e) => setFechaInicio(e.target.value)}
               />
             </div>
-            <div className="col-xxl-4 col-sm-6 text-center">
+
+            <div className="col-6 text-center">
               <label htmlFor="fechaFin" className="form-label-sm">Hasta:</label>
               <input
                 type="date"
@@ -101,8 +123,10 @@ export function Historial({ userDetails }) {
                 onChange={(e) => setFechaFin(e.target.value)}
               />
             </div>
+
           </div>
         </div>
+        
         <table className="table table-dark text-center">
           <thead>
             <tr>
@@ -112,7 +136,7 @@ export function Historial({ userDetails }) {
             </tr>
           </thead>
           <tbody>
-            {filteredTraspasosByFecha.reverse().map((traspaso) => (
+            {filteredTraspasosByVacunaNombre.reverse().map((traspaso) => (
               <tr key={traspaso.id} className='custom-tabe-style text-center'>
                 <td>
                   {new Date(traspaso.fecha_traspaso).toLocaleDateString()}
@@ -122,10 +146,10 @@ export function Historial({ userDetails }) {
                     <td>
                       <strong>
                         {traspaso.cantidad_traspasada} dosis de <br /> {traspaso.vacuna_traspaso_nombre}
-                      </strong>{' '}
+                      </strong>{' '}{traspaso.vacuna_traspaso_lote}
                     </td>
                     <td>
-                      <i className="fa-regular fa-paper-plane fs-6"></i> <br /><strong>{traspaso.vacunatorio_destino_nombre}</strong>
+                      <i className="fa-regular fa-paper-plane fs-6"></i> <br /><strong>{traspaso.vacunatorio_destino_nombre} </strong>
                     </td>
                   </>
                 ) : (
@@ -133,7 +157,7 @@ export function Historial({ userDetails }) {
                     <td>
                       <strong>
                         {traspaso.cantidad_traspasada} dosis de <br /> {traspaso.vacuna_traspaso_nombre}
-                      </strong>{' '}
+                      </strong>{' '}{traspaso.vacuna_traspaso_lote}
                     </td>
                     <td>
                       <i className="fa-regular fa-circle-down fs-6"></i><br /> <strong>{traspaso.vacunatorio_origen_nombre}</strong>
