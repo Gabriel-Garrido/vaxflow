@@ -45,14 +45,15 @@ class TraspasoVacuna(models.Model):
     is_accepted = models.BooleanField(blank=True, default=False)
 
     def clean(self):
-        if self.cantidad_traspasada <= 0:
-            raise ValidationError("La cantidad de vacunas traspasada debe ser mayor que 0.")
+            if self.cantidad_traspasada <= 0:
+                raise ValidationError("La cantidad de vacunas traspasada debe ser mayor que 0.")
 
     def save(self, *args, **kwargs):
         with transaction.atomic():
             # Verificar si la cantidad_traspasada es mayor que el stock del vacunatorio de origen
-            if self.cantidad_traspasada > self.vacuna_traspaso.stock:
-                raise ValidationError("La cantidad de vacunas traspasada es mayor que el stock disponible.")
+            if self.vacunatorio_origen.nombre != "camara":
+                if self.cantidad_traspasada > self.vacuna_traspaso.stock:
+                    raise ValidationError("La cantidad de vacunas traspasada es mayor que el stock disponible.")
 
             # Intentar obtener el VacunaStock en el vacunatorio destino
             vacuna_destino = VacunaStock.objects.filter(
@@ -76,8 +77,9 @@ class TraspasoVacuna(models.Model):
             vacuna_destino.save()
 
             # Restar la cantidad traspasada del stock en el origen
-            self.vacuna_traspaso.stock -= self.cantidad_traspasada
-            self.vacuna_traspaso.save()
+            if self.vacunatorio_origen.nombre != "camara":
+                self.vacuna_traspaso.stock -= self.cantidad_traspasada
+                self.vacuna_traspaso.save()
 
             super(TraspasoVacuna, self).save(*args, **kwargs)
 
