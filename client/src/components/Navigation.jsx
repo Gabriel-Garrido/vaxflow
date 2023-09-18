@@ -21,6 +21,7 @@ export function Navigation() {
     <h1 className="navbar-brand">
       <Link className="text-decoration-none fs-5 text-success" to="/"><i className="fa-solid fa-syringe fs-4"></i> VaxFlow</Link>
     </h1>
+
     <button
       className="navbar-toggler"
       type="button"

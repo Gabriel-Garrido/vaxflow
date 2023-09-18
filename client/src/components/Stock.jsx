@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
 import { StockCard } from './StockCard';
+import { Recepcion } from './Recepcion';
 
 export function Stock({ size, userDetails }) {
   const [loading, setLoading] = useState(true);
@@ -51,6 +52,10 @@ export function Stock({ size, userDetails }) {
   } else {
     return (
       <div className="container card " style={{ maxHeight: '75vh', overflowY: 'auto' }}>
+        <div className='text-center mt-2 row'>
+          <Recepcion userDetails={userDetails} stock={stock} size={size}/>
+        </div>
+        
         <h3 className="card-title fs-4 mt-2 text-success text-center">
           Stock vacunatorio {userDetails.vacunatorio_nombre}
         </h3>
@@ -59,7 +64,7 @@ export function Stock({ size, userDetails }) {
           {stock.map((item) =>
             item.vacunatorio === userDetails.vacunatorio && item.stock !== 0 ? (
               <div className="accordion-item bg-secondary" key={item.id}>
-                <h2 className={`accordion-header ${determinarClaseColor(calcularDiasRestantes(item))}`} id={`heading${item.id}`}>
+                <div className={`accordion-header ${determinarClaseColor(calcularDiasRestantes(item))}`} id={`heading${item.id}`}>
                   <button
                     className={`btn w-100 ${determinarClaseColor(calcularDiasRestantes(item))}`}
                     type="button"
@@ -78,8 +83,8 @@ export function Stock({ size, userDetails }) {
                         />
                       </div>
                       <div className="col-6">
-                        <h1 className="mb-0 fs-5"> {item.nombre_vacuna} </h1>
-                        <h5 className="fs-6">Lote: {item.lote}</h5>
+                        <h6 className="mb-0 fs-5"> {item.nombre_vacuna} </h6>
+                        <div className="fs-6">Lote: {item.lote}</div>
                         {item.fecha_caducidad_descongelacion && (
                           <h6>Vigencia: {calcularDiasRestantes(item)} dias</h6>
                         )}
@@ -93,7 +98,7 @@ export function Stock({ size, userDetails }) {
                       <div className="col-1"></div>
                     </div>
                   </button>
-                </h2>
+                </div>
                 <div
                   id={`collapse${item.id}`}
                   className="accordion-collapse collapse"
