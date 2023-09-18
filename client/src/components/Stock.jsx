@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { getAllStock } from '../api/inventario';
-import { useNavigate } from 'react-router-dom';
-import { logout } from '../api/authentication';
 import { useAuth } from '../AuthContext';
 import { StockCard } from './StockCard';
 
 export function Stock({ size, userDetails }) {
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated, user, fetchStock, stock } = useAuth();
+  const { fetchStock, stock } = useAuth();
 
   useEffect(() => {
     setLoading(true);

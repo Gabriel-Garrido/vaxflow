@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getAllTraspasos } from '../api/inventario';
-import { useAuth } from '../AuthContext';
 
 export function Historial({ userDetails }) {
   const [traspasos, setTraspasos] = useState([]);

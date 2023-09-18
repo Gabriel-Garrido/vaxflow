@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { createEliminacionVacuna } from '../api/inventario';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 
 export function Eliminacion({ stock, size }) {
   const [processing, setProcessing] = useState(false);
-  const navigate = useNavigate();
-  const { isAuthenticated, userDetails } = useAuth();
+  const { userDetails } = useAuth();
   const {
     register,
     handleSubmit,

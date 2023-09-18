@@ -97,10 +97,10 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
           {vacuna.nombre_vacuna} {vacuna.lote}
         </strong>
         {vacuna.fecha_caducidad_descongelacion && (
-          <h6 className="card-title text-success fs-6 ">Vigencia descongelación: {format(new Date(`${vacuna.fecha_caducidad_descongelacion}T${vacuna.hora_descongelacion}`), 'dd MMM yyyy HH:mm', { locale: es })}</h6>
+          <p className="card-title text-success fs-7 mt-0">Vigencia descong: {format(new Date(`${vacuna.fecha_caducidad_descongelacion}T${vacuna.hora_descongelacion}`), 'dd MMM yyyy HH:mm', { locale: es })}</p>
         )}
         {!vacuna.fecha_caducidad_descongelacion && (
-          <h6 className="card-title text-success fs-6 ">Vigencia fabricante: {format(parseISO(vacuna.caducidad_fabricante), 'dd MMM yyyy')}</h6>
+          <h6 className="card-title text-success fs-7 mt-0 ">Vigencia fabr: {format(parseISO(vacuna.caducidad_fabricante), 'dd MMM yyyy')}</h6>
         )}
         <>
           <li key={`inicial${vacuna.id}`} className="list-group-item">

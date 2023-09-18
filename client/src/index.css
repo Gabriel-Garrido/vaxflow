@@ -33,6 +33,10 @@
   font-size: 8px !important;
 }
 
+.fs-7, .fs-7 * {
+  font-size: 12px !important;
+}
+
 /* Estilo para el navbar */
 .navbar {
   height: 8vh !important; /* Ajustamos la altura del navbar */

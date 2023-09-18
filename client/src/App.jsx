@@ -6,8 +6,7 @@ import { Login } from "./pages/Login";
 import { ChangePassword } from "./pages/ChangePassword";
 import { Footer } from "./components/Footer"
 import React, { useEffect, useState } from 'react';
-import { AuthProvider, useAuth } from "./AuthContext";
-import { getUserDetails, logout } from "./api/authentication";
+import { useAuth } from "./AuthContext";
 
 function App() {
   const { isAuthenticated, user, setUserDetails, fetchUserDetails } = useAuth();
