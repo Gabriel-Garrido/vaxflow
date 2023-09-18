@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { getAllStock, getAllVacunatorios, createTraspaso, getAllUsuariosByVacunatorioId } from '../api/inventario';
+import { createTraspaso, getAllUsuariosByVacunatorioId } from '../api/inventario';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { logout } from '../api/authentication';
 
-export function Recepcion({ stock, userDetails, size }) {
+export function RecepcionCamara({ userDetails, size }) {
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
-  const [stocks, setStocks] = useState([]);
   const [stockTraspaso, setStockTraspaso] = useState([]);
-  const [vacunatorios, setVacunatorios] = useState([]);
   const [usuariosAsociados, setUsuariosAsociados] = useState([]);
 
   const { isAuthenticated, setIsAuthenticated } = useAuth();
@@ -24,15 +22,15 @@ export function Recepcion({ stock, userDetails, size }) {
   } = useForm({
     mode: 'all', // Habilitar validación en cada cambio
     defaultValues: {
-      vacunatorio_destino: userDetails.vacunatorio,
+      vacunatorio_origen: 'Camara', // Origen fijo en "Camara"
       traspaso_recepcion: userDetails.id,
       cantidad_traspasada: 1, // Valor predeterminado para cantidad
     },
   });
 
-  const cargarUsuariosAsociados = async (vacunatorioId) => {
+  const cargarUsuariosAsociados = async () => {
     try {
-      const response = await getAllUsuariosByVacunatorioId(vacunatorioId);
+      const response = await getAllUsuariosByVacunatorioId(userDetails.vacunatorio);
       setUsuariosAsociados(response.data);
     } catch (error) {
       console.error('Error fetching usuarios asociados:', error);
@@ -40,28 +38,14 @@ export function Recepcion({ stock, userDetails, size }) {
     }
   };
 
-  const cargarStockTraspaso = (vacunatorioId) => {
-    const newStock = stocks.filter((stock) => {
-      return vacunatorioId == stock.vacunatorio
-    })
-    console.log('--newStock--')
-    console.log(newStock);
-    setStockTraspaso(newStock)
-  };
-
-  const handleVacunatorioOrigenChange = (event) => {
-    const selectedVacunatorioId = event.target.value;
-    cargarUsuariosAsociados(selectedVacunatorioId);
-    cargarStockTraspaso(selectedVacunatorioId)
-  };
-
   useEffect(() => {
     setLoading(true);
 
-    async function loadStocks() {
+    async function loadStockTraspaso() {
       try {
-        const response = await getAllStock();
-        setStocks(response.data);
+        // Obtén el stock disponible en "Camara" (sin importar la cantidad)
+        const stockResponse = await getAllStock();
+        setStockTraspaso(stockResponse.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching stock:', error);
@@ -76,36 +60,16 @@ export function Recepcion({ stock, userDetails, size }) {
       }
     }
 
-    async function loadVacunatorios() {
-      setLoading(true);
-      try {
-        const res = await getAllVacunatorios();
-        setVacunatorios(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching stock:', error);
-        if (error.response && error.response.status === 401) {
-          logout();
-          setIsAuthenticated(false);
-          setLoading(false);
-          navigate('/login');
-        } else {
-          setLoading(false);
-        }
-      }
-    }
-
     if (isAuthenticated) {
-      loadStocks();
-      loadVacunatorios();
+      cargarUsuariosAsociados();
+      loadStockTraspaso();
     } else {
       setLoading(false);
       navigate('/login');
     }
-  }, [navigate, isAuthenticated, setIsAuthenticated]); // Asegúrate de que la autenticación sea una dependencia
+  }, [navigate, isAuthenticated, setIsAuthenticated, userDetails.vacunatorio]);
 
   const selectedVacunaId = watch('vacuna_traspaso');
-  const selectedStock = stocks.find((stock) => stock.id === selectedVacunaId);
 
   const onSubmit = handleSubmit(async (data) => {
     setProcessing(true);
@@ -114,20 +78,19 @@ export function Recepcion({ stock, userDetails, size }) {
       // Convierte las cadenas en números
       data.cantidad_traspasada = parseInt(data.cantidad_traspasada, 10);
       data.responsable_recepcion = parseInt(data.traspaso_recepcion, 10);
-      data.responsable_entrega = parseInt(data.traspaso_entrega, 10);
       data.vacunatorio_destino = parseInt(data.vacunatorio_destino, 10);
 
-      if (!isNaN(data.cantidad_traspasada) && !isNaN(data.traspaso_recepcion)) {
-        try {
-          await createTraspaso(data);
-          window.location.reload();
+      try {
+        // Realiza la solicitud PUT al backend para agregar stock en "Camara" si es necesario.
+        // Aquí debes implementar la lógica para agregar stock a "Camara" si la cantidad es mayor al stock actual.
 
-        } catch (error) {
-          console.error('Error al crear el traspaso:', error);
-        }
-      } else {
-        console.error('Los valores de cantidad y recepción no son números válidos.');
+        // Luego, realiza la transferencia al vacunatorio de destino del usuario.
+        await createTraspaso(data);
+        window.location.reload();
+      } catch (error) {
+        console.error('Error al crear el traspaso:', error);
       }
+
       setProcessing(false);
     } else {
       console.error('User is not authenticated');
@@ -149,7 +112,7 @@ export function Recepcion({ stock, userDetails, size }) {
     );
   } else {
     return (
-      <div key={stock.id} >
+      <div>
         {/* Botón "Recibir vacunas" */}
         <button
           type="button"
@@ -183,31 +146,6 @@ export function Recepcion({ stock, userDetails, size }) {
                         <div className="carousel-inner">
                           <div className="carousel-item active">
 
-                            {/* Vacunatorio de origen */}
-                            <div className="mb-3">
-                              <label htmlFor="vacunatorio" className="form-label text-light">
-                                Vacunatorio de origen:
-                              </label>
-                              <select
-                                id="vacunatorio"
-                                name="vacunatorio"
-                                {...register('vacunatorio_origen', { required: true })}
-                                className="form-select"
-                                onChange={handleVacunatorioOrigenChange}
-                              >
-                                <option value=""></option>
-                                {vacunatorios.map((vacunatorio) => (
-                                  // Filtra el vacunatorio actual del usuario
-                                  userDetails.vacunatorio !== vacunatorio.id && (
-                                    <option key={vacunatorio.id} value={vacunatorio.id}>
-                                      {vacunatorio.nombre}
-                                    </option>
-                                  )
-                                ))}
-                              </select>
-                              {errors.vacunatorio_origen && <p className="text-danger">Este campo es requerido</p>}
-                            </div>
-
                             {/* Vacuna a recibir */}
                             <div className="mb-3">
                               <label htmlFor="vacuna_traspaso" className="form-label text-light">
@@ -227,10 +165,7 @@ export function Recepcion({ stock, userDetails, size }) {
                                 ))}
                               </select>
                               {errors.vacuna_traspaso && <p className="text-danger">Este campo es requerido</p>}
-                            <p className='text-white'>Stock disponible: {stockTraspaso.find(v => v.id === parseInt(watch('vacuna_traspaso')))?.stock
-                                }</p>
                             </div>
-
 
                             {/* Cantidad */}
                             <div className="mb-3">
@@ -244,7 +179,6 @@ export function Recepcion({ stock, userDetails, size }) {
                                 {...register('cantidad_traspasada', {
                                   required: true,
                                   min: 1,
-                                  max: stockTraspaso.find(v => v.id === parseInt(watch('vacuna_traspaso')))?.stock
                                 })}
                                 disabled={!selectedVacunaId}
                                 className="form-control"
@@ -253,8 +187,6 @@ export function Recepcion({ stock, userDetails, size }) {
                                 <p className="text-danger">
                                   {errors.cantidad_traspasada.type === 'required' && 'Debe ingresar un número'}
                                   {errors.cantidad_traspasada.type === 'min' && 'La cantidad debe ser mayor a 0'}
-                                  {errors.cantidad_traspasada.type === 'max' &&
-                                    'La cantidad no puede ser mayor al stock'}
                                 </p>
                               )}
                             </div>
@@ -289,13 +221,13 @@ export function Recepcion({ stock, userDetails, size }) {
                             <div className="text-center text-white">
                               <h3>Resumen del Traspaso</h3>
                               <p>Recibirás {watch('cantidad_traspasada')} dosis de {selectedStock ? selectedStock.nombre_vacuna : 'Vacuna Desconocida'}</p>
-                              <p>Desde: {vacunatorios.find(v => v.id === parseInt(watch('vacunatorio_origen')))?.nombre} </p>
+                              <p>Desde: Camara</p>
                             </div>
                             {/* Boton */}
                             <div className="mb-3 text-center">
                               {processing ? (
                                 <div className="spinner-border" role="status">
-                                  <span className="visually-hidden">Loading...</span>
+                                  <span className="visually-impaired">Loading...</span>
                                 </div>
                               ) : (
                                 <div>

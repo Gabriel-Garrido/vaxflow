@@ -19,4 +19,5 @@ urlpatterns = [
     path('traspasos/', GetAllTraspasosView.as_view(), name='get-all-traspasos'),
     path('eliminaciones/', getAllEliminacionesView.as_view(), name='get-all-eliminaciones'),
     path('administraciones/', getAllAdministracionesView.as_view(), name='get-all-administraciones'),
+    
 ]
