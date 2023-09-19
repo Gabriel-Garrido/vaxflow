@@ -54,13 +54,13 @@ export function Navigation() {
               <>
                 {!loading && (
                   <>
-                    <li className="nav-item">
+                    <li className="nav-item p-sm-2">
                       <Recepcion userDetails={userDetails} stock={stock} size="yourSize" />
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item p-sm-2">
                       <RecepcionCamara userDetails={userDetails} stock={stock} size="yourSize" />
                     </li>
-                    <li className="nav-item">
+                    <li className="nav-item p-sm-2">
                       <NuevaVacuna size="yourSize" />
                     </li>
                   </>

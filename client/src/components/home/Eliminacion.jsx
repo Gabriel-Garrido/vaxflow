@@ -37,7 +37,7 @@ export function Eliminacion({ stock, size }) {
       // Redirigir o hacer algo después de la eliminación exitosa
     } catch (error) {
       console.error('Error en reportar eliminación de vacunas:', error);
-      setProcessing(false);
+    
 
       // Manejar errores aquí, por ejemplo, mostrar un mensaje de error al usuario
     }
@@ -101,11 +101,11 @@ export function Eliminacion({ stock, size }) {
                   <p>Eliminarás {watch('cantidad_eliminada')} dosis {stock.nombre_vacuna}</p>
                 </div>
                 <div className="mb-3 text-center">
-                  {processing ? (
-                    <div className="spinner-border" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                  ) : (
+                {processing ? (
+                              <div className="spinner-border" role="status">
+                                <span className="visually-impaired">Loading...</span>
+                              </div>
+                            ) : (
                     <div>
                       <button className="btn btn-primary me-2 fs-3 mt-2" type="button" onClick={prevSlide}>{"<"}</button>
                       <button type="submit" disabled={!isValid} className="btn btn-primary me-2 fs-3 mt-2">Confirmar eliminación</button>
