@@ -1,12 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Home } from "./pages/Home";
-import { Traspaso } from "./components/Traspaso";
-import { Navigation } from "./components/Navigation";
+import { Traspaso } from "./components/home/Traspaso";
+import { Navigation } from "./components/static/Navigation";
 import { Login } from "./pages/Login";
 import { ChangePassword } from "./pages/ChangePassword";
-import { Footer } from "./components/Footer"
+import { Footer } from "./components/static/Footer"
 import React, { useEffect, useState } from 'react';
 import { useAuth } from "./AuthContext";
+import { NuevaVacuna } from "./components/recepciones/NuevaVacuna";
+
 
 function App() {
   const { isAuthenticated, user, setUserDetails, fetchUserDetails } = useAuth();
@@ -39,6 +41,7 @@ function App() {
   return (
     
     <BrowserRouter>
+    
       <Navigation />     
       <div className="main-container" style={{ minHeight: 'calc(100vh - 100px)', overflowY: 'auto', width: '100%' }}>
         <Routes>      

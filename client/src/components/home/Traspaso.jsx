@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { getAllStock, getAllVacunatorios, createTraspaso, getAllUsuariosByVacunatorioId } from '../api/inventario';
+import { getAllStock, getAllVacunatorios, createTraspaso, getAllUsuariosByVacunatorioId } from '../../api/inventario';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
-import { logout } from '../api/authentication';
+import { useAuth } from '../../AuthContext';
+import { logout } from '../../api/authentication';
 
 export function Traspaso({ stock, size }) {
 

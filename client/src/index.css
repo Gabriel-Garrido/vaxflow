@@ -39,7 +39,7 @@
 
 /* Estilo para el navbar */
 .navbar {
-  height: 8vh !important; /* Ajustamos la altura del navbar */
+  height: 9vh !important; /* Ajustamos la altura del navbar */
 }
 
 /* Estilo para el footer */
@@ -74,8 +74,8 @@
 }
 
 .stock-card {
-  background: 'black';
-  color: 'white';
+  background: black;
+  color: white;
 }
 
 .custom-footer {

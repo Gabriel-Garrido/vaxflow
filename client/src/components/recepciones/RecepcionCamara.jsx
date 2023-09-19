@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { createTraspaso, getAllUsuariosByVacunatorioId, getAllStock, getAllVacunatorios } from '../api/inventario';
+import { createTraspaso, getAllUsuariosByVacunatorioId, getAllStock, getAllVacunatorios } from '../../api/inventario';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
-import { logout } from '../api/authentication';
+import { useAuth } from '../../AuthContext';
+import { logout } from '../../api/authentication';
 
 export function RecepcionCamara({ userDetails, size }) {
   const [loading, setLoading] = useState(true);
@@ -137,15 +137,12 @@ export function RecepcionCamara({ userDetails, size }) {
       {/* Botón "Recibir vacunas" */}
       <button
         type="button"
-        className="btn btn-outline-success mb-1 col-12"
+        className="btn btn-outline-success fs-4"
         data-bs-toggle="modal"
         data-bs-target={`#modalRecibirCamara${size}`}
       >
         <div>
-          <div>
-            <i className="fa-regular fa-circle-down fs-2"></i>
-          </div>
-          <div className='text-center'><strong>Recibir vacunas camara</strong></div>
+          <div className='text-center'><strong><i class="fa-solid fa-snowflake fs-6"></i> Recibir de camara</strong></div>
         </div>
       </button>
 
@@ -249,7 +246,7 @@ export function RecepcionCamara({ userDetails, size }) {
                 </div>
               </div>
             </div>
-            <div className=''>
+            <div className='text-center'>
             <button
               type="button"
               className="btn btn-secondary mb-3 fs-3"

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../../AuthContext';
 import { StockCard } from './StockCard';
-import { Recepcion } from './Recepcion';
-import { RecepcionCamara } from './RecepcionCamara';
 
 export function Stock({ size, userDetails }) {
   const [loading, setLoading] = useState(true);
@@ -49,11 +47,7 @@ export function Stock({ size, userDetails }) {
   } else {
     return (
       <div className="container card " style={{ maxHeight: '75vh', overflowY: 'auto' }}>
-        <div className='text-center mt-2 row'>
-          <Recepcion userDetails={userDetails} stock={stock} size={size}/>
-          <RecepcionCamara userDetails={userDetails} stock={stock} size={size}/>
-        </div>
-        
+                
         <h3 className="card-title fs-4 mt-2 text-success text-center">
           Stock vacunatorio {userDetails.vacunatorio_nombre}
         </h3>

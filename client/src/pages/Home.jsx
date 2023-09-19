@@ -1,7 +1,7 @@
 import { useAuth } from '../AuthContext';
-import { Historial } from '../components/Historial'
-import { Reportes } from '../components/Reportes'
-import { Stock } from '../components/Stock'
+import { Historial } from '../components/home/Historial'
+import { Reportes } from '../components/home/Reportes'
+import { Stock } from '../components/home/Stock'
 
 export function Home() {
     const { isAuthenticated, setIsAuthenticated, user, userDetails, fetchStock, stock } = useAuth();
@@ -19,14 +19,14 @@ export function Home() {
         );
       } else {
     return (
-        <div className='container mt-2'>
+        <div className=' mt-2'>
         <div className='row'>
             <div className='col-lg-4 d-none d-xl-block'>
                 <div className='container col-12'>
                     <Historial userDetails={userDetails} />
                 </div>
             </div>
-            <div className='col d-none d-xl-block'>
+            <div className='col-lg-5 d-none d-xl-block'>
                 <div className='col-12 col-md-10 offset-md-1'>
                     <Stock userDetails={userDetails} size="lg"/>
                 </div>
@@ -39,7 +39,7 @@ export function Home() {
         </div>
     
         {/* Small screen */}
-        <nav className='d-flex mb-0 d-xl-none'>
+        <nav className='d-flex mb-0 d-xl-none '>
             <div className="nav nav-tabs align-content-top col-12 d-xl-none text-center" id="nav-tab" role="tablist">
                 <button className="nav-link col-4" id="nav-historial-tab" data-bs-toggle="tab" data-bs-target="#nav-historial" type="button" role="tab" aria-controls="nav-historial" aria-selected="true"><i className="fa-solid fa-book fs-3"></i></button>
                 <button className="nav-link active col-4" id="nav-stock-tab" data-bs-toggle="tab" data-bs-target="#nav-stock" type="button" role="tab" aria-controls="nav-stock" aria-selected="false"><i className="fa-solid fa-syringe fs-3"></i></button>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { getAllStock, getAllVacunatorios, createTraspaso, getAllUsuariosByVacunatorioId } from '../api/inventario';
+import { getAllStock, getAllVacunatorios, createTraspaso, getAllUsuariosByVacunatorioId } from '../../api/inventario';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
-import { logout } from '../api/authentication';
+import { useAuth } from '../../AuthContext';
+import { logout } from '../../api/authentication';
 
 export function Recepcion({ stock, userDetails, size }) {
   const [loading, setLoading] = useState(true);
@@ -128,12 +128,10 @@ export function Recepcion({ stock, userDetails, size }) {
       } else {
         console.error('Los valores de cantidad y recepción no son números válidos.');
       }
-      setProcessing(false);
     } else {
       console.error('User is not authenticated');
       // Puedes manejar el feedback al usuario
       navigate('/login');
-      setProcessing(false);
     }
   });
 
@@ -153,15 +151,12 @@ export function Recepcion({ stock, userDetails, size }) {
         {/* Botón "Recibir vacunas" */}
         <button
           type="button"
-          className="btn btn-outline-success mb-1 col-12"
+          className="btn btn-outline-success fs-4"
           data-bs-toggle="modal"
           data-bs-target={`#modalRecibir${size}`}
         >
           <div>
-            <div>
-              <i className="fa-regular fa-circle-down fs-2"></i>
-            </div>
-            <div className='text-center'><strong>Recibir vacunas</strong></div>
+            <div className='text-center'><strong><i className="fa-regular fa-circle-down fs-6"></i> Recibir vacunas</strong></div>
           </div>
         </button>
 
@@ -293,11 +288,11 @@ export function Recepcion({ stock, userDetails, size }) {
                             </div>
                             {/* Boton */}
                             <div className="mb-3 text-center">
-                              {processing ? (
-                                <div className="spinner-border" role="status">
-                                  <span className="visually-hidden">Loading...</span>
-                                </div>
-                              ) : (
+                            {processing ? (
+                              <div className="spinner-border" role="status">
+                                <span className="visually-impaired">Loading...</span>
+                              </div>
+                            ) : (
                                 <div>
                                   <button className="btn btn-primary me-2 fs-3 mt-2" type="button" data-bs-target={`#carouselRecibir${size}`} data-bs-slide="prev">{"<"}
                                   </button>

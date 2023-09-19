@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getAllAdministraciones, getAllEliminaciones, getAllTraspasos } from '../api/inventario';
-import { useAuth } from '../AuthContext';
+import { getAllAdministraciones, getAllEliminaciones, getAllTraspasos } from '../../api/inventario';
+import { useAuth } from '../../AuthContext';
 import { ReporteVacuna } from './ReporteVacuna';
 
 export function Reportes({ userDetails }) {
