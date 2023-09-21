@@ -30,9 +30,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     const totalCantidadEnviadas = enviadas.reduce((acumulador, administracion) => {
       return acumulador + administracion.cantidad_traspasada;
     }, 0);
-    const totalCantidadRecibidas = recibidas
-      .filter((recepcion) => recepcion.vacunatorio_origen_nombre !== "camara")
-      .reduce((acumulador, recepcion) => {
+    const totalCantidadRecibidas = recibidas.reduce((acumulador, recepcion) => {
         return acumulador + recepcion.cantidad_traspasada;
       }, 0);
   

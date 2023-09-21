@@ -7,7 +7,6 @@ import { ChangePassword } from "./pages/ChangePassword";
 import { Footer } from "./components/static/Footer"
 import React, { useEffect, useState } from 'react';
 import { useAuth } from "./AuthContext";
-import { NuevaVacuna } from "./components/recepciones/NuevaVacuna";
 
 
 function App() {

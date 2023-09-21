@@ -4,7 +4,6 @@ import { logout } from '../../api/authentication';
 import { useAuth } from '../../AuthContext';
 import { Recepcion } from '../recepciones/Recepcion';
 import { RecepcionCamara } from '../recepciones/RecepcionCamara';
-import { NuevaVacuna } from '../recepciones/NuevaVacuna';
 
 export function Navigation() {
   const navigate = useNavigate();
@@ -60,9 +59,6 @@ export function Navigation() {
                     <li className="nav-item p-sm-2">
                       <RecepcionCamara userDetails={userDetails} stock={stock} size="yourSize" />
                     </li>
-                    <li className="nav-item p-sm-2">
-                      <NuevaVacuna size="yourSize" />
-                    </li>
                   </>
                 )}
               </>
@@ -107,7 +103,7 @@ export function Navigation() {
           </ul>
         )}
             <button className="btn btn-outline nav-item d-sm-none" onClick={handleLogout}>
-            <i class="fa-solid fa-arrow-right-from-bracket fs-4"></i>
+            <i className="fa-solid fa-arrow-right-from-bracket fs-4"></i>
                   </button>
       </div>
     </nav>

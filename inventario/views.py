@@ -1,12 +1,13 @@
 from rest_framework import viewsets
-from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock
-from .serializer import VacunatorioSerializer, VacunaSerializer, AdministracionVacunaSerializer, TraspasoVacunaSerializer, EliminacionVacunaSerializer, VacunaStockSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from authentication.models import CustomUser
 from authentication.serializers import CustomUserSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
+from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock
+from .serializer import VacunatorioSerializer, VacunaSerializer, AdministracionVacunaSerializer, TraspasoVacunaSerializer, EliminacionVacunaSerializer, VacunaStockSerializer
 
 class VacunatorioViewSet(viewsets.ModelViewSet):
     queryset = Vacunatorio.objects.all()
@@ -15,6 +16,38 @@ class VacunatorioViewSet(viewsets.ModelViewSet):
 class VacunaStockViewSet(viewsets.ModelViewSet):
     queryset = VacunaStock.objects.all()
     serializer_class = VacunaStockSerializer
+
+    def create(self, request, *args, **kwargs):
+        # Obtén los datos de la solicitud POST
+        data = request.data
+        tipo_vacuna_id = data.get('tipo_vacuna')
+        fecha_descongelacion = data.get('fecha_descongelacion')
+        fecha_caducidad_descongelacion = data.get('fecha_caducidad_descongelacion')
+        hora_descongelacion = data.get('hora_descongelacion')
+        vacunatorio_id = data.get('vacunatorio')
+        stock_to_add = int(data.get('stock', 0))  # Convierte el stock a entero
+
+        # Busca un registro existente con los mismos valores
+        existing_record = VacunaStock.objects.filter(
+            tipo_vacuna=tipo_vacuna_id,
+            fecha_descongelacion=fecha_descongelacion,
+            fecha_caducidad_descongelacion=fecha_caducidad_descongelacion,
+            hora_descongelacion=hora_descongelacion,
+            vacunatorio=vacunatorio_id
+        ).first()
+
+        if existing_record:
+            # Si existe un registro, actualiza el stock
+            existing_record.stock += stock_to_add  # Suma el stock de la solicitud
+            existing_record.save()
+            serializer = self.get_serializer(existing_record)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            # Si no existe un registro, crea uno nuevo
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class VacunaViewSet(viewsets.ModelViewSet):
     queryset = Vacuna.objects.all()

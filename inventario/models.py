@@ -7,8 +7,6 @@ class Vacunatorio(models.Model):
     nombre = models.CharField(max_length=100)
     direccion = models.TextField()
     telefono = models.CharField(max_length=20)
-    nombre_encargado = models.CharField(max_length=100)
-    email_encargado = models.EmailField(max_length=100)
     codigo_deis = models.CharField(max_length=15)
 
     def __str__(self):
@@ -42,7 +40,6 @@ class TraspasoVacuna(models.Model):
     cantidad_traspasada = models.PositiveIntegerField()
     responsable_entrega = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_entrega')
     responsable_recepcion = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_recepcion')
-    is_accepted = models.BooleanField(blank=True, default=False)
 
     def clean(self):
             if self.cantidad_traspasada <= 0:
@@ -51,9 +48,8 @@ class TraspasoVacuna(models.Model):
     def save(self, *args, **kwargs):
         with transaction.atomic():
             # Verificar si la cantidad_traspasada es mayor que el stock del vacunatorio de origen
-            if self.vacunatorio_origen.nombre != "camara":
-                if self.cantidad_traspasada > self.vacuna_traspaso.stock:
-                    raise ValidationError("La cantidad de vacunas traspasada es mayor que el stock disponible.")
+            if self.cantidad_traspasada > self.vacuna_traspaso.stock:
+                raise ValidationError("La cantidad de vacunas traspasada es mayor que el stock disponible.")
 
             # Intentar obtener el VacunaStock en el vacunatorio destino
             vacuna_destino = VacunaStock.objects.filter(
@@ -76,10 +72,6 @@ class TraspasoVacuna(models.Model):
             vacuna_destino.stock += self.cantidad_traspasada
             vacuna_destino.save()
 
-            # Restar la cantidad traspasada del stock en el origen
-            if self.vacunatorio_origen.nombre != "camara":
-                self.vacuna_traspaso.stock -= self.cantidad_traspasada
-                self.vacuna_traspaso.save()
 
             super(TraspasoVacuna, self).save(*args, **kwargs)
 
