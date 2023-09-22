@@ -4,36 +4,38 @@ import { es } from 'date-fns/locale';
 import { Traspaso } from './Traspaso';
 import { Eliminacion } from './Eliminacion';
 import { Administracion } from './Administracion';
+import moment from 'moment';
+
 
 export function StockCard({ stock, size }) {
 
   return (
     <div key={stock.id + size} className="card text-white">
       <div className="card-body text-start row">
-      <div className="col-6">
-  {stock.fecha_descongelacion && stock.hora_descongelacion && (
-    <p className="mb-0 custom-stock-card">
-      <strong>
-        <i className="fa-solid fa-temperature-arrow-up"></i> Descongelación:{' '}
-      </strong>{' '}
-      <br />{' '}
-      {format(new Date(`${stock.fecha_descongelacion}T${stock.hora_descongelacion}`), 'dd MMM yyyy HH:mm', { locale: es })}
-    </p>
-  )}
-  <br />
-  {stock.fecha_caducidad_descongelacion && (
-    <p className="mb-0 custom-stock-card">
-      <strong>
-        <i className="fa-solid fa-hourglass-half"></i> Caducidad por descong:
-      </strong>{' '}
-      <br />{' '}
-      {format(new Date(`${stock.fecha_caducidad_descongelacion}T${stock.hora_descongelacion}`), 'dd MMM yyyy HH:mm', { locale: es })}
-    </p>
-  )}
-  <hr />
-  <p className="mb-0 custom-stock-card">
-    <strong>Caducidad fabricante:</strong>{' '}
-    {format(parseISO(stock.caducidad_fabricante), 'dd MMM yyyy')}
+        <div className="col-6">
+          {stock.fecha_descongelacion && stock.hora_descongelacion && (
+            <p className="mb-0 custom-stock-card">
+              <strong>
+                <i className="fa-solid fa-temperature-arrow-up"></i> Descongelación:{' '}
+              </strong>{' '}
+              <br />{' '}
+              {moment(`${stock.fecha_descongelacion} ${stock.hora_descongelacion}`).format('DD MMM YYYY HH:mm')}
+            </p>
+          )}
+          <br />
+          {stock.fecha_caducidad_descongelacion && (
+            <p className="mb-0 custom-stock-card">
+              <strong>
+                <i className="fa-solid fa-hourglass-half"></i> Caducidad por descong:
+              </strong>{' '}
+              <br />{' '}
+              {moment(`${stock.fecha_caducidad_descongelacion} ${stock.hora_descongelacion}`).format('DD MMM YYYY HH:mm')}
+            </p>
+          )}
+          <hr />
+          <p className="mb-0 custom-stock-card">
+            <strong>Caducidad fabricante:</strong>{' '}
+            {moment(stock.caducidad_fabricante).format('DD MMM YYYY')}
   </p>
 </div>
 
