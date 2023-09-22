@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../AuthContext';
 import { StockCard } from './StockCard';
+import moment from 'moment';
 
 export function Stock({ size, userDetails }) {
   const [loading, setLoading] = useState(true);
@@ -14,8 +15,8 @@ export function Stock({ size, userDetails }) {
 
   // Función para calcular los días restantes hasta la caducidad
   const calcularDiasRestantes = (item) => {
-    const fechaCaducidad = item.fecha_caducidad_descongelacion || item.caducidad_fabricante;
-    const fechaActual = new Date()
+    const fechaCaducidad = moment(item.fecha_caducidad_descongelacion || item.caducidad_fabricante);
+    const fechaActual = moment();
     const fechaCaducidadDate = new Date(fechaCaducidad);
     const diferenciaDias = Math.ceil((fechaCaducidadDate - fechaActual) / (1000 * 60 * 60 * 24));
     return diferenciaDias;
