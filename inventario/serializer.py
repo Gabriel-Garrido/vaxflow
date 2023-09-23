@@ -7,15 +7,38 @@ class VacunatorioSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class VacunaStockSerializer(serializers.ModelSerializer):
-    hora_descongelacion = serializers.TimeField(format='%H:%M'),
     nombre_vacuna = serializers.CharField(source='tipo_vacuna.nombre', read_only=True)
     nombre_vacunatorio = serializers.CharField(source='vacunatorio.nombre', read_only=True)
     caducidad_fabricante = serializers.CharField(source='tipo_vacuna.fecha_caducidad_fabricante', read_only=True)
     lote = serializers.CharField(source='tipo_vacuna.lote', read_only=True)
+    fecha_descongelacion = serializers.DateField(format='%Y-%m-%d', required=False, allow_null=True)
+    fecha_caducidad_descongelacion = serializers.DateField(format='%Y-%m-%d', required=False, allow_null=True)
+    hora_descongelacion = serializers.TimeField(format='%H:%M', required=False, allow_null=True)
 
     class Meta:
         model = VacunaStock
         fields = '__all__'
+
+    def validate(self, data):
+        # Verificar si los campos de fecha y hora son vacíos ('') y convertirlos en None
+        if data.get('fecha_descongelacion') == '':
+            data['fecha_descongelacion'] = None
+        if data.get('fecha_caducidad_descongelacion') == '':
+            data['fecha_caducidad_descongelacion'] = None
+        if data.get('hora_descongelacion') == '':
+            data['hora_descongelacion'] = None
+
+        # Validar que todos los campos sean nulos o tengan valores válidos
+        if (
+            (data['fecha_descongelacion'] is None and data['fecha_caducidad_descongelacion'] is None and data['hora_descongelacion'] is not None) or
+            (data['fecha_descongelacion'] is not None and data['fecha_caducidad_descongelacion'] is None and data['hora_descongelacion'] is None) or
+            (data['fecha_descongelacion'] is None and data['fecha_caducidad_descongelacion'] is not None and data['hora_descongelacion'] is None)
+        ):
+            raise serializers.ValidationError("Todos los campos deben ser nulos o tener valores válidos.")
+
+        return data
+
+
 
 class VacunaSerializer(serializers.ModelSerializer):
     class Meta:

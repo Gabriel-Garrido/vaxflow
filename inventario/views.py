@@ -27,6 +27,14 @@ class VacunaStockViewSet(viewsets.ModelViewSet):
         vacunatorio_id = data.get('vacunatorio')
         stock_to_add = int(data.get('stock', 0))  # Convierte el stock a entero
 
+        # Convierte campos de fecha y hora vacíos en None
+        if fecha_descongelacion == '':
+            fecha_descongelacion = None
+        if fecha_caducidad_descongelacion == '':
+            fecha_caducidad_descongelacion = None
+        if hora_descongelacion == '':
+            hora_descongelacion = None
+
         # Busca un registro existente con los mismos valores
         existing_record = VacunaStock.objects.filter(
             tipo_vacuna=tipo_vacuna_id,
@@ -48,6 +56,7 @@ class VacunaStockViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class VacunaViewSet(viewsets.ModelViewSet):
     queryset = Vacuna.objects.all()

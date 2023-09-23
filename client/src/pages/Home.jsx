@@ -19,7 +19,7 @@ export function Home() {
         );
       } else {
     return (
-        <div className=' mt-2'>
+        <div className='container mt-2'>
         <div className='row container'>
             <div className='col-lg-4 d-none d-xl-block'>
                 <div className='container col-12'>
@@ -39,7 +39,7 @@ export function Home() {
         </div>
     
         {/* Small screen */}
-        <div className='container row'>
+        <div >        
         <nav className='d-block mb-0 d-xl-none '>
             <div className="nav nav-tabs align-content-top col-12 d-xl-none text-center" id="nav-tab" role="tablist">
                 <button className="nav-link col-4" id="nav-historial-tab" data-bs-toggle="tab" data-bs-target="#nav-historial" type="button" role="tab" aria-controls="nav-historial" aria-selected="true"><i className="fa-solid fa-book fs-3"></i></button>

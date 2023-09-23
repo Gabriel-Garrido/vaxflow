@@ -24,8 +24,8 @@ class VacunaStock(models.Model):
     tipo_vacuna = models.ForeignKey(Vacuna, on_delete=models.CASCADE)
     stock = models.PositiveIntegerField()
     fecha_descongelacion = models.DateField(null=True, blank=True)
-    hora_descongelacion = models.TimeField(null=True, blank=True)    
     fecha_caducidad_descongelacion = models.DateField(null=True, blank=True)
+    hora_descongelacion = models.TimeField(null=True, blank=True)
     vacunatorio = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE)
 
     def __str__(self):
