@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../api/authentication';
 import { useAuth } from '../../AuthContext';
 import { Recepcion } from '../recepciones/Recepcion';
-import { RecepcionCamara } from '../recepciones/RecepcionCamara';
+import { RetiroCamara } from '../recepciones/RetiroCamara';
 
 export function Navigation() {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ export function Navigation() {
                       <Recepcion userDetails={userDetails} stock={stock} size="yourSize" />
                     </li>
                     <li className="nav-item p-sm-2">
-                      <RecepcionCamara userDetails={userDetails} stock={stock} size="yourSize" />
+                      <RetiroCamara userDetails={userDetails} stock={stock} size="yourSizeCamara" />
                     </li>
                   </>
                 )}
