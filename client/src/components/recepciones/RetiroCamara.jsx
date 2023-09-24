@@ -9,6 +9,11 @@ export function RetiroCamara({ userDetails, size, stock }) {
   const [error, setError] = useState(null)
   const [vacunaSeleccionada, setVacunaSeleccionada] = useState([])
   const [lotesVacunaSeleccionada, setLotesVacunaSeleccionada] = useState([])
+  const [fechasLoteSeleccionado, setFechasLoteSeleccionado] = useState([])
+
+  const [nombreVacunaOtro, setNombreVacunaOtro] = useState(false);
+  const [loteOtro, setLoteOtro] = useState(false);
+  const [fechaCaducidadFabricanteOtro, setFechaCaducidadFabricanteOtro] = useState(false)
 
   useEffect(() => {
     async function loadVacunas() {
@@ -84,15 +89,23 @@ export function RetiroCamara({ userDetails, size, stock }) {
 
   const handleVacunaNombreChange = (event) => {
     const selectedVacunaNombre = event.target.value;
+    if (selectedVacunaNombre === "Otro") {
+      setNombreVacunaOtro(true);
+    } else {
+      setNombreVacunaOtro(false);
+    }
     const vacunaSeleccionada = vacunas.filter((vacuna) => {
-      return vacuna.nombre == selectedVacunaNombre
-    })
-    setVacunaSeleccionada(vacunaSeleccionada)
+      return vacuna.nombre == selectedVacunaNombre;
+    });
+    setVacunaSeleccionada(vacunaSeleccionada);
     console.log(vacunaSeleccionada);
-    const lotesVacunaSeleccionada = vacunaSeleccionada.map((vacuna) =>{
-      return vacuna.lote
-    })
-    setLotesVacunaSeleccionada(lotesVacunaSeleccionada)
+    const lotesVacunaSeleccionada = vacunaSeleccionada.map((vacuna) => {
+      return vacuna.lote;
+    });
+    const fechasVacunaSeleccionada = vacunaSeleccionada.map((vacuna) => {
+      return vacuna.fecha_caducidad_fabricante;
+    });
+    setLotesVacunaSeleccionada(lotesVacunaSeleccionada);
   };
 
 
@@ -136,64 +149,145 @@ export function RetiroCamara({ userDetails, size, stock }) {
                   <div>
                     <form onSubmit={handleSubmit(onSubmit)} className="bg-dark p-1 rounded ">
                       {/* Nombre de la Vacuna */}
-                      <div className="mb-3">
-                        <label htmlFor="tipo_vacuna" className="form-label text-light">
-                          Nombre Vacuna
-                        </label>
-                        <select
-                          id="nombreVacuna"
-                          name="nombreVacuna"
-                          {...register('nombreVacuna', { required: true })}
-                          className="form-select"
-                          onChange={handleVacunaNombreChange}
-                        >
-                          <option value=""></option>
-                          {vacunas.filter((vacuna, index, self) => self.findIndex(v => v.nombre === vacuna.nombre) === index)
-                          .map((vacuna) => (
-                            <option key={vacuna.nombre} value={vacuna.nombre}>
-                              {vacuna.nombre}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.tipo_vacuna && <p className="text-danger">Este campo es requerido</p>}
-                      </div>
+<div className="mb-3">
+  <label htmlFor="tipo_vacuna" className="form-label text-light">
+    Nombre Vacuna
+  </label>
+  <select
+    id="nombreVacuna"
+    name="nombreVacuna"
+    {...register('nombreVacuna', { required: true })}
+    className="form-select"
+    onChange={handleVacunaNombreChange}
+  >
+    <option value=""></option>
+    {vacunas
+      .filter(
+        (vacuna, index, self) =>
+          self.findIndex((v) => v.nombre === vacuna.nombre) === index
+      )
+      .map((vacuna) => (
+        <option key={vacuna.nombre} value={vacuna.nombre}>
+          {vacuna.nombre}
+        </option>
+      ))}
+    <option value="Otro">Otro nombre vacuna</option> {/* Agregar la opción "Otro" */}
+  </select>
+  {nombreVacunaOtro && ( // Mostrar el campo de texto si se selecciona "Otro"
+    <input
+      type="text"
+      id="nombreVacunaOtro"
+      name="nombreVacunaOtro"
+      {...register('nombreVacunaOtro', { required: true })}
+      className="form-control"
+      onChange={(e) =>{
+        const vacunaOtraSeleccionada = vacunas.filter((vacuna) => { return vacuna.nombre == e.target.value})
+          console.log(vacunaOtraSeleccionada);
+          const lotesvacunaOtraSeleccionada = vacunaOtraSeleccionada.map((vacuna) => {
+            return vacuna.lote;
+          });
+          
+          setLotesVacunaSeleccionada(lotesvacunaOtraSeleccionada)
+          ;
+        
+
+      }}
+    />
+  )}
+  {errors.tipo_vacuna && <p className="text-danger">Este campo es requerido</p>}
+</div>
+
+{/* Lote */}
+<div className="mb-3">
+  <label htmlFor="lote" className="form-label text-light">
+    Lote:
+  </label>
+  <select
+    type="text"
+    id="lote"
+    name="lote"
+    {...register('lote', { required: true })}
+    className="form-select"
+    onChange={(event) => {
+      if (event.target.value === "Otro") {
+        setLoteOtro(true);
+      } else {
+        console.log(event.target.value);
+        setLoteOtro(false);
+        const vacunasLoteSeleccionado = vacunas.filter((vacuna) => {
+          if (vacuna.lote == event.target.value) {
+            return vacuna.lote
+          }
+        })
+        console.log(vacunasLoteSeleccionado);
+        const fechasLoteSeleccionado = vacunasLoteSeleccionado.map((vacuna) => {
+          return vacuna.fecha_caducidad_fabricante
+        })
+        console.log(fechasLoteSeleccionado);
+        setFechasLoteSeleccionado(fechasLoteSeleccionado)
+      }
+
+    }}
+  >
+    <option value=""></option>
+    {lotesVacunaSeleccionada.map((lote) => (
+      <option key={'lote' + lote} value={lote}>
+        {lote}
+      </option>
+    ))}
+    
+    <option value="Otro">Otro</option> {/* Agregar la opción "Otro" */}
+  </select>
+  {loteOtro && ( // Mostrar el campo de texto si se selecciona "Otro"
+    <input
+      type="text"
+      id="loteOtro"
+      name="loteOtro"
+      {...register('loteOtro', { required: true })}
+      className="form-control"
+    />
+  )}
+  {errors.lote && <p className="text-danger">Este campo es requerido</p>}
+</div>
 
                       {/* Fecha de Caducidad del Fabricante */}
-                      <div className="mb-3">
-                        <label htmlFor="fechaCaducidadFabricante" className="form-label text-light">
-                          Fecha de Caducidad del Fabricante:
-                        </label>
-                        <input
-                          type="date"
-                          id="fechaCaducidadFabricante"
-                          name="fechaCaducidadFabricante"
-                          {...register('fechaCaducidadFabricante', { required: true })}
-                          className="form-control"
-                        />
-                        {errors.fechaCaducidadFabricante && <p className="text-danger">Este campo es requerido</p>}
-                      </div>
+<div className="mb-3">
+  <label htmlFor="fechaCaducidadFabricante" className="form-label text-light">
+    Fecha de Caducidad del Fabricante:
+  </label>
+  <select
+    id="fechaCaducidadFabricante"
+    name="fechaCaducidadFabricante"
+    {...register('fechaCaducidadFabricante', { required: true })}
+    className="form-select"
+    onChange={(event) => {
+      if (event.target.value === "Otro") {
+        setFechaCaducidadFabricanteOtro(true);
+      } else {
+        setFechaCaducidadFabricanteOtro(false);
+      }
+    }}
+  >
+    <option value=""></option>
+    {fechasLoteSeleccionado.map((fecha) => (
+      <option key={'fecha' + fecha + stock.id} value={fecha}>
+        {fecha}
+      </option>
+    ))}
+    <option value="Otro">Otras fechas</option> {/* Agregar la opción "Otras fechas" */}
+  </select>
+  {fechaCaducidadFabricanteOtro && ( // Mostrar el campo de entrada de fecha si se selecciona "Otras fechas"
+    <input
+      type="date"
+      id="fechaCaducidadFabricanteOtro"
+      name="fechaCaducidadFabricanteOtro"
+      {...register('fechaCaducidadFabricanteOtro', { required: true })}
+      className="form-control"
+    />
+  )}
+  {errors.fechaCaducidadFabricante && <p className="text-danger">Este campo es requerido</p>}
+</div>
 
-                      {/* Lote */}
-                      <div className="mb-3">
-                        <label htmlFor="lote" className="form-label text-light">
-                          Lote:
-                        </label>
-                        <select
-                          type="text"
-                          id="lote"
-                          name="lote"
-                          {...register('lote', { required: true })}
-                          className="form-select"
-                        >
-                          <option value=""></option>
-                          {lotesVacunaSeleccionada.map((lote) => (
-                            <option key={'lote'+lote} value={lote}>
-                              {lote}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.lote && <p className="text-danger">Este campo es requerido</p>}
-                      </div>
 
                       {/* Cantidad */}
                       <div className="mb-3">
@@ -215,7 +309,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
                         )}
                       </div>
 
-                      {vacunaSeleccionada[0].congelacion?
+                      {vacunaSeleccionada[0]?.congelacion?
                       <div className='container bg-black '>
                         <hr />
                         {/* Fecha de Descongelación */}
@@ -264,7 +358,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
 
                     {error?<span key={"error" + stock.id} className='text-danger'>{error}</span>: <></>}
 
-                      <div className='text-center'>
+                      {isValid?<div className='text-center'>
                         <button
                           type="submit"
                           className="btn btn-primary me-2 fs-3 mt-2"
@@ -272,7 +366,14 @@ export function RetiroCamara({ userDetails, size, stock }) {
                         >
                           {processing ? 'Procesando...' : 'Realizar Retiro'}
                         </button>
-                      </div>
+                      </div>:<div className='text-center'>
+                        <button
+                          className="btn btn-secondary me-2 fs-3 mt-2"
+                          disabled
+                        >
+                          Realizar Retiro
+                        </button>
+                      </div>}
                     </form>
                   </div>
                         
