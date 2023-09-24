@@ -10,10 +10,13 @@ export function RetiroCamara({ userDetails, size, stock }) {
   const [vacunaSeleccionada, setVacunaSeleccionada] = useState([])
   const [lotesVacunaSeleccionada, setLotesVacunaSeleccionada] = useState([])
   const [fechasLoteSeleccionado, setFechasLoteSeleccionado] = useState([])
-
-  const [nombreVacunaOtro, setNombreVacunaOtro] = useState(false);
+  const [vacunaOtraSeleccionada, setVacunaOtraSeleccionada] = useState([])
+  const [inputCongelacion, setInputCongelacion] = useState(false)
+  const [nombreVacunaOtroActive, setNombreVacunaOtroActive] = useState(false);
   const [loteOtro, setLoteOtro] = useState(false);
   const [fechaCaducidadFabricanteOtro, setFechaCaducidadFabricanteOtro] = useState(false)
+
+  
 
   useEffect(() => {
     async function loadVacunas() {
@@ -36,35 +39,49 @@ export function RetiroCamara({ userDetails, size, stock }) {
     handleSubmit,
     formState: { errors, isValid },
     reset,
+    setValue,
   } = useForm({
     mode: 'onBlur', // Validar cuando se sale de un campo
   });
 
   const onSubmit = async (data) => {
     setProcessing(true);
-  
+
     if (!isValid) {
       console.error('Formulario no válido');
       setError('Formulario no válido')
       return;
     }
-  
+
+    const nombreVacunaEnviar = data.nombreVacunaOtro || data.nombreVacuna;
+    const loteEnviar = data.loteOtro || data.lote;
+    const fechaCaducidadEnviar = data.fechaCaducidadFabricanteOtro || data.fechaCaducidadFabricante;
+
+
     // Buscar la vacuna que coincida con nombre, fecha de caducidad del fabricante y lote
+    
     const vacunaEncontrada = vacunas.find((vacuna) => {
       return (
-        vacuna.nombre === data.nombreVacuna &&
-        vacuna.fecha_caducidad_fabricante === data.fechaCaducidadFabricante &&
-        vacuna.lote === data.lote
+        vacuna.nombre === nombreVacunaEnviar &&
+        vacuna.fecha_caducidad_fabricante === fechaCaducidadEnviar &&
+        vacuna.lote === loteEnviar &&
+        vacuna.congelacion === inputCongelacion
       );
     });
-  
+
     if (!vacunaEncontrada) {
-      console.error('No se encontró la vacuna con los datos proporcionados');
-      setError('No se encontró la vacuna con los datos proporcionados')
-      setProcessing(false);
-      return;
+      const nuevaVacunaData = {
+        nombre: nombreVacunaEnviar,
+        lote: loteEnviar,
+        fecha_caducidad_fabricante: fechaCaducidadEnviar,
+        congelacion: inputCongelacion
+        // Agrega otros campos del formulario aquí
+      };
+
+      // Llama a la función para crear la nueva vacuna
+      vacunaEncontrada = await createVacuna(nuevaVacunaData);
+      console.log(vacunaEncontrada);
     }
-  
     // Crear objeto de vacunaStock a enviar al servidor
     const vacunaStockData = {
       tipo_vacuna: vacunaEncontrada.id, // Asignar el ID de la vacuna encontrada
@@ -74,11 +91,10 @@ export function RetiroCamara({ userDetails, size, stock }) {
       fecha_caducidad_descongelacion: data.fecha_caducidad_descongelacion || null,
       hora_descongelacion: data.hora_descongelacion || null,
     };
-  
+
     try {
       await createVacunaStock(vacunaStockData);
-      setProcessing(false);
-      reset(); // Limpiar el formulario
+      window.location.reload();
     } catch (error) {
       console.error('Error al crear el registro de vacunaStock:', error);
       setError('Error al crear el registro de vacunaStock')
@@ -89,10 +105,15 @@ export function RetiroCamara({ userDetails, size, stock }) {
 
   const handleVacunaNombreChange = (event) => {
     const selectedVacunaNombre = event.target.value;
+    setValue('nombreVacunaOtro', event.target.value)
+    setInputCongelacion(false)
+    setVacunaOtraSeleccionada([])
     if (selectedVacunaNombre === "Otro") {
-      setNombreVacunaOtro(true);
+      reset()
+      setValue('nombreVacuna', 'Otro')
+      setNombreVacunaOtroActive(true);
     } else {
-      setNombreVacunaOtro(false);
+      setNombreVacunaOtroActive(false);
     }
     const vacunaSeleccionada = vacunas.filter((vacuna) => {
       return vacuna.nombre == selectedVacunaNombre;
@@ -101,9 +122,6 @@ export function RetiroCamara({ userDetails, size, stock }) {
     console.log(vacunaSeleccionada);
     const lotesVacunaSeleccionada = vacunaSeleccionada.map((vacuna) => {
       return vacuna.lote;
-    });
-    const fechasVacunaSeleccionada = vacunaSeleccionada.map((vacuna) => {
-      return vacuna.fecha_caducidad_fabricante;
     });
     setLotesVacunaSeleccionada(lotesVacunaSeleccionada);
   };
@@ -149,144 +167,169 @@ export function RetiroCamara({ userDetails, size, stock }) {
                   <div>
                     <form onSubmit={handleSubmit(onSubmit)} className="bg-dark p-1 rounded ">
                       {/* Nombre de la Vacuna */}
-<div className="mb-3">
-  <label htmlFor="tipo_vacuna" className="form-label text-light">
-    Nombre Vacuna
-  </label>
-  <select
-    id="nombreVacuna"
-    name="nombreVacuna"
-    {...register('nombreVacuna', { required: true })}
-    className="form-select"
-    onChange={handleVacunaNombreChange}
-  >
-    <option value=""></option>
-    {vacunas
-      .filter(
-        (vacuna, index, self) =>
-          self.findIndex((v) => v.nombre === vacuna.nombre) === index
-      )
-      .map((vacuna) => (
-        <option key={vacuna.nombre} value={vacuna.nombre}>
-          {vacuna.nombre}
-        </option>
-      ))}
-    <option value="Otro">Otro nombre vacuna</option> {/* Agregar la opción "Otro" */}
-  </select>
-  {nombreVacunaOtro && ( // Mostrar el campo de texto si se selecciona "Otro"
-    <input
-      type="text"
-      id="nombreVacunaOtro"
-      name="nombreVacunaOtro"
-      {...register('nombreVacunaOtro', { required: true })}
-      className="form-control"
-      onChange={(e) =>{
-        const vacunaOtraSeleccionada = vacunas.filter((vacuna) => { return vacuna.nombre == e.target.value})
-          console.log(vacunaOtraSeleccionada);
-          const lotesvacunaOtraSeleccionada = vacunaOtraSeleccionada.map((vacuna) => {
-            return vacuna.lote;
-          });
-          
-          setLotesVacunaSeleccionada(lotesvacunaOtraSeleccionada)
-          ;
-        
+                      <div className="mb-3">
+                        <label htmlFor="tipo_vacuna" className="form-label text-light">
+                          Nombre Vacuna
+                        </label>
+                        <select
+                          id="nombreVacuna"
+                          name="nombreVacuna"
+                          {...register('nombreVacuna', { required: true })}
+                          className="form-select"
+                          onChange={handleVacunaNombreChange}
+                        >
+                          <option value=""></option>
+                          {vacunas
+                            .filter(
+                              (vacuna, index, self) =>
+                                self.findIndex((v) => v.nombre === vacuna.nombre) === index
+                            )
+                            .map((vacuna) => (
+                              <option key={vacuna.nombre} value={vacuna.nombre}>
+                                {vacuna.nombre}
+                              </option>
+                            ))}
+                          <option value="Otro">Otro nombre vacuna</option> 
+                          {/* Agregar la opción "Otro" */}
+                        </select>
+                        {nombreVacunaOtroActive && ( // Mostrar el campo de texto si se selecciona "Otro"
+                          <div className='row container'>
+                          <input
+                            type="text"
+                            id="nombreVacunaOtro"
+                            name="nombreVacunaOtro"
+                            placeholder="Escriba nombre de vacuna"
+                            {...register('nombreVacunaOtro', { required: true })}
+                            className="form-control border-success mt-2 "
+                            onChange={(e) => {
+                              const vacunaOtraSeleccionada = vacunas.filter((vacuna) => { return vacuna.nombre == e.target.value })
+                              console.log(vacunaOtraSeleccionada);
+                              const lotesvacunaOtraSeleccionada = vacunaOtraSeleccionada.map((vacuna) => {
+                                return vacuna.lote;
+                              });
+                              setVacunaOtraSeleccionada(vacunaOtraSeleccionada)
 
-      }}
-    />
-  )}
-  {errors.tipo_vacuna && <p className="text-danger">Este campo es requerido</p>}
-</div>
+                              setLotesVacunaSeleccionada(lotesvacunaOtraSeleccionada)
+                                ;
+                            
 
-{/* Lote */}
-<div className="mb-3">
-  <label htmlFor="lote" className="form-label text-light">
-    Lote:
-  </label>
-  <select
-    type="text"
-    id="lote"
-    name="lote"
-    {...register('lote', { required: true })}
-    className="form-select"
-    onChange={(event) => {
-      if (event.target.value === "Otro") {
-        setLoteOtro(true);
-      } else {
-        console.log(event.target.value);
-        setLoteOtro(false);
-        const vacunasLoteSeleccionado = vacunas.filter((vacuna) => {
-          if (vacuna.lote == event.target.value) {
-            return vacuna.lote
-          }
-        })
-        console.log(vacunasLoteSeleccionado);
-        const fechasLoteSeleccionado = vacunasLoteSeleccionado.map((vacuna) => {
-          return vacuna.fecha_caducidad_fabricante
-        })
-        console.log(fechasLoteSeleccionado);
-        setFechasLoteSeleccionado(fechasLoteSeleccionado)
-      }
+                            }}
+                            
+                          />
+                              <select
+                                className="form-select mt-1"
+                                aria-label="Default select example"
+                                onChange={(e) => {
+                                  const isCongelada = e.target.value === 'true'; // Convierte el valor del select en un booleano
+                                  setInputCongelacion(isCongelada);
+                                }}
+                              >
+                                <option defaultValue>¿Congelada en cámara?</option>
+                                <option value="true">Sí</option>
+                                <option value="false">No</option>
+                              </select>
 
-    }}
-  >
-    <option value=""></option>
-    {lotesVacunaSeleccionada.map((lote) => (
-      <option key={'lote' + lote} value={lote}>
-        {lote}
-      </option>
-    ))}
-    
-    <option value="Otro">Otro</option> {/* Agregar la opción "Otro" */}
-  </select>
-  {loteOtro && ( // Mostrar el campo de texto si se selecciona "Otro"
-    <input
-      type="text"
-      id="loteOtro"
-      name="loteOtro"
-      {...register('loteOtro', { required: true })}
-      className="form-control"
-    />
-  )}
-  {errors.lote && <p className="text-danger">Este campo es requerido</p>}
-</div>
+
+
+
+                          </div>
+                        )}
+                        {errors.tipo_vacuna && <p className="text-danger">Este campo es requerido</p>}
+                      </div>
+
+                      {/* Lote */}
+                      <div className="mb-3">
+                        <label htmlFor="lote" className="form-label text-light">
+                          Lote:
+                        </label>
+                        <select
+                          type="text"
+                          id="lote"
+                          name="lote"
+                          {...register('lote', { required: true })}
+                          className="form-select"
+                          onChange={(event) => {
+                            if (event.target.value === "Otro") {
+                              setLoteOtro(true);
+                            } else {
+                              console.log(event.target.value);
+                              setLoteOtro(false);
+                              const vacunasLoteSeleccionado = vacunas.filter((vacuna) => {
+                                if (vacuna.lote == event.target.value) {
+                                  return vacuna.lote
+                                }
+                              })
+                              console.log(vacunasLoteSeleccionado);
+                              const fechasLoteSeleccionado = vacunasLoteSeleccionado.map((vacuna) => {
+                                return vacuna.fecha_caducidad_fabricante
+                              })
+                              console.log(fechasLoteSeleccionado);
+                              setFechasLoteSeleccionado(fechasLoteSeleccionado)
+                            }
+
+                          }}
+                        
+                        >
+                          <option value=""></option>
+                          {lotesVacunaSeleccionada.map((lote) => (
+                            <option key={'lote' + lote} value={lote}>
+                              {lote}
+                            </option>
+                          ))}
+
+                          <option value="Otro">Otro</option> 
+                          {/* Agregar la opción "Otro" */}
+                        </select>
+                        {loteOtro && (
+                          <input
+                            type="text"
+                            id="loteOtro"
+                            name="loteOtro"
+                            placeholder="Escriba el lote de la vacuna"
+                            {...register('loteOtro', { required: true })}
+                            className="form-control"
+                          />
+                        )}
+                        {errors.lote && <p className="text-danger">Este campo es requerido</p>}
+                      </div>
 
                       {/* Fecha de Caducidad del Fabricante */}
-<div className="mb-3">
-  <label htmlFor="fechaCaducidadFabricante" className="form-label text-light">
-    Fecha de Caducidad del Fabricante:
-  </label>
-  <select
-    id="fechaCaducidadFabricante"
-    name="fechaCaducidadFabricante"
-    {...register('fechaCaducidadFabricante', { required: true })}
-    className="form-select"
-    onChange={(event) => {
-      if (event.target.value === "Otro") {
-        setFechaCaducidadFabricanteOtro(true);
-      } else {
-        setFechaCaducidadFabricanteOtro(false);
-      }
-    }}
-  >
-    <option value=""></option>
-    {fechasLoteSeleccionado.map((fecha) => (
-      <option key={'fecha' + fecha + stock.id} value={fecha}>
-        {fecha}
-      </option>
-    ))}
-    <option value="Otro">Otras fechas</option> {/* Agregar la opción "Otras fechas" */}
-  </select>
-  {fechaCaducidadFabricanteOtro && ( // Mostrar el campo de entrada de fecha si se selecciona "Otras fechas"
-    <input
-      type="date"
-      id="fechaCaducidadFabricanteOtro"
-      name="fechaCaducidadFabricanteOtro"
-      {...register('fechaCaducidadFabricanteOtro', { required: true })}
-      className="form-control"
-    />
-  )}
-  {errors.fechaCaducidadFabricante && <p className="text-danger">Este campo es requerido</p>}
-</div>
+                      <div className="mb-3">
+                        <label htmlFor="fechaCaducidadFabricante" className="form-label text-light">
+                          Fecha de Caducidad del Fabricante:
+                        </label>
+                        <select
+                          id="fechaCaducidadFabricante"
+                          name="fechaCaducidadFabricante"
+                          {...register('fechaCaducidadFabricante', { required: true })}
+                          className="form-select"
+                          onChange={(event) => {
+                            if (event.target.value === "Otro") {
+                              setFechaCaducidadFabricanteOtro(true);
+                            } else {
+                              setFechaCaducidadFabricanteOtro(false);
+                            }
+                          }}
+                        >
+                          <option value=""></option>
+                          {fechasLoteSeleccionado.map((fecha) => (
+                            <option key={'fecha' + fecha + stock.id} value={fecha}>
+                              {fecha}
+                            </option>
+                          ))}
+                          <option value="Otro">Otras fechas</option> {/* Agregar la opción "Otras fechas" */}
+                        </select>
+                        {fechaCaducidadFabricanteOtro && ( // Mostrar el campo de entrada de fecha si se selecciona "Otras fechas"
+                          <input
+                            type="date"
+                            id="fechaCaducidadFabricanteOtro"
+                            name="fechaCaducidadFabricanteOtro"
+                            {...register('fechaCaducidadFabricanteOtro', { required: true })}
+                            className="form-control"
+                          />
+                        )}
+                        {errors.fechaCaducidadFabricante && <p className="text-danger">Este campo es requerido</p>}
+                      </div>
 
 
                       {/* Cantidad */}
@@ -309,56 +352,56 @@ export function RetiroCamara({ userDetails, size, stock }) {
                         )}
                       </div>
 
-                      {vacunaSeleccionada[0]?.congelacion?
-                      <div className='container bg-black '>
-                        <hr />
-                        {/* Fecha de Descongelación */}
-                        <div className="mb-3">
-                          <label htmlFor="fecha_descongelacion" className="form-label text-light">
-                            Fecha de Descongelación:
-                          </label>
-                          <input
-                            type="date"
-                            id="fecha_descongelacion"
-                            name="fecha_descongelacion"
-                            {...register('fecha_descongelacion')}
-                            className="form-control"
-                          />
-                        </div>
+                      {vacunaSeleccionada[0]?.congelacion || vacunaOtraSeleccionada[0]?.congelacion || inputCongelacion == true?
+                        <div className='container bg-black '>
+                          <hr />
+                          {/* Fecha de Descongelación */}
+                          <div className="mb-3">
+                            <label htmlFor="fecha_descongelacion" className="form-label text-light">
+                              Fecha de Descongelación:
+                            </label>
+                            <input
+                              type="date"
+                              id="fecha_descongelacion"
+                              name="fecha_descongelacion"
+                              {...register('fecha_descongelacion', { required: true })}
+                              className="form-control"
+                            />
+                          </div>
 
-                        {/* Fecha de Caducidad de Descongelación */}
-                        <div className="mb-3">
-                          <label htmlFor="fecha_caducidad_descongelacion" className="form-label text-light">
-                            Fecha de Caducidad de Descongelación:
-                          </label>
-                          <input
-                            type="date"
-                            id="fecha_caducidad_descongelacion"
-                            name="fecha_caducidad_descongelacion"
-                            {...register('fecha_caducidad_descongelacion')}
-                            className="form-control"
-                          />
-                        </div>
+                          {/* Fecha de Caducidad de Descongelación */}
+                          <div className="mb-3">
+                            <label htmlFor="fecha_caducidad_descongelacion" className="form-label text-light">
+                              Fecha de Caducidad de Descongelación:
+                            </label>
+                            <input
+                              type="date"
+                              id="fecha_caducidad_descongelacion"
+                              name="fecha_caducidad_descongelacion"
+                              {...register('fecha_caducidad_descongelacion', { required: true })}
+                              className="form-control"
+                            />
+                          </div>
 
-                        {/* Hora de Descongelación */}
-                        <div className="mb-3">
-                          <label htmlFor="hora_descongelacion" className="form-label text-light">
-                            Hora de Descongelación:
-                          </label>
-                          <input
-                            type="time"
-                            id="hora_descongelacion"
-                            name="hora_descongelacion"
-                            {...register('hora_descongelacion')}
-                            className="form-control"
-                          />
-                        </div>
-                        <hr />
-                      </div>:<></>}
+                          {/* Hora de Descongelación */}
+                          <div className="mb-3">
+                            <label htmlFor="hora_descongelacion" className="form-label text-light">
+                              Hora de Descongelación:
+                            </label>
+                            <input
+                              type="time"
+                              id="hora_descongelacion"
+                              name="hora_descongelacion"
+                              {...register('hora_descongelacion', { required: true })}
+                              className="form-control"
+                            />
+                          </div>
+                          <hr />
+                        </div> : <></>}
 
-                    {error?<span key={"error" + stock.id} className='text-danger'>{error}</span>: <></>}
+                      {error ? <span key={"error" + stock.id} className='text-danger'>{error}</span> : <></>}
 
-                      {isValid?<div className='text-center'>
+                      {isValid ? <div className='text-center'>
                         <button
                           type="submit"
                           className="btn btn-primary me-2 fs-3 mt-2"
@@ -366,7 +409,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
                         >
                           {processing ? 'Procesando...' : 'Realizar Retiro'}
                         </button>
-                      </div>:<div className='text-center'>
+                      </div> : <div className='text-center'>
                         <button
                           className="btn btn-secondary me-2 fs-3 mt-2"
                           disabled
@@ -376,7 +419,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
                       </div>}
                     </form>
                   </div>
-                        
+
                 </div>
               </div>
             </div>

@@ -115,6 +115,7 @@ export const createVacuna = async (vacunaData) => {
     try {
         const token = localStorage.getItem('accessToken');
         await inventarioApi.post('/vacunas/', vacunaData, { headers: { Authorization: `Bearer ${token}` } });
+        return response.data; // Devuelve la respuesta del servidor
     } catch (error) {
         console.error('Error en createVacuna:', error);
         throw error;
