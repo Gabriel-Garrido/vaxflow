@@ -46,23 +46,20 @@ export function RetiroCamara({ userDetails, size, stock }) {
 
   const onSubmit = async (data) => {
     setProcessing(true);
-
+  
     if (!isValid) {
       console.error('Formulario no válido');
-      setError('Formulario no válido')
+      setError('Formulario no válido');
+      setProcessing(false); // Agrega esto para detener el procesamiento en caso de error
       return;
     }
-
-    let vacunaDataId = null
-    let vacunaCreada = null;
-
+  
+    let vacunaDataId = null;
+  
     const nombreVacunaEnviar = data.nombreVacunaOtro || data.nombreVacuna;
     const loteEnviar = data.loteOtro || data.lote;
     const fechaCaducidadEnviar = data.fechaCaducidadFabricanteOtro || data.fechaCaducidadFabricante;
-
-
-    // Buscar la vacuna que coincida con nombre, fecha de caducidad del fabricante y lote
-    
+  
     const vacunaEncontrada = vacunas.find((vacuna) => {
       return (
         vacuna.nombre === nombreVacunaEnviar &&
@@ -71,69 +68,65 @@ export function RetiroCamara({ userDetails, size, stock }) {
         vacuna.congelacion === inputCongelacion
       );
     });
-
+  
     console.log('---vacunaEncontrada----');
     console.log(vacunaEncontrada);
-
+  
     if (!vacunaEncontrada) {
       const nuevaVacunaData = {
         nombre: nombreVacunaEnviar,
         lote: loteEnviar,
         fecha_caducidad_fabricante: fechaCaducidadEnviar,
-        congelacion: inputCongelacion
+        congelacion: inputCongelacion,
         // Agrega otros campos del formulario aquí
       };
       console.log('---nuevaVacunaData----');
-        console.log(nuevaVacunaData);
-
-      // Llama a la función para crear la nueva vacuna
-      try{
-        vacunaCreada = await createVacuna(nuevaVacunaData);
-        setNuevaVacuna(vacunaCreada)
+      console.log(nuevaVacunaData);
+  
+      try {
+        const vacunaCreada = await createVacuna(nuevaVacunaData);
+        setNuevaVacuna(vacunaCreada);
         console.log('---vacunaCreada----');
         console.log(vacunaCreada);
+        vacunaDataId = vacunaCreada.id;
       } catch (error) {
         console.error('Error al crear el registro de crearVacuna:', error);
-        setError('Error al crear el registro de crearVacuna')
-        console.log(error)
+        setError('Error al crear el registro de crearVacuna');
+        console.log(error);
         setProcessing(false);
+        return; // Agrega esto para detener la ejecución en caso de error
       }
-      
-      console.log('---nuevaVacuna----');
-      console.log(nuevaVacuna);
-      vacunaDataId = vacunaCreada.id
-
-    }else{
-      vacunaDataId = vacunaEncontrada.id
+    } else {
+      vacunaDataId = vacunaEncontrada.id;
     }
-    
-    // Crear objeto de vacunaStock a enviar al servidor
+  
     const vacunaStockData = {
-      tipo_vacuna: vacunaDataId, // Asignar el ID de la vacuna encontrada
+      tipo_vacuna: vacunaDataId,
       vacunatorio: userDetails.vacunatorio,
       stock: parseInt(data.stock),
       fecha_descongelacion: data.fecha_descongelacion || null,
       fecha_caducidad_descongelacion: data.fecha_caducidad_descongelacion || null,
       hora_descongelacion: data.hora_descongelacion || null,
     };
-
+  
     const nuevoRetiroData = {
       cantidad_retiro: parseInt(data.stock),
       vacuna_retiro: vacunaDataId,
       vacunatorio: userDetails.vacunatorio,
     };
-
+  
     try {
       await createVacunaStock(vacunaStockData);
-      await createRetiroCamara(nuevoRetiroData)
+      await createRetiroCamara(nuevoRetiroData);
       window.location.reload();
     } catch (error) {
       console.error('Error al crear el registro de vacunaStock:', error);
-      setError('Error al crear el registro de vacunaStock')
-      console.log(error)
+      setError('Error al crear el registro de vacunaStock');
+      console.log(error);
       setProcessing(false);
     }
   };
+  
 
   const handleVacunaNombreChange = (event) => {
     const selectedVacunaNombre = event.target.value;
