@@ -440,7 +440,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
                       {isValid ? <div className='text-center'>
                         <button
                           type="submit"
-                          className="btn btn-primary me-2 fs-3 mt-2"
+                          className={processing?'spinner-border btn btn-primary me-2 fs-3 mt-2':"btn btn-primary me-2 fs-3 mt-2"}
                           disabled={processing}
                         >
                           {processing ? 'Procesando...' : 'Realizar Retiro'}
@@ -450,6 +450,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
                           className="btn btn-secondary me-2 fs-3 mt-2"
                           disabled
                         >
+                          
                           Realizar Retiro
                         </button>
                       </div>}
