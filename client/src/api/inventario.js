@@ -114,7 +114,7 @@ export const getAllAdministraciones = async () => {
 export const createVacuna = async (vacunaData) => {
     try {
         const token = localStorage.getItem('accessToken');
-        await inventarioApi.post('/vacunas/', vacunaData, { headers: { Authorization: `Bearer ${token}` } });
+        const response = await inventarioApi.post('/vacunas/', vacunaData, { headers: { Authorization: `Bearer ${token}` } });
         return response.data; // Devuelve la respuesta del servidor
     } catch (error) {
         console.error('Error en createVacuna:', error);
@@ -125,7 +125,8 @@ export const createVacuna = async (vacunaData) => {
 export const createVacunaStock = async (vacunaStockData) => {
     try {
         const token = localStorage.getItem('accessToken');
-        await inventarioApi.post('/vacunasStock/', vacunaStockData, { headers: { Authorization: `Bearer ${token}` } });
+        const response = await inventarioApi.post('/vacunasStock/', vacunaStockData, { headers: { Authorization: `Bearer ${token}` } });
+        return response.data; 
     } catch (error) {
         console.error('Error en createVacunaStock:', error);
         throw error;

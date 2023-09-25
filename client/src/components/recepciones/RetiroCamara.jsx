@@ -15,7 +15,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
   const [nombreVacunaOtroActive, setNombreVacunaOtroActive] = useState(false);
   const [loteOtro, setLoteOtro] = useState(false);
   const [fechaCaducidadFabricanteOtro, setFechaCaducidadFabricanteOtro] = useState(false)
-
+  const [nuevaVacuna, setNuevaVacuna] = useState([])
   
 
   useEffect(() => {
@@ -53,6 +53,9 @@ export function RetiroCamara({ userDetails, size, stock }) {
       return;
     }
 
+    let vacunaDataId = null
+    let vacunaCreada = null;
+
     const nombreVacunaEnviar = data.nombreVacunaOtro || data.nombreVacuna;
     const loteEnviar = data.loteOtro || data.lote;
     const fechaCaducidadEnviar = data.fechaCaducidadFabricanteOtro || data.fechaCaducidadFabricante;
@@ -69,6 +72,9 @@ export function RetiroCamara({ userDetails, size, stock }) {
       );
     });
 
+    console.log('---vacunaEncontrada----');
+    console.log(vacunaEncontrada);
+
     if (!vacunaEncontrada) {
       const nuevaVacunaData = {
         nombre: nombreVacunaEnviar,
@@ -77,14 +83,33 @@ export function RetiroCamara({ userDetails, size, stock }) {
         congelacion: inputCongelacion
         // Agrega otros campos del formulario aquí
       };
+      console.log('---nuevaVacunaData----');
+        console.log(nuevaVacunaData);
 
       // Llama a la función para crear la nueva vacuna
-      vacunaEncontrada = await createVacuna(nuevaVacunaData);
-      console.log(vacunaEncontrada);
+      try{
+        vacunaCreada = await createVacuna(nuevaVacunaData);
+        setNuevaVacuna(vacunaCreada)
+        console.log('---vacunaCreada----');
+        console.log(vacunaCreada);
+      } catch (error) {
+        console.error('Error al crear el registro de crearVacuna:', error);
+        setError('Error al crear el registro de crearVacuna')
+        console.log(error)
+        setProcessing(false);
+      }
+      
+      console.log('---nuevaVacuna----');
+      console.log(nuevaVacuna);
+      vacunaDataId = vacunaCreada.id
+
+    }else{
+      vacunaDataId = vacunaEncontrada.id
     }
+    
     // Crear objeto de vacunaStock a enviar al servidor
     const vacunaStockData = {
-      tipo_vacuna: vacunaEncontrada.id, // Asignar el ID de la vacuna encontrada
+      tipo_vacuna: vacunaDataId, // Asignar el ID de la vacuna encontrada
       vacunatorio: userDetails.vacunatorio,
       stock: parseInt(data.stock),
       fecha_descongelacion: data.fecha_descongelacion || null,
@@ -107,7 +132,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
     const selectedVacunaNombre = event.target.value;
     setValue('nombreVacunaOtro', event.target.value)
     setInputCongelacion(false)
-    setVacunaOtraSeleccionada([])
+    setVacunaOtraSeleccionada('')
     if (selectedVacunaNombre === "Otro") {
       reset()
       setValue('nombreVacuna', 'Otro')
@@ -192,7 +217,13 @@ export function RetiroCamara({ userDetails, size, stock }) {
                           <option value="Otro">Otro nombre vacuna</option> 
                           {/* Agregar la opción "Otro" */}
                         </select>
-                        {nombreVacunaOtroActive && ( // Mostrar el campo de texto si se selecciona "Otro"
+                        {errors.nombreVacuna && <p className="text-danger">Este campo es requerido</p>}
+
+
+                        {nombreVacunaOtroActive && ( 
+                          
+                          // Mostrar el campo de texto si se selecciona "Otro"
+
                           <div className='row container'>
                           <input
                             type="text"
@@ -212,25 +243,28 @@ export function RetiroCamara({ userDetails, size, stock }) {
                               setLotesVacunaSeleccionada(lotesvacunaOtraSeleccionada)
                                 ;
                             
-
                             }}
                             
                           />
+                          {errors.nombreVacunaOtro && <p className="text-danger">Este campo es requerido</p>}
+                          
+                          <div className='container row  mt-2 mx-2 px-5'>
+                          <label htmlFor="congelacionInput" class="col-form-label col text-white">Se congelan en camara?</label>
                               <select
-                                className="form-select mt-1"
+                                id='congelacionInput'
+                                className="form-select border-success col"
                                 aria-label="Default select example"
+                                {...register('congelacion', { required: true })}
                                 onChange={(e) => {
-                                  const isCongelada = e.target.value === 'true'; // Convierte el valor del select en un booleano
+                                  let isCongelada = e.target.value === 'true'; // Convierte el valor del select en un booleano
                                   setInputCongelacion(isCongelada);
                                 }}
                               >
-                                <option defaultValue>¿Congelada en cámara?</option>
+                                
+                                <option defaultValue value="false">No</option>
                                 <option value="true">Sí</option>
-                                <option value="false">No</option>
                               </select>
-
-
-
+                              </div>
 
                           </div>
                         )}
@@ -272,7 +306,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
                         >
                           <option value=""></option>
                           {lotesVacunaSeleccionada.map((lote) => (
-                            <option key={'lote' + lote} value={lote}>
+                            <option key={'lote' + lote + stock.id} value={lote}>
                               {lote}
                             </option>
                           ))}
@@ -281,14 +315,15 @@ export function RetiroCamara({ userDetails, size, stock }) {
                           {/* Agregar la opción "Otro" */}
                         </select>
                         {loteOtro && (
+                          <div className='row container'>
                           <input
                             type="text"
                             id="loteOtro"
                             name="loteOtro"
                             placeholder="Escriba el lote de la vacuna"
                             {...register('loteOtro', { required: true })}
-                            className="form-control"
-                          />
+                            className="form-control border-success"
+                          /></div>
                         )}
                         {errors.lote && <p className="text-danger">Este campo es requerido</p>}
                       </div>
@@ -320,13 +355,14 @@ export function RetiroCamara({ userDetails, size, stock }) {
                           <option value="Otro">Otras fechas</option> {/* Agregar la opción "Otras fechas" */}
                         </select>
                         {fechaCaducidadFabricanteOtro && ( // Mostrar el campo de entrada de fecha si se selecciona "Otras fechas"
+                        <div className='row container'>
                           <input
                             type="date"
                             id="fechaCaducidadFabricanteOtro"
                             name="fechaCaducidadFabricanteOtro"
                             {...register('fechaCaducidadFabricanteOtro', { required: true })}
-                            className="form-control"
-                          />
+                            className="form-control border-success"
+                          /></div>
                         )}
                         {errors.fechaCaducidadFabricante && <p className="text-danger">Este campo es requerido</p>}
                       </div>
