@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllAdministraciones, getAllEliminaciones, getAllTraspasos } from '../../api/inventario';
+import { getAllAdministraciones, getAllEliminaciones, getAllRetirosCamara, getAllTraspasos } from '../../api/inventario';
 import { useAuth } from '../../AuthContext';
 import { ReporteVacuna } from './ReporteVacuna';
 
@@ -9,12 +9,14 @@ export function Reportes({ userDetails }) {
   const [eliminaciones, setEliminaciones] = useState([]);
   const [administraciones, setAdministraciones] = useState([])
   const [vacunasConStock, setVacunasConStock] = useState([]);
+  const [retirosCamara, setRetirosCamara] = useState([])
 
   useEffect(() => {
     fetchStock();
     fetchTodaysTraspasos();
     fetchAllEliminaciones();
     fetchAllAdministraciones()
+    fetchAllRetirosCamara()
   }, [userDetails]);
 
   useEffect(() => {
@@ -47,6 +49,15 @@ export function Reportes({ userDetails }) {
     }
   };
 
+  const fetchAllRetirosCamara = async () => {
+    try {
+      const response = await getAllRetirosCamara();
+      setRetirosCamara(response.data);
+    } catch (error) {
+      console.error('Error en cargar todas los retiros de camara', error);
+    }
+  };
+
   const fetchAllAdministraciones = async () => {
     try {
       const response = await getAllAdministraciones();
@@ -73,7 +84,7 @@ export function Reportes({ userDetails }) {
         <div className="card-body text-center" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {vacunasConStock.map((vacuna) => (
               !eliminaciones || !administraciones || !todaysTraspasos?<></>: 
-            <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} administraciones={administraciones} stock={stock} />
+            <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} administraciones={administraciones} stock={stock} retirosCamara={retirosCamara}/>
           ))}
         </div>
       </div>

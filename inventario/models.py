@@ -36,8 +36,11 @@ class VacunaStock(models.Model):
 class RetiroCamara(models.Model):
     fecha_retiro = models.DateField(auto_now_add=True)
     cantidad_retiro = models.PositiveIntegerField()
-    vacuna_retiro = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='retiro_camara')
+    vacuna_retiro = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='vacuna_retiro_camara')
+    vacunatorio = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE)
     
+    def __str__(self):
+        return f"{self.fecha_retiro} => {self.vacuna_retiro} - {str(self.cantidad_retiro)} - {str(self.vacunatorio)}"
 
 class TraspasoVacuna(models.Model):
     vacuna_traspaso = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='traspasos_enviados')

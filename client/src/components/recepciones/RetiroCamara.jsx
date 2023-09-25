@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createVacuna, createVacunaStock, getAllVacunas } from '../../api/inventario';
+import { createVacuna, createVacunaStock, getAllVacunas, createRetiroCamara } from '../../api/inventario';
 import { useForm } from 'react-hook-form';
 
 export function RetiroCamara({ userDetails, size, stock }) {
@@ -117,8 +117,15 @@ export function RetiroCamara({ userDetails, size, stock }) {
       hora_descongelacion: data.hora_descongelacion || null,
     };
 
+    const nuevoRetiroData = {
+      cantidad_retiro: parseInt(data.stock),
+      vacuna_retiro: vacunaDataId,
+      vacunatorio: userDetails.vacunatorio,
+    };
+
     try {
       await createVacunaStock(vacunaStockData);
+      await createRetiroCamara(nuevoRetiroData)
       window.location.reload();
     } catch (error) {
       console.error('Error al crear el registro de vacunaStock:', error);
@@ -249,7 +256,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
                           {errors.nombreVacunaOtro && <p className="text-danger">Este campo es requerido</p>}
                           
                           <div className='container row  mt-2 mx-2 px-5'>
-                          <label htmlFor="congelacionInput" class="col-form-label col text-white">Se congelan en camara?</label>
+                          <label htmlFor="congelacionInput" className="col-form-label col text-white">Se congelan en camara?</label>
                               <select
                                 id='congelacionInput'
                                 className="form-select border-success col"
@@ -305,8 +312,8 @@ export function RetiroCamara({ userDetails, size, stock }) {
                         
                         >
                           <option value=""></option>
-                          {lotesVacunaSeleccionada.map((lote) => (
-                            <option key={'lote' + lote + stock.id} value={lote}>
+                          {lotesVacunaSeleccionada.map((lote,i) => (
+                            <option key={'lote' + i} value={lote}>
                               {lote}
                             </option>
                           ))}
@@ -347,8 +354,8 @@ export function RetiroCamara({ userDetails, size, stock }) {
                           }}
                         >
                           <option value=""></option>
-                          {fechasLoteSeleccionado.map((fecha) => (
-                            <option key={'fecha' + fecha + stock.id} value={fecha}>
+                          {fechasLoteSeleccionado.map((fecha, i) => (
+                            <option key={'fecha' + i} value={fecha}>
                               {fecha}
                             </option>
                           ))}

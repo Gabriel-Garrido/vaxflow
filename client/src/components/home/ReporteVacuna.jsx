@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
+import moment from 'moment';
 
-export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, administraciones, stock }) {
+export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, administraciones, stock, retirosCamara }) {
   const [enviadas, setEnviadas] = useState([]);
   const [recibidas, setRecibidas] = useState([]);
   const [eliminadas, setEliminadas] = useState([]);
   const [administradas, setAdministradas] = useState([])
   const [loading, setLoading] = useState(true);
   const [stockInicial, setStockInicial] = useState(0);
+  const [retiradasCamara, setRetiradasCamara] = useState([])
 
   useEffect(() => {
     setLoading(true)
@@ -17,6 +19,8 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     getEliminadas();
     getAdministradas()
     totalStockInicial();
+    getRetirosCamara()
+    
     setLoading(false)
   }, [traspasos, eliminaciones, vacuna, userDetails, stock]);
 
@@ -69,6 +73,19 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     setRecibidas(recibosHoy);
   }
 
+  function getRetirosCamara() {
+    const today = moment().format('DD-MM-YYYY'); // Formato dd-mm-yyyy
+    const retirosCamaraHoy = retirosCamara.filter((retiro) => {
+      const fechaRetiro = moment(retiro.fecha_retiro);
+      const formattedFechaRetiro = fechaRetiro.format('DD-MM-YYYY'); // Formato dd-mm-yyyy
+      console.log('Fecha del retiro:', formattedFechaRetiro); // Agregar este log
+      return formattedFechaRetiro === today 
+    });
+    setRetiradasCamara(retirosCamaraHoy);
+  }
+  
+  
+
   async function getEliminadas() {
     const today = new Date().toDateString();
     const eliminacionesHoy = eliminaciones.filter((eliminacion) => {
@@ -85,6 +102,15 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     setAdministradas(administracionesHoy);
   }
 
+  const today = new Date().toDateString();
+  console.log('------today');
+  console.log(today);
+
+  console.log('------retirosCamara');
+  console.log(retirosCamara);
+
+  console.log('------retiradasCamara');
+  console.log(retiradasCamara);
   if (loading) {
     return (
       <div>

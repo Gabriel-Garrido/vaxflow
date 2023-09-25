@@ -25,7 +25,6 @@ export const getAllVacunas = () => {
         console.error('Error en getAllVacunas:', error);
         throw error; // Puedes relanzar el error para que sea manejado por quien llame a esta función
     }
-
 };
 
 export const getAllVacunatorios = () => {
@@ -111,6 +110,17 @@ export const getAllAdministraciones = async () => {
     }
 };
 
+export const getAllRetirosCamara = async () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        const response = await inventarioApi.get('/RetiroCamara/', { headers: { Authorization: `Bearer ${token}` } });
+        return response
+    } catch (error) {
+        console.error('Error en getAllRetirosCamara:', error);
+        throw error;
+    }
+}
+
 export const createVacuna = async (vacunaData) => {
     try {
         const token = localStorage.getItem('accessToken');
@@ -132,3 +142,15 @@ export const createVacunaStock = async (vacunaStockData) => {
         throw error;
     }
 };
+
+export const createRetiroCamara = async (vacunaStockData) => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        const response = await inventarioApi.post('/RetiroCamara/', vacunaStockData, { headers: { Authorization: `Bearer ${token}` } });
+        return response.data; 
+    } catch (error) {
+        console.error('Error en createRetiroCamara:', error);
+        throw error;
+    }
+};
+

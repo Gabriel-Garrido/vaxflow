@@ -58,7 +58,7 @@ class VacunaStockViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class RetiroCamaraViewSet(viewsets.ModelViewSet):
-    queryset = RetiroCamara.objeccts.all()
+    queryset = RetiroCamara.objects.all()
     serializer_class = RetiroCamaraSerializer
 
 class VacunaViewSet(viewsets.ModelViewSet):
