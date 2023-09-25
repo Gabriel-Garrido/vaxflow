@@ -32,6 +32,12 @@ class VacunaStock(models.Model):
     def __str__(self):
         fecha_descongelacion_str = f" - Descongelación: {self.fecha_descongelacion}" if self.fecha_descongelacion else ""
         return f"{self.vacunatorio.nombre} => {self.tipo_vacuna.nombre} - {str(self.stock)} - {str(fecha_descongelacion_str)}"
+    
+class RetiroCamara(models.Model):
+    fecha_retiro = models.DateField(auto_now_add=True)
+    cantidad_retiro = models.PositiveIntegerField()
+    vacuna_retiro = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='retiro_camara')
+    
 
 class TraspasoVacuna(models.Model):
     vacuna_traspaso = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='traspasos_enviados')

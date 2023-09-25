@@ -98,8 +98,8 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   } else {
     return (
       
-      <div className="container card custom-tabe-style mt-2">
-        <ul className="list-group  list-group-flush text-start">
+      <div className="card border-dark mb-3 border-white border-top">
+        <ul className="list-group fs-5 list-group-flush text-start">
 
         <strong className="card-title text-success fs-6 mt-2">
           {vacuna.nombre_vacuna} {vacuna.lote}

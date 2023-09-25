@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Vacunatorio, Vacuna, VacunaStock, TraspasoVacuna, EliminacionVacuna, AdministracionVacuna
+from .models import Vacunatorio, Vacuna, VacunaStock, TraspasoVacuna, EliminacionVacuna, AdministracionVacuna, RetiroCamara
 from django.utils.translation import gettext_lazy as _
 
 # Define clases de administración personalizadas para tus modelos si es necesario
@@ -16,6 +16,7 @@ admin.site.register(VacunaStock, VacunaStockAdmin)
 admin.site.register(TraspasoVacuna)
 admin.site.register(EliminacionVacuna)
 admin.site.register(AdministracionVacuna)
+admin.site.register(RetiroCamara)
 
 # Personaliza la apariencia del panel de administración si es necesario
 admin.site.site_header = _("Panel de Administración de VaxFlow")

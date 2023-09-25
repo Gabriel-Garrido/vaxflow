@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock
+from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock, RetiroCamara
 
 class VacunatorioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,7 +38,10 @@ class VacunaStockSerializer(serializers.ModelSerializer):
 
         return data
 
-
+class RetiroCamaraSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RetiroCamara
+        fields = '__all__'
 
 class VacunaSerializer(serializers.ModelSerializer):
     class Meta:

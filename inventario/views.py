@@ -6,8 +6,8 @@ from authentication.serializers import CustomUserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
-from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock
-from .serializer import VacunatorioSerializer, VacunaSerializer, AdministracionVacunaSerializer, TraspasoVacunaSerializer, EliminacionVacunaSerializer, VacunaStockSerializer
+from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock, RetiroCamara
+from .serializer import VacunatorioSerializer, VacunaSerializer, AdministracionVacunaSerializer, TraspasoVacunaSerializer, EliminacionVacunaSerializer, VacunaStockSerializer, RetiroCamaraSerializer
 
 class VacunatorioViewSet(viewsets.ModelViewSet):
     queryset = Vacunatorio.objects.all()
@@ -57,6 +57,9 @@ class VacunaStockViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class RetiroCamaraViewSet(viewsets.ModelViewSet):
+    queryset = RetiroCamara.objeccts.all()
+    serializer_class = RetiroCamaraSerializer
 
 class VacunaViewSet(viewsets.ModelViewSet):
     queryset = Vacuna.objects.all()
