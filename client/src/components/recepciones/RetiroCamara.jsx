@@ -98,7 +98,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
         return; // Agrega esto para detener la ejecución en caso de error
       }
     } else {
-      vacunaDataId = vacunaEncontrada.id;
+      vacunaDataId = vacunaEncontrada.tipo_vacuna;
     }
   
     const vacunaStockData = {

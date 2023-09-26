@@ -41,9 +41,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
       return acumulador + retiro.cantidad_retiro;
     }, 0);
 
-    console.log('----------------------------------------------totalCantidadRetiradaCamara');
-    console.log(totalCantidadRetiradaCamara);
-
   
     setStockInicial(
       vacuna.stock +
@@ -61,8 +58,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   function getEnviadas() {
     const today = new Date().toDateString();
     const enviosHoy = traspasos.filter((traspaso) => {
-      console.log('{{{{{{{{{{{{{{{{{{{{traspaso');
-    console.log(traspaso);
+     
       return (
         new Date(traspaso.fecha_traspaso).toDateString() === today &&
         traspaso.vacunatorio_origen === userDetails.vacunatorio &&
@@ -90,7 +86,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     const retirosCamaraHoy = retirosCamara.filter((retiro) => {
       const fechaRetiro = moment(retiro.fecha_retiro);
       const formattedFechaRetiro = fechaRetiro.format('DD-MM-YYYY'); // Formato dd-mm-yyyy
-      console.log('Fecha del retiro:', formattedFechaRetiro); // Agregar este log
   
       // Agregamos la condición para filtrar por vacunatorio y vacuna
       const cumpleCondicion = (
@@ -126,11 +121,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
 
   const today = new Date().toDateString();
 
-  console.log('------retirosCamara');
-  console.log(retirosCamara);
-
-  console.log('------retiradasCamara');
-  console.log(retiradasCamara);
   if (loading) {
     return (
       <div>
