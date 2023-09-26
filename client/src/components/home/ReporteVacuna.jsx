@@ -37,13 +37,22 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     const totalCantidadRecibidas = recibidas.reduce((acumulador, recepcion) => {
         return acumulador + recepcion.cantidad_traspasada;
       }, 0);
+    const totalCantidadRetiradaCamara = retiradasCamara.reduce((acumulador, retiro) => {
+      return acumulador + retiro.cantidad_retiro;
+    }, 0);
+
+    console.log('----------------------------------------------totalCantidadRetiradaCamara');
+    console.log(totalCantidadRetiradaCamara);
+
   
     setStockInicial(
       vacuna.stock +
         totalCantidadEliminada +
         totalCantidadEnviadas +
         totalCantidadAdministrada -
-        totalCantidadRecibidas
+        totalCantidadRecibidas -
+        totalCantidadRetiradaCamara
+
     );
     setLoading(false);
   }
@@ -52,12 +61,15 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   function getEnviadas() {
     const today = new Date().toDateString();
     const enviosHoy = traspasos.filter((traspaso) => {
+      console.log('{{{{{{{{{{{{{{{{{{{{traspaso');
+    console.log(traspaso);
       return (
         new Date(traspaso.fecha_traspaso).toDateString() === today &&
         traspaso.vacunatorio_origen === userDetails.vacunatorio &&
-        traspaso.vacuna_traspaso_nombre === vacuna.nombre_vacuna
+        traspaso.vacuna_traspaso === vacuna.id
       );
     });
+    
     setEnviadas(enviosHoy);
   }
 
@@ -67,7 +79,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
       return (
         new Date(traspaso.fecha_traspaso).toDateString() === today &&
         traspaso.vacunatorio_destino === userDetails.vacunatorio &&
-        traspaso.vacuna_traspaso_nombre === vacuna.nombre_vacuna
+        traspaso.vacuna_traspaso === vacuna.id
       );
     });
     setRecibidas(recibosHoy);
@@ -79,8 +91,18 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
       const fechaRetiro = moment(retiro.fecha_retiro);
       const formattedFechaRetiro = fechaRetiro.format('DD-MM-YYYY'); // Formato dd-mm-yyyy
       console.log('Fecha del retiro:', formattedFechaRetiro); // Agregar este log
-      return formattedFechaRetiro === today 
+  
+      // Agregamos la condición para filtrar por vacunatorio y vacuna
+      const cumpleCondicion = (
+        formattedFechaRetiro === today &&
+        retiro.vacunatorio === userDetails.vacunatorio && retiro.vacuna_retiro === vacuna.id
+
+        
+      );
+  
+      return cumpleCondicion;
     });
+
     setRetiradasCamara(retirosCamaraHoy);
   }
   
@@ -103,8 +125,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   }
 
   const today = new Date().toDateString();
-  console.log('------today');
-  console.log(today);
 
   console.log('------retirosCamara');
   console.log(retirosCamara);
@@ -141,6 +161,17 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
             <strong>Stock Inicial:</strong> {stockInicial}
           </li>
         </>
+
+        {retiradasCamara.length > 0 && (
+          <>
+            {retiradasCamara.map((retiroCamara) => (
+              <li key={`retiroCamara${retiroCamara.id}`} className="list-group-item">
+                <i className="fa-regular fa-truck-loading fs-6"></i> Retiradas de cámara: {retiroCamara.cantidad_retiro}
+              </li>
+            ))}
+          </>
+        )}
+        
         {recibidas.length > 0 && (
           <>
             {recibidas.map((traspaso) => (

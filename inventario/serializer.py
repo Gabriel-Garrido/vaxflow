@@ -11,6 +11,7 @@ class VacunaStockSerializer(serializers.ModelSerializer):
     nombre_vacunatorio = serializers.CharField(source='vacunatorio.nombre', read_only=True)
     caducidad_fabricante = serializers.CharField(source='tipo_vacuna.fecha_caducidad_fabricante', read_only=True)
     lote = serializers.CharField(source='tipo_vacuna.lote', read_only=True)
+    congelacion = serializers.BooleanField(source='tipo_vacuna.congelacion', read_only=True)
     fecha_descongelacion = serializers.DateField(format='%Y-%m-%d', required=False, allow_null=True)
     fecha_caducidad_descongelacion = serializers.DateField(format='%Y-%m-%d', required=False, allow_null=True)
     hora_descongelacion = serializers.TimeField(format='%H:%M', required=False, allow_null=True)

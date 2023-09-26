@@ -55,15 +55,16 @@ export function RetiroCamara({ userDetails, size, stock }) {
     }
   
     let vacunaDataId = null;
+
   
     const nombreVacunaEnviar = data.nombreVacunaOtro || data.nombreVacuna;
     const loteEnviar = data.loteOtro || data.lote;
     const fechaCaducidadEnviar = data.fechaCaducidadFabricanteOtro || data.fechaCaducidadFabricante;
   
-    const vacunaEncontrada = vacunas.find((vacuna) => {
+    const vacunaEncontrada = stock.find((vacuna) => {
       return (
-        vacuna.nombre === nombreVacunaEnviar &&
-        vacuna.fecha_caducidad_fabricante === fechaCaducidadEnviar &&
+        vacuna.nombre_vacuna === nombreVacunaEnviar &&
+        vacuna.caducidad_fabricante === fechaCaducidadEnviar &&
         vacuna.lote === loteEnviar &&
         vacuna.congelacion === inputCongelacion
       );
@@ -109,16 +110,22 @@ export function RetiroCamara({ userDetails, size, stock }) {
       hora_descongelacion: data.hora_descongelacion || null,
     };
   
-    const nuevoRetiroData = {
-      cantidad_retiro: parseInt(data.stock),
-      vacuna_retiro: vacunaDataId,
-      vacunatorio: userDetails.vacunatorio,
-    };
   
     try {
-      await createVacunaStock(vacunaStockData);
+      const nuevoStock = await createVacunaStock(vacunaStockData);
+      console.log('---nuevoStock----');
+        console.log(nuevoStock);
+      const nuevoRetiroData = {
+        cantidad_retiro: parseInt(data.stock),
+        vacuna_retiro: nuevoStock.id,
+        vacunatorio: userDetails.vacunatorio,
+      };
       await createRetiroCamara(nuevoRetiroData);
+
+
       window.location.reload();
+
+
     } catch (error) {
       console.error('Error al crear el registro de vacunaStock:', error);
       setError('Error al crear el registro de vacunaStock');

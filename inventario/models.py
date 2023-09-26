@@ -81,6 +81,10 @@ class TraspasoVacuna(models.Model):
             # Sumar la cantidad traspasada al stock en el destino
             vacuna_destino.stock += self.cantidad_traspasada
             vacuna_destino.save()
+            
+            # Restar la cantidad traspasada del stock en el origen
+            self.vacuna_traspaso.stock -= self.cantidad_traspasada
+            self.vacuna_traspaso.save()
 
 
             super(TraspasoVacuna, self).save(*args, **kwargs)
