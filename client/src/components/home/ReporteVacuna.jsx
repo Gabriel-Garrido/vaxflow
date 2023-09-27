@@ -145,18 +145,23 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   } else {
     return (
       
-      <div className="card border-dark mb-3 border-white border-top">
+      <div className="card border-dark lh-1 mb-3 border-white border-top">
         <ul className="list-group fs-5 list-group-flush text-start">
 
-        <strong className="card-title text-success fs-6 mt-2">
-          {vacuna.nombre_vacuna} {vacuna.lote}
-        </strong>
+        <strong className="card-title text-white fs-6 mt-1 text-center">
+          {vacuna.nombre_vacuna}
+          </strong> 
+          
+          <div className="card-title lh-1 mx-2 border-top border-success text-white fs-7 mb-0 pb-0 pt-1">
+          <p className='card-titletext-white'>Lote: {vacuna.lote}</p>
+        
+      
         {vacuna.fecha_caducidad_descongelacion && (
-          <p className="card-title text-success fs-7 mt-0">Vigencia descong: {format(new Date(`${vacuna.fecha_caducidad_descongelacion}T${vacuna.hora_descongelacion}`), 'dd MMM yyyy HH:mm', { locale: es })}</p>
+          <p>Caducidad descong: {format(new Date(`${vacuna.fecha_caducidad_descongelacion}T${vacuna.hora_descongelacion}`), 'dd MMM yyyy HH:mm', { locale: es })}</p>
         )}
         {!vacuna.fecha_caducidad_descongelacion && (
-          <h6 className="card-title text-success fs-7 mt-0 ">Vigencia fabr: {format(parseISO(vacuna.caducidad_fabricante), 'dd MMM yyyy')}</h6>
-        )}
+          <p>Caducidad fabr: {format(parseISO(vacuna.caducidad_fabricante), 'dd MMM yyyy')}</p>
+        )}</div>
         <>
           <li key={`inicial${vacuna.id}`} className="list-group-item">
             <strong>Stock Inicial:</strong> {stockInicial}
@@ -167,7 +172,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
           <>
             {retiradasCamara.map((retiroCamara) => (
               <li key={`retiroCamara${retiroCamara.id}`} className="list-group-item">
-                <i class="fa-solid fa-snowflake fs-6"></i> Retiradas de cámara: {retiroCamara.cantidad_retiro}
+                <i className="fa-solid fa-snowflake fs-6"></i> Retiradas de cámara: {retiroCamara.cantidad_retiro}
               </li>
             ))}
           </>

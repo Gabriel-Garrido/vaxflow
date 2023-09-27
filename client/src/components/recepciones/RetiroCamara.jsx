@@ -180,7 +180,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
           data-bs-target={`#modalRecibirCamara${size}`}
         >
           <div>
-            <div className='text-center'><strong><i className="fa-regular fa-circle-down fs-6"></i> Retirar vacunas</strong></div>
+            <div className='text-center'><strong><i className="fa-solid fa-snowflake fs-6"></i> Retiro de camara</strong></div>
           </div>
         </button>
 
