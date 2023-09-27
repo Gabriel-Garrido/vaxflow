@@ -34,12 +34,18 @@ export function Reportes({ userDetails }) {
           (traspaso.vacunatorio_destino === userDetails.vacunatorio || traspaso.vacunatorio_origen === userDetails.vacunatorio)
         );
       });
+      console.log('-----------todaysTraspasos');
+      console.log(todaysTraspasos);
+      
+
+
       setTodaysTraspasos(todaysTraspasos);
     } catch (error) {
       console.error('Error fetching traspasos:', error);
     }
   };
-
+console.log('-----------vacunasConStock');
+      console.log(vacunasConStock);
   const fetchAllEliminaciones = async () => {
     try {
       const response = await getAllEliminaciones();

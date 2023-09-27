@@ -43,12 +43,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
 
   
     setStockInicial(
-      vacuna.stock +
-        totalCantidadEliminada +
-        totalCantidadEnviadas +
-        totalCantidadAdministrada -
-        totalCantidadRecibidas -
-        totalCantidadRetiradaCamara
+      vacuna.stock + totalCantidadEliminada + totalCantidadEnviadas + totalCantidadAdministrada - totalCantidadRecibidas - totalCantidadRetiradaCamara
 
     );
     setLoading(false);
@@ -72,12 +67,28 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   function getRecibidas() {
     const today = new Date().toDateString();
     const recibosHoy = traspasos.filter((traspaso) => {
+      console.log('------traspaso.vacunatorio_destino');
+    console.log(traspaso.vacunatorio_destino);
+    
+    console.log('------userDetails.vacunatorio');
+    console.log(userDetails.vacunatorio);
+    
+    console.log('------traspaso.vacuna_traspaso');
+    console.log(traspaso.vacuna_traspaso);
+    
+    console.log('------vacuna.id');
+    console.log(vacuna.id);
+    
       return (
         new Date(traspaso.fecha_traspaso).toDateString() === today &&
         traspaso.vacunatorio_destino === userDetails.vacunatorio &&
-        traspaso.vacuna_traspaso === vacuna.id
+        traspaso.vacuna_traspaso_nombre === vacuna.nombre_vacuna && traspaso.vacuna_traspaso_lote === vacuna.lote && traspaso.vacuna_traspaso_fecha_caducidad_descongelacion === vacuna.fecha_descongelacion 
+
       );
     });
+    console.log('------recibosHoy');
+    console.log(recibosHoy);
+    
     setRecibidas(recibosHoy);
   }
 
@@ -156,7 +167,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
           <>
             {retiradasCamara.map((retiroCamara) => (
               <li key={`retiroCamara${retiroCamara.id}`} className="list-group-item">
-                <i className="fa-regular fa-truck-loading fs-6"></i> Retiradas de cámara: {retiroCamara.cantidad_retiro}
+                <i class="fa-solid fa-snowflake fs-6"></i> Retiradas de cámara: {retiroCamara.cantidad_retiro}
               </li>
             ))}
           </>
