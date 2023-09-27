@@ -78,10 +78,10 @@ export function Stock({ size, userDetails }) {
               <img
                 src={vacunaImages[item.nombre_vacuna] || vacunaImages['vacuna']}
                 alt={item.nombre}
-                className="col-3 img-fluid object-fit-contain border-end border-secondary"
+                className="col-3 img-fluid object-fit-contain "
                 style={{ maxWidth: '100px', maxHeight: '60px' }}
               />
-              <div className="col-6 border-end border-secondary">
+              <div className="col-6 ">
                 
                 <div style={{ maxHeight: '100px', overflow: 'hidden' }}>
                   <h6 className="mb-0 fs-6 border-bottom border-secondary">{item.nombre_vacuna}</h6>

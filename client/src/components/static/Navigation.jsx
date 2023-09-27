@@ -28,7 +28,7 @@ export function Navigation() {
   };
 
   return (
-    <nav className="navbar navbar-expand bg-dark border-bottom border-body" data-bs-theme="dark">
+    <nav className="navbar navbar-expand bg-dark border-bottom border-success border-body" data-bs-theme="dark">
       <div className="container-fluid text-success">
         <h1 className="navbar-brand d-none d-sm-block">
           <Link className="text-decoration-none fs-5 text-success" to="/">
