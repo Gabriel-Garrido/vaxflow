@@ -67,17 +67,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   function getRecibidas() {
     const today = new Date().toDateString();
     const recibosHoy = traspasos.filter((traspaso) => {
-      console.log('------traspaso.vacunatorio_destino');
-    console.log(traspaso.vacunatorio_destino);
-    
-    console.log('------userDetails.vacunatorio');
-    console.log(userDetails.vacunatorio);
-    
-    console.log('------traspaso.vacuna_traspaso');
-    console.log(traspaso.vacuna_traspaso);
-    
-    console.log('------vacuna.id');
-    console.log(vacuna.id);
     
       return (
         new Date(traspaso.fecha_traspaso).toDateString() === today &&
@@ -86,8 +75,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
 
       );
     });
-    console.log('------recibosHoy');
-    console.log(recibosHoy);
     
     setRecibidas(recibosHoy);
   }

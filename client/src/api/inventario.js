@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/inventario/api/';
+const baseURL = 'https://vaxflowapi.onrender.com/inventario/api/' || 'http://localhost:8000/inventario/api/';
 
 const inventarioApi = axios.create({
     baseURL,

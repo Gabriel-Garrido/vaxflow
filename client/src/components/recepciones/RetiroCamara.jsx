@@ -70,9 +70,6 @@ export function RetiroCamara({ userDetails, size, stock }) {
       );
     });
   
-    console.log('---vacunaEncontrada----');
-    console.log(vacunaEncontrada);
-  
     if (!vacunaEncontrada) {
       const nuevaVacunaData = {
         nombre: nombreVacunaEnviar,
@@ -81,14 +78,10 @@ export function RetiroCamara({ userDetails, size, stock }) {
         congelacion: inputCongelacion,
         // Agrega otros campos del formulario aquí
       };
-      console.log('---nuevaVacunaData----');
-      console.log(nuevaVacunaData);
   
       try {
         const vacunaCreada = await createVacuna(nuevaVacunaData);
         setNuevaVacuna(vacunaCreada);
-        console.log('---vacunaCreada----');
-        console.log(vacunaCreada);
         vacunaDataId = vacunaCreada.id;
       } catch (error) {
         console.error('Error al crear el registro de crearVacuna:', error);
@@ -113,8 +106,6 @@ export function RetiroCamara({ userDetails, size, stock }) {
   
     try {
       const nuevoStock = await createVacunaStock(vacunaStockData);
-      console.log('---nuevoStock----');
-        console.log(nuevoStock);
       const nuevoRetiroData = {
         cantidad_retiro: parseInt(data.stock),
         vacuna_retiro: nuevoStock.id,
@@ -151,7 +142,6 @@ export function RetiroCamara({ userDetails, size, stock }) {
       return vacuna.nombre == selectedVacunaNombre;
     });
     setVacunaSeleccionada(vacunaSeleccionada);
-    console.log(vacunaSeleccionada);
     const lotesVacunaSeleccionada = vacunaSeleccionada.map((vacuna) => {
       return vacuna.lote;
     });
@@ -241,7 +231,6 @@ export function RetiroCamara({ userDetails, size, stock }) {
                             className="form-control border-success mt-2 "
                             onChange={(e) => {
                               const vacunaOtraSeleccionada = vacunas.filter((vacuna) => { return vacuna.nombre == e.target.value })
-                              console.log(vacunaOtraSeleccionada);
                               const lotesvacunaOtraSeleccionada = vacunaOtraSeleccionada.map((vacuna) => {
                                 return vacuna.lote;
                               });
@@ -293,18 +282,15 @@ export function RetiroCamara({ userDetails, size, stock }) {
                             if (event.target.value === "Otro") {
                               setLoteOtro(true);
                             } else {
-                              console.log(event.target.value);
                               setLoteOtro(false);
                               const vacunasLoteSeleccionado = vacunas.filter((vacuna) => {
                                 if (vacuna.lote == event.target.value) {
                                   return vacuna.lote
                                 }
                               })
-                              console.log(vacunasLoteSeleccionado);
                               const fechasLoteSeleccionado = vacunasLoteSeleccionado.map((vacuna) => {
                                 return vacuna.fecha_caducidad_fabricante
                               })
-                              console.log(fechasLoteSeleccionado);
                               setFechasLoteSeleccionado(fechasLoteSeleccionado)
                             }
 

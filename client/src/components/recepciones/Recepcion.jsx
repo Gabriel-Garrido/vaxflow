@@ -44,8 +44,7 @@ export function Recepcion({ stock, userDetails, size }) {
     const newStock = stocks.filter((stock) => {
       return vacunatorioId == stock.vacunatorio
     })
-    console.log('--newStock--')
-    console.log(newStock);
+  
     setStockTraspaso(newStock)
   };
 

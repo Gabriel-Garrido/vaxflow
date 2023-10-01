@@ -15,7 +15,6 @@ function App() {
   
   useEffect(() => {
     setLoading(true)
-    console.log('is authenticated?  ' + isAuthenticated +'  user: ' + user);
     if (isAuthenticated){
       fetchUserDetails()
       setLoading(false)
