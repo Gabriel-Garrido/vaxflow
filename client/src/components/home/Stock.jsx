@@ -74,33 +74,33 @@ export function Stock({ size, userDetails }) {
             aria-expanded="false"
             aria-controls={`collapse${item.id}`}
           >
-            <div className="row align-items-stretch d-flex" style={{ overflow: 'hidden' }}>
-              <div className='col-2 d-flex flex-column justify-content-center align-items-start'>
-
-              <i className="fa-solid fa-syringe fs-1  "></i>
+            <div className="row" style={{ overflow: 'hidden' }}>
+              <div className='col-2 d-flex flex-column justify-content-center align-items-center ms-2'>
+              <span className=" fs-7 badge rounded-pill bg-primary fs-7 end-0">
+                    {item.stock} dosis
+                  </span>
+              
               </div>
-              <div className="col-6 ">
+              <div className="col-8 text-start ">
                 
                 <div style={{ maxHeight: '100px', overflow: 'hidden' }}>
-                  <h6 className="mb-0 fs-6 border-bottom border-secondary">{item.nombre_vacuna}</h6>
+                  <h6 className="mb-0 fs-5 mb-1 border-bottom border-secondary"><i className="fa-solid fa-syringe fs-5  "></i> {item.nombre_vacuna}</h6>
                 </div>
-                <div className="fs-7">Lote: {item.lote}</div>
+                <div className="fs-7 ms-4 ">Lote: {item.lote}</div>
                 {item.fecha_caducidad_descongelacion && (
-                  <h6>Vigencia: {calcularDiasRestantes(item)} días</h6>
+                  <h6 className='ms-4'>Vigencia: {calcularDiasRestantes(item)} días</h6>
                 )}
                 {!item.fecha_caducidad_descongelacion && (
-                  <h6>Vigencia: {calcularDiasRestantes(item)} días</h6>
+                  <h6 className='ms-4'>Vigencia: {calcularDiasRestantes(item)} días</h6>
                 )}
+                
+              </div>
+              <div className="col-1 d-flex flex-column justify-content-center align-items-center ">
+                
+                <i className="fa-solid fa-angle-down fs-1"></i>
                 
               </div>
               
-              <div className="col-2 position-relative float-start">
-                
-                  <span className=" fs-7 badge rounded-pill bg-primary fs-7 end-0">
-                    {item.stock} dosis
-                  </span>
-                
-              </div>
             
             </div>
           </button>
