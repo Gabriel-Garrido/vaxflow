@@ -1,4 +1,4 @@
-# Nombre del Proyecto
+# Vaxflow
 
 **VaxFlow** es una aplicación web que gestiona el inventario de vacunas en varios vacunatorios. La aplicación está construida con Django y React.
 

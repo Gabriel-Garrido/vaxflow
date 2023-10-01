@@ -86,9 +86,9 @@ export function Navigation() {
               </a>
               <ul className="dropdown-menu">
                 <li>
-                  <Link to="/change-password" className="dropdown-item">
+                  {/* <Link to="/change-password" className="dropdown-item">
                     Change Password
-                  </Link>
+                  </Link> */}
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
