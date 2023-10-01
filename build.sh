@@ -17,7 +17,9 @@ if [ ! -z "$SUPERUSER_DATA" ]; then
 
   # Crear el superusuario si no existe
   python manage.py shell <<EOF
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 if not User.objects.filter(username='$SUPERUSER_USERNAME').exists():
     User.objects.create_superuser('$SUPERUSER_USERNAME', '$SUPERUSER_EMAIL', '$SUPERUSER_PASSWORD')
