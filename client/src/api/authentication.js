@@ -1,7 +1,11 @@
+javascript
+
 import axios from 'axios';
 
+const baseURL = process.env.REACT_APP_AUTH_API_BASE_URL || 'http://localhost:8000/auth/';
+
 const authApi = axios.create({
-  baseURL: 'http://localhost:8000/auth/',
+    baseURL,
 });
 
 // Función para realizar el inicio de sesión
