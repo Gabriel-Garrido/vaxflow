@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "vite": "^4.4.5",
     "@testing-library/jest-dom": "^6.1.2",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
