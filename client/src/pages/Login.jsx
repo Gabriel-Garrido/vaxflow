@@ -3,11 +3,17 @@ import { login } from '../api/authentication';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 
-export function Login() {
+export function Login(isAuthenticated) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { setIsAuthenticated, setUser } = useAuth();
+
+  useEffect(() =>{
+    if (isAuthenticated) {
+      navigate(home)
+    }
+  })
 
   const handleLogin = async () => {
     try {
