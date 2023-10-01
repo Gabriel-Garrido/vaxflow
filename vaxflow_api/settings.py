@@ -16,8 +16,6 @@ import pytz
 from django.utils import timezone
 import os
 import dj_database_url
-import json
-from django.contrib.auth.models import User
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -168,21 +166,3 @@ AUTH_USER_MODEL = 'authentication.CustomUser'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=4),
 }
-
-
-#para crear superuser al iniciar
-# Obtén la variable de entorno SUPERUSER como una cadena JSON
-superuser_data = os.environ.get("SUPERUSER")
-
-if superuser_data:
-    # Parsea el JSON para obtener los datos del superusuario
-    superuser_data = json.loads(superuser_data)
-
-    # Crea el superusuario si no existe
-    username = superuser_data.get("username")
-    password = superuser_data.get("password")
-    email = superuser_data.get("email")
-
-    if username and password and email:
-        if not User.objects.filter(username=username).exists():
-            User.objects.create_superuser(username, email, password)
