@@ -75,12 +75,10 @@ export function Stock({ size, userDetails }) {
             aria-controls={`collapse${item.id}`}
           >
             <div className="row align-items-stretch d-flex" style={{ overflow: 'hidden' }}>
-              <img
-                src={vacunaImages[item.nombre_vacuna] || vacunaImages['vacuna']}
-                alt={item.nombre}
-                className="col-3 img-fluid object-fit-contain "
-                style={{ maxWidth: '100px', maxHeight: '60px' }}
-              />
+              <div className='col-2 d-flex flex-column justify-content-center align-items-start'>
+
+              <i className="fa-solid fa-syringe fs-1  "></i>
+              </div>
               <div className="col-6 ">
                 
                 <div style={{ maxHeight: '100px', overflow: 'hidden' }}>
