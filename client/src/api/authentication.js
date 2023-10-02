@@ -4,6 +4,7 @@ const baseURL = 'https://vaxflowapi.onrender.com/auth/' || 'http://localhost:800
 
 const authApi = axios.create({
     baseURL,
+    timeout: 6000,
 });
 
 // Función para realizar el inicio de sesión

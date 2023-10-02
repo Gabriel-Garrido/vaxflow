@@ -1,35 +1,34 @@
 import React, { useState } from 'react';
 import { login } from '../api/authentication';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 
-export function Login(isAuthenticated) {
+export function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [processing, setProcessing] = useState(false); // Nuevo estado para el procesamiento
   const { setIsAuthenticated, setUser } = useAuth();
-
-  useEffect(() =>{
-    if (isAuthenticated) {
-      navigate(home)
-    }
-  })
 
   const handleLogin = async () => {
     try {
+      setProcessing(true); // Iniciar el proceso de inicio de sesión
       const response = await login({ username, password });
       if (response) {
         localStorage.setItem('user', JSON.stringify(username));
         setIsAuthenticated(true);
         setUser(username);
-        window.location.reload();      }
+      }
     } catch (error) {
-      console.error('Login error:', error);
+      setProcessing(false); // Finalizar el proceso de inicio de sesión (éxito o fallo)
+      return setError('Error al iniciar sesión. Verifique sus credenciales.');
+    } finally {
+      
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError(null);
     handleLogin();
   };
 
@@ -40,6 +39,11 @@ export function Login(isAuthenticated) {
           <div className="card bg-dark text-white">
             <div className="card-header">Login</div>
             <div className="card-body">
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="username" className="text-light">
@@ -67,8 +71,15 @@ export function Login(isAuthenticated) {
                   />
                 </div>
                 <div className="text-center mt-3">
-                  <button className="btn btn-primary" type="submit">
-                    Login
+                  <button className="btn btn-primary" type="submit" disabled={processing}>
+                    {processing ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Loading...
+                      </>
+                    ) : (
+                      'Login'
+                    )}
                   </button>
                 </div>
               </form>

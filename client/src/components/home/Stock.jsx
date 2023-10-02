@@ -95,9 +95,9 @@ export function Stock({ size, userDetails }) {
                 )}
                 
               </div>
-              <div className="col-1 d-flex flex-column justify-content-center align-items-center ">
+              <div className="col-1 d-flex flex-column justify-content-center align-items-start ">
                 
-                <i className="fa-solid fa-angle-down fs-1"></i>
+                <i className="fa-solid fa-angle-down fs-5"></i>
                 
               </div>
               
