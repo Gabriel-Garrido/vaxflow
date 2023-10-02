@@ -10,7 +10,7 @@ export function Home() {
     if (!userDetails) {
         return (
           <div>
-            <div className="text-center">
+            <div className="text-center mt-5 fs-1">
               <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>

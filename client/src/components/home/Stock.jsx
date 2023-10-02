@@ -3,14 +3,6 @@ import { useAuth } from '../../AuthContext';
 import { StockCard } from './StockCard';
 import moment from 'moment';
 
-const vacunaImages = {
-  'Pfizer bivalente': '../../public/images/Pfizer bivalente.jpg',
-  'Pfizer pediatrica': '../../public/images/Pfizer pediatrica.jpg',
-  'Sinovac': '../../public/images/Sinovac.jpg',
-  'Influenza': '../../public/images/Influenza.jpg',
-  'vacuna': '../../public/images/Vacuna.jpg'
-};
-
 export function Stock({ size, userDetails }) {
   const [loading, setLoading] = useState(true);
   const { fetchStock, stock } = useAuth();

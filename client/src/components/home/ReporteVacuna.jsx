@@ -21,7 +21,6 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     totalStockInicial();
     getRetirosCamara()
     
-    setLoading(false)
   }, [traspasos, eliminaciones, vacuna, userDetails, stock]);
 
   function totalStockInicial() {
@@ -121,12 +120,11 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
 
   if (loading) {
     return (
-      <div>
-        <div className="text-center">
-          <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
+        <p>Loading...</p> 
       </div>
     );
   } else {
