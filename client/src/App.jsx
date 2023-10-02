@@ -45,12 +45,16 @@ function App() {
         <Routes>      
           {isAuthenticated ? (
             <>
-              <Route path="/traspaso" element={<Traspaso />} />
-              <Route path="/change-password" element={<ChangePassword />} />
               <Route path="/home" element={<Home />} />
               <Route path="/" element={<Home />} />
-              <Route path="*" element={<Home />} />
-              <Route path="/login" element={<Home />} />
+              <Route
+                path="*"
+                element={isAuthenticated ? <Navigate to="/home" /> : <Login />}
+              />
+              <Route
+                path="/login"
+                element={isAuthenticated ? <Navigate to="/home" /> : <Login />}
+              />
             </>
           ) : (
             <Route path="*" element={<Login />} />
