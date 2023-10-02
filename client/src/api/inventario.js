@@ -4,6 +4,7 @@ const baseURL = 'https://vaxflowapi.onrender.com/inventario/api/' || 'http://loc
 
 const inventarioApi = axios.create({
     baseURL,
+    timeout: 30000,
 });
 
 export const getAllStock = () => {
