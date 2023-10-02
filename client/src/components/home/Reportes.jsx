@@ -84,7 +84,15 @@ export function Reportes({ userDetails }) {
           <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2>
         <div className="card-body text-center" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {vacunasConStock.map((vacuna) => (
-              !eliminaciones || !administraciones || !todaysTraspasos?<></>: 
+              !eliminaciones || !administraciones || !todaysTraspasos || !vacuna || !stock || !retirosCamara || !userDetails?
+              <>
+                <div className="text-center">
+                  <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <p>Loading...</p> 
+              </div>
+            </>: 
             <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} administraciones={administraciones} stock={stock} retirosCamara={retirosCamara}/>
           ))}
         </div>

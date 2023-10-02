@@ -8,22 +8,31 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
   const [recibidas, setRecibidas] = useState([]);
   const [eliminadas, setEliminadas] = useState([]);
   const [administradas, setAdministradas] = useState([])
+
+  const [loadingEnviadas, setLoadingEnviadas] = useState(true);
+  const [loadingRecibidas, setLoadingRecibidas] = useState(true);
+  const [loadingEliminadas, setLoadingEliminadas] = useState(true);
+  const [loadingAdministradas, setLoadingAdministradas] = useState(true);
+  const [loadingRetiradas, setLoadingRetiradas] = useState(true);
   const [loading, setLoading] = useState(true);
+
+
   const [stockInicial, setStockInicial] = useState(0);
   const [retiradasCamara, setRetiradasCamara] = useState([])
 
   useEffect(() => {
-    setLoading(true)
     getEnviadas();
     getRecibidas();
     getEliminadas();
     getAdministradas()
-    totalStockInicial();
     getRetirosCamara()
+    totalStockInicial();
+    
     
   }, [traspasos, eliminaciones, vacuna, userDetails, stock]);
 
   function totalStockInicial() {
+
     const totalCantidadEliminada = eliminadas.reduce((acumulador, eliminacion) => {
       return acumulador + eliminacion.cantidad_eliminada;
     }, 0);
@@ -45,11 +54,12 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
       vacuna.stock + totalCantidadEliminada + totalCantidadEnviadas + totalCantidadAdministrada - totalCantidadRecibidas - totalCantidadRetiradaCamara
 
     );
-    setLoading(false);
+    setLoading(false)
   }
   
 
   function getEnviadas() {
+    setLoadingEnviadas(true)
     const today = new Date().toDateString();
     const enviosHoy = traspasos.filter((traspaso) => {
      
@@ -61,9 +71,12 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     });
     
     setEnviadas(enviosHoy);
+    setLoadingEnviadas(false)
+
   }
 
   function getRecibidas() {
+    setLoadingRecibidas(true)
     const today = new Date().toDateString();
     const recibosHoy = traspasos.filter((traspaso) => {
     
@@ -76,9 +89,11 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     });
     
     setRecibidas(recibosHoy);
+    setLoadingRecibidas(false)
   }
 
   function getRetirosCamara() {
+    setLoadingRetiradas(true)
     const today = moment().format('DD-MM-YYYY'); // Formato dd-mm-yyyy
     const retirosCamaraHoy = retirosCamara.filter((retiro) => {
       const fechaRetiro = moment(retiro.fecha_retiro);
@@ -91,34 +106,39 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
 
         
       );
-  
+      
       return cumpleCondicion;
     });
 
     setRetiradasCamara(retirosCamaraHoy);
+    setLoadingRetiradas(false)
   }
   
   
 
   async function getEliminadas() {
+    setLoadingEliminadas(true)
     const today = new Date().toDateString();
     const eliminacionesHoy = eliminaciones.filter((eliminacion) => {
       return new Date(eliminacion.fecha).toDateString() === today && vacuna.id === eliminacion.vacuna;
     });
     setEliminadas(eliminacionesHoy);;
+    setLoadingEliminadas(false)
   }
 
   async function getAdministradas() {
+    setLoadingAdministradas(true)
     const today = new Date().toDateString();
     const administracionesHoy = administraciones.filter((administracion) => {
       return new Date(administracion.fecha).toDateString() === today && vacuna.id === administracion.vacuna;
     });
     setAdministradas(administracionesHoy);
+    setLoadingAdministradas(false)
   }
 
   const today = new Date().toDateString();
 
-  if (loading) {
+  if (loadingEnviadas || loadingRecibidas || loadingEliminadas || loadingAdministradas || loadingRetiradas || loading) {
     return (
       <div className="text-center">
         <div className="spinner-border" role="status">
@@ -147,6 +167,7 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
         {!vacuna.fecha_caducidad_descongelacion && (
           <p>Caducidad fabr: {format(parseISO(vacuna.caducidad_fabricante), 'dd MMM yyyy')}</p>
         )}</div>
+        
         <>
           <li key={`inicial${vacuna.id}`} className="list-group-item">
             <strong>Stock Inicial:</strong> {stockInicial}
