@@ -42,23 +42,11 @@ function App() {
     
       <Navigation />     
       <div className="main-container" style={{ minHeight: 'calc(100vh - 100px)', overflowY: 'auto', width: '100%' }}>
-        <Routes>      
-          {isAuthenticated ? (
-            <>
-              <Route path="/home" element={<Home />} />
-              <Route path="/" element={<Home />} />
-              <Route
-                path="*"
-                element={isAuthenticated ? <Navigate to="/home" /> : <Login />}
-              />
-              <Route
-                path="/login"
-                element={isAuthenticated ? <Navigate to="/home" /> : <Login />}
-              />
-            </>
-          ) : (
-            <Route path="*" element={<Login />} />
-          )}
+        <Routes>   
+          <Route
+            path="*"
+            element={isAuthenticated ? <Home /> : <Login />}
+          />
         </Routes>
       </div>
       <Footer />
