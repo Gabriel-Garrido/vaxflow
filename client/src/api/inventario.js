@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:8000/inventario/api/';
+// const baseURL = 'http://localhost:8000/inventario/api/';
 
-// const baseURL = 'https://vaxflowapi.onrender.com/inventario/api/' || 'http://localhost:8000/inventario/api/';
+const baseURL = 'https://vaxflowapi.onrender.com/inventario/api/' || 'http://localhost:8000/inventario/api/';
 
 const inventarioApi = axios.create({
     baseURL,

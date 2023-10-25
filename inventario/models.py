@@ -2,7 +2,7 @@ from django.db import models, transaction
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from authentication.models import CustomUser
-from datetime import datetime
+from datetime import datetime, date
 
 class Vacunatorio(models.Model):
     nombre = models.CharField(max_length=100)
@@ -35,7 +35,7 @@ class VacunaStock(models.Model):
         return f"{self.vacunatorio.nombre} => {self.tipo_vacuna.nombre} - {str(self.stock)} - {str(fecha_descongelacion_str)}"
     
 class RetiroCamara(models.Model):
-    fecha_retiro = models.DateField(default=datetime.today)
+    fecha_retiro = models.DateField(default=date.today)
     cantidad_retiro = models.PositiveIntegerField()
     vacuna_retiro = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='vacuna_retiro_camara')
     vacunatorio = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE)

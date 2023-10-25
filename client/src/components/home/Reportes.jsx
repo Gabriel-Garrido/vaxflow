@@ -9,14 +9,15 @@ export function Reportes({ userDetails }) {
   const [eliminaciones, setEliminaciones] = useState([]);
   const [administraciones, setAdministraciones] = useState([])
   const [vacunasConStock, setVacunasConStock] = useState([]);
-  const [retirosCamara, setRetirosCamara] = useState([])
+  const [retirosCamara, setRetirosCamara] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10)); // Fecha actual por defecto
 
   useEffect(() => {
     fetchStock();
     fetchTodaysTraspasos();
     fetchAllEliminaciones();
-    fetchAllAdministraciones()
-    fetchAllRetirosCamara()
+    fetchAllAdministraciones();
+    fetchAllRetirosCamara();
   }, [userDetails]);
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export function Reportes({ userDetails }) {
       const response = await getAllRetirosCamara();
       setRetirosCamara(response.data);
     } catch (error) {
-      console.error('Error en cargar todas los retiros de camara', error);
+      console.error('Error en cargar todas los retiros de cámara', error);
     }
   };
 
@@ -81,19 +82,26 @@ export function Reportes({ userDetails }) {
   } else {
     return (
       <div className='card text-bg-dark' style={{ maxHeight: '75vh', overflowY: 'auto' }}>
-          <h2 className="card-title fs-4 mt-2 text-success text-center">Reporte Diario</h2>
+        <h2 className="card-title fs-4 mt-2 text-success text-center">
+          Reporte Diario
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+        </h2>
         <div className="card-body text-center" style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {vacunasConStock.map((vacuna) => (
-              !eliminaciones || !administraciones || !todaysTraspasos || !vacuna || !stock || !retirosCamara || !userDetails?
+            !eliminaciones || !administraciones || !todaysTraspasos || !vacuna || !stock || !retirosCamara || !userDetails ?
               <>
                 <div className="text-center">
                   <div className="spinner-border" role="status">
                     <span className="visually-hidden">Loading...</span>
                   </div>
-                  <p>Loading...</p> 
-              </div>
-            </>: 
-            <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} administraciones={administraciones} stock={stock} retirosCamara={retirosCamara}/>
+                  <p>Loading...</p>
+                </div>
+              </> :
+              <ReporteVacuna userDetails={userDetails} key={vacuna.id} vacuna={vacuna} traspasos={todaysTraspasos} eliminaciones={eliminaciones} administraciones={administraciones} stock={stock} retirosCamara={retirosCamara} selectedDate={selectedDate} />
           ))}
         </div>
       </div>
