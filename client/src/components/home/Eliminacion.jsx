@@ -29,6 +29,7 @@ export function Eliminacion({ stock, size }) {
         fecha: data.fecha_eliminacion,
         vacuna: data.vacuna_traspaso,
         cantidad_eliminada: parseInt(data.cantidad_eliminada),
+        motivo_eliminacion: data.motivo_eliminacion,
         responsable_eliminacion: userDetails.id,
         vacunatorio_eliminacion: userDetails.vacunatorio,
       };
@@ -110,6 +111,27 @@ export function Eliminacion({ stock, size }) {
                     <p className="text-danger">Debe ingresar una fecha de eliminación</p>
                   )}
                 </div>
+
+                <div className="mb-3">
+                  <label htmlFor="motivo" className="form-label text-light">
+                    Motivo de eliminación:
+                  </label>
+                  <select
+                    id="motivo"
+                    name="motivo"
+                    {...register('motivo_eliminacion', {
+                      required: true,
+                    })}
+                    className="form-select"
+                  >
+                    <option value="vencimiento_por_fecha_de_fabricante">Vencimiento por fecha de fabricante</option>
+                    <option value="vencimiento_por_fecha_de_descongelacion">Vencimiento por fecha de descongelación</option>
+                    <option value="perdida_de_cadena_de_frio">Pérdida de cadena de frío</option>
+                    <option value="contaminacion_de_vacuna">Contaminación de vacuna</option>
+                    <option value="otro_motivo">Otro motivo</option>
+                  </select>
+                </div>
+                
                 <div className='text-center'>
                   <button className="btn btn-danger me-2 fs-3 mt-2" type="button" onClick={nextSlide} disabled={!isValid}>Eliminar vacunas</button>
                 </div>

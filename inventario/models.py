@@ -96,6 +96,7 @@ class EliminacionVacuna(models.Model):
     fecha = models.DateTimeField(default=datetime.today)
     cantidad_eliminada = models.PositiveIntegerField()
     responsable_eliminacion = models.CharField(max_length=100)
+    motivo_eliminacion = models.CharField(max_length=100, default="otro")
     vacunatorio_eliminacion = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE)
 
 
