@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { createEliminacionVacuna } from '../../api/inventario';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../AuthContext';
@@ -16,6 +16,8 @@ export function Eliminacion({ stock, size }) {
     defaultValues: {
       vacuna_traspaso: stock.id,
       cantidad_eliminada: 1,
+      fecha_eliminacion_option: 'hoy', // Valor predeterminado: 'Hoy'
+      fecha_eliminacion: new Date().toISOString().slice(0, 10), // Valor predeterminado: Fecha actual en formato 'YYYY-MM-DD'
     },
   });
 
@@ -24,6 +26,7 @@ export function Eliminacion({ stock, size }) {
       setProcessing(true);
 
       const eliminacionVacunaData = {
+        fecha: data.fecha_eliminacion,
         vacuna: data.vacuna_traspaso,
         cantidad_eliminada: parseInt(data.cantidad_eliminada),
         responsable_eliminacion: userDetails.id,
@@ -37,7 +40,6 @@ export function Eliminacion({ stock, size }) {
       // Redirigir o hacer algo después de la eliminación exitosa
     } catch (error) {
       console.error('Error en reportar eliminación de vacunas:', error);
-    
 
       // Manejar errores aquí, por ejemplo, mostrar un mensaje de error al usuario
     }
@@ -91,6 +93,23 @@ export function Eliminacion({ stock, size }) {
                     </p>
                   )}
                 </div>
+                <div className="mb-3">
+                  <label htmlFor="fecha" className="form-label text-light">
+                    Fecha de eliminación:
+                  </label>
+                  <input
+                    type="date"
+                    id="fecha"
+                    name="fecha"
+                    {...register('fecha_eliminacion', {
+                      required: true,
+                    })}
+                    className="form-control"
+                  />
+                  {errors.fecha_eliminacion && (
+                    <p className="text-danger">Debe ingresar una fecha de eliminación</p>
+                  )}
+                </div>
                 <div className='text-center'>
                   <button className="btn btn-danger me-2 fs-3 mt-2" type="button" onClick={nextSlide} disabled={!isValid}>Eliminar vacunas</button>
                 </div>
@@ -101,11 +120,11 @@ export function Eliminacion({ stock, size }) {
                   <p>Eliminarás {watch('cantidad_eliminada')} dosis {stock.nombre_vacuna}</p>
                 </div>
                 <div className="mb-3 text-center">
-                {processing ? (
-                              <div className="spinner-border" role="status">
-                                <span className="visually-impaired">Loading...</span>
-                              </div>
-                            ) : (
+                  {processing ? (
+                    <div className="spinner-border" role="status">
+                      <span className="visually-impaired">Loading...</span>
+                    </div>
+                  ) : (
                     <div>
                       <button className="btn btn-primary me-2 fs-3 mt-2" type="button" onClick={prevSlide}>{"<"}</button>
                       <button type="submit" disabled={!isValid} className="btn btn-primary me-2 fs-3 mt-2">Confirmar eliminación</button>

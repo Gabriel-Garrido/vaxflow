@@ -2,6 +2,7 @@ from django.db import models, transaction
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from authentication.models import CustomUser
+from datetime import datetime
 
 class Vacunatorio(models.Model):
     nombre = models.CharField(max_length=100)
@@ -34,7 +35,7 @@ class VacunaStock(models.Model):
         return f"{self.vacunatorio.nombre} => {self.tipo_vacuna.nombre} - {str(self.stock)} - {str(fecha_descongelacion_str)}"
     
 class RetiroCamara(models.Model):
-    fecha_retiro = models.DateField(auto_now_add=True)
+    fecha_retiro = models.DateField(default=datetime.today)
     cantidad_retiro = models.PositiveIntegerField()
     vacuna_retiro = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='vacuna_retiro_camara')
     vacunatorio = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE)
@@ -46,7 +47,7 @@ class TraspasoVacuna(models.Model):
     vacuna_traspaso = models.ForeignKey(VacunaStock, on_delete=models.CASCADE, related_name='traspasos_enviados')
     vacunatorio_origen = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE, related_name='traspasos_origen')
     vacunatorio_destino = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE, related_name='traspasos_destino')
-    fecha_traspaso = models.DateTimeField(auto_now_add=True)
+    fecha_traspaso = models.DateTimeField(default=datetime.today)
     cantidad_traspasada = models.PositiveIntegerField()
     responsable_entrega = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_entrega')
     responsable_recepcion = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='traspasos_recepcion')
@@ -92,7 +93,7 @@ class TraspasoVacuna(models.Model):
 
 class EliminacionVacuna(models.Model):
     vacuna = models.ForeignKey(VacunaStock, on_delete=models.CASCADE)
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField(default=datetime.today)
     cantidad_eliminada = models.PositiveIntegerField()
     responsable_eliminacion = models.CharField(max_length=100)
     vacunatorio_eliminacion = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE)
@@ -111,7 +112,7 @@ class EliminacionVacuna(models.Model):
 
 class AdministracionVacuna(models.Model):
     vacuna = models.ForeignKey(VacunaStock, on_delete=models.CASCADE)
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField(default=datetime.today)
     cantidad_administrada = models.PositiveIntegerField()
 
     def save(self, *args, **kwargs):

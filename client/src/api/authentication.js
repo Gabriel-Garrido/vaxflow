@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const baseURL = 'https://vaxflowapi.onrender.com/auth/' || 'http://localhost:8000/auth/';
+
+const baseURL ='http://localhost:8000/auth/';
+// const baseURL = 'https://vaxflowapi.onrender.com/auth/' || 'http://localhost:8000/auth/';
 
 const authApi = axios.create({
     baseURL,
