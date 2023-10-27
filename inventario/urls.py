@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
 from rest_framework import routers
-from .views import VacunatorioViewSet, VacunaViewSet, AdministracionVacunaViewSet, TraspasoVacunaViewSet, EliminacionVacunaViewSet, VacunaStockViewSet, UsuariosByVacunatorioView, GetAllTraspasosView, getAllEliminacionesView,getAllAdministracionesView, RetiroCamaraViewSet
+from .views import VacunatorioViewSet, VacunaViewSet, AdministracionVacunaViewSet, TraspasoVacunaViewSet, EliminacionVacunaViewSet, VacunaStockViewSet, UsuariosByVacunatorioView, GetAllTraspasosView, getAllEliminacionesView,getAllAdministracionesView, RetiroCamaraViewSet, RegistroInventarioViewSet
 
 router = routers.DefaultRouter()
 router.register(r'vacunatorios', VacunatorioViewSet)
@@ -10,7 +10,8 @@ router.register(r'vacunasStock', VacunaStockViewSet)
 router.register(r'administraciones', AdministracionVacunaViewSet)
 router.register(r'traspasos', TraspasoVacunaViewSet)
 router.register(r'eliminaciones', EliminacionVacunaViewSet)
-router.register(r'RetiroCamara', RetiroCamaraViewSet)
+router.register(r'retiroCamara', RetiroCamaraViewSet)
+router.register(r'RegistroInventario', RegistroInventarioViewSet)
 
 urlpatterns = [
     # Otras URLs de tu aplicación si las tienes

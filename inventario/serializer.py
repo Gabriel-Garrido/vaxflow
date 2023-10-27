@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock, RetiroCamara
+from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock, RetiroCamara, RegistroInventario
 
 class VacunatorioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,6 +38,11 @@ class VacunaStockSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Todos los campos deben ser nulos o tener valores válidos.")
 
         return data
+    
+class RegistroInventarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RegistroInventario
+        fields = '__all__'
 
 class RetiroCamaraSerializer(serializers.ModelSerializer):
     class Meta:

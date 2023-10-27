@@ -6,8 +6,10 @@ from authentication.serializers import CustomUserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
-from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock, RetiroCamara
-from .serializer import VacunatorioSerializer, VacunaSerializer, AdministracionVacunaSerializer, TraspasoVacunaSerializer, EliminacionVacunaSerializer, VacunaStockSerializer, RetiroCamaraSerializer
+from .models import Vacunatorio, Vacuna, AdministracionVacuna, TraspasoVacuna, EliminacionVacuna, VacunaStock, RetiroCamara, RegistroInventario
+from .serializer import VacunatorioSerializer, VacunaSerializer, AdministracionVacunaSerializer, TraspasoVacunaSerializer, EliminacionVacunaSerializer, VacunaStockSerializer, RetiroCamaraSerializer, RegistroInventarioSerializer
+from datetime import datetime
+from django.utils import timezone
 
 class VacunatorioViewSet(viewsets.ModelViewSet):
     queryset = Vacunatorio.objects.all()
@@ -56,6 +58,39 @@ class VacunaStockViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+class RegistroInventarioViewSet(viewsets.ModelViewSet):
+    queryset = RegistroInventario.objects.all()
+    serializer_class = RegistroInventarioSerializer
+
+    def create(self, request, *args, **kwargs):
+        # Verificar si ya existe un registro con la misma fecha y VacunaStock
+        fecha = request.data.get('fecha')
+        vacuna_stock_id = request.data.get('vacuna_stock')
+
+        if fecha is not None:
+            # Formatear la fecha para que no considere la hora
+            formatted_fecha = datetime.strptime(fecha, '%Y-%m-%d').date()
+        else:
+            # Si la fecha es None, usa la fecha de hoy
+            formatted_fecha = timezone.now().date()
+
+        try:
+            registro_existente = RegistroInventario.objects.get(fecha=formatted_fecha, vacuna_stock=vacuna_stock_id)
+            serializer = RegistroInventarioSerializer(registro_existente, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except RegistroInventario.DoesNotExist:
+            serializer = RegistroInventarioSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class RetiroCamaraViewSet(viewsets.ModelViewSet):
     queryset = RetiroCamara.objects.all()
