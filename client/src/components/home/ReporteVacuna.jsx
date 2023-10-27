@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import moment from 'moment';
+import { createRegistroInventario } from '../../api/inventario';
 
 export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, administraciones, stock, retirosCamara }) {
   const [enviadas, setEnviadas] = useState([]);
@@ -27,6 +28,9 @@ export function ReporteVacuna({ vacuna, userDetails, traspasos, eliminaciones, a
     getAdministradas()
     getRetirosCamara()
     totalStockInicial();
+    createRegistroInventario({
+      "vacuna_stock": vacuna.id
+    })
     
     
   }, [traspasos, eliminaciones, vacuna, userDetails, stock]);

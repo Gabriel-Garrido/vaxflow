@@ -11,7 +11,7 @@ router.register(r'administraciones', AdministracionVacunaViewSet)
 router.register(r'traspasos', TraspasoVacunaViewSet)
 router.register(r'eliminaciones', EliminacionVacunaViewSet)
 router.register(r'retiroCamara', RetiroCamaraViewSet)
-router.register(r'RegistroInventario', RegistroInventarioViewSet)
+router.register(r'registroInventario', RegistroInventarioViewSet)
 
 urlpatterns = [
     # Otras URLs de tu aplicación si las tienes

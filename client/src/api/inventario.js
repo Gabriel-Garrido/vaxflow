@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const inventarioApi = axios.create({
     baseURL,
-    timeout: 30000,
+    timeout: 100000,
 });
 
 export const getAllStock = () => {
@@ -118,7 +118,7 @@ export const getAllAdministraciones = async () => {
 export const getAllRetirosCamara = async () => {
     try {
         const token = localStorage.getItem('accessToken');
-        const response = await inventarioApi.get('/RetiroCamara/', { headers: { Authorization: `Bearer ${token}` } });
+        const response = await inventarioApi.get('/retiroCamara/', { headers: { Authorization: `Bearer ${token}` } });
         return response
     } catch (error) {
         console.error('Error en getAllRetirosCamara:', error);
@@ -151,7 +151,7 @@ export const createVacunaStock = async (vacunaStockData) => {
 export const createRetiroCamara = async (vacunaStockData) => {
     try {
         const token = localStorage.getItem('accessToken');
-        const response = await inventarioApi.post('/RetiroCamara/', vacunaStockData, { headers: { Authorization: `Bearer ${token}` } });
+        const response = await inventarioApi.post('/retiroCamara/', vacunaStockData, { headers: { Authorization: `Bearer ${token}` } });
         return response.data; 
     } catch (error) {
         console.error('Error en createRetiroCamara:', error);
@@ -159,3 +159,35 @@ export const createRetiroCamara = async (vacunaStockData) => {
     }
 };
 
+export const createRegistroInventario = (registroInventarioData) => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        return inventarioApi.post('/registroInventario/', registroInventarioData, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+        console.error('Error en createRegistroInventario:', error);
+        throw error;
+    }
+};
+
+export const getAllRegistrosInventario = () => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        return inventarioApi.get('/registroInventario/', { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+        console.error('Error en getAllRegistrosInventario:', error);
+        throw error;
+    }
+};
+
+export const getRegistrosInventarioPorFecha = (fecha) => {
+    try {
+        const token = localStorage.getItem('accessToken');
+        return inventarioApi.get('/registroInventario/', {
+            params: { fecha: fecha },
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    } catch (error) {
+        console.error('Error en getRegistrosInventarioPorFecha:', error);
+        throw error;
+    }
+};
