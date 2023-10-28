@@ -13,12 +13,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='InventarioVacuna',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('fecha_caducidad_fabricante', models.DateField()),
+                ('fecha_descongelacion', models.DateTimeField(blank=True, null=True)),
+                ('fecha_caducidad_descongelacion', models.DateTimeField(blank=True, null=True)),
+                ('existe', models.BooleanField(default=True)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Vacuna',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=100)),
-                ('fecha_caducidad_fabricante', models.DateField(blank=True, null=True)),
-                ('lote', models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
@@ -26,43 +34,55 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=100)),
-                ('direccion', models.TextField()),
-                ('telefono', models.CharField(max_length=20)),
-                ('nombre_encargado', models.CharField(max_length=100)),
-                ('email_encargado', models.EmailField(max_length=100)),
-                ('codigo_deis', models.CharField(max_length=15)),
+                ('direccion', models.CharField(max_length=200)),
             ],
         ),
         migrations.CreateModel(
-            name='VacunaStock',
+            name='TraspasoVacuna',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('stock', models.PositiveIntegerField()),
-                ('fecha_descongelacion', models.DateField(blank=True, null=True)),
-                ('hora_descongelacion', models.TimeField(blank=True, null=True)),
-                ('fecha_caducidad_descongelacion', models.DateField(blank=True, null=True)),
-                ('tipo_vacuna', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.vacuna')),
-                ('vacunatorio', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.vacunatorio')),
+                ('fecha_traspaso', models.DateTimeField()),
+                ('cantidad_traspasada', models.PositiveIntegerField()),
+                ('destino', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='traspasos_recibidos', to='inventario.vacunatorio')),
+                ('inventario_vacuna', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.inventariovacuna')),
+                ('origen', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='traspasos_realizados', to='inventario.vacunatorio')),
             ],
         ),
-        
+        migrations.CreateModel(
+            name='RetiroCamara',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('fecha_retiro', models.DateTimeField()),
+                ('cantidad_retirada', models.PositiveIntegerField()),
+                ('inventario_vacuna', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.inventariovacuna')),
+            ],
+        ),
+        migrations.AddField(
+            model_name='inventariovacuna',
+            name='vacuna',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.vacuna'),
+        ),
+        migrations.AddField(
+            model_name='inventariovacuna',
+            name='vacunatorio',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.vacunatorio'),
+        ),
         migrations.CreateModel(
             name='EliminacionVacuna',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fecha', models.DateTimeField(auto_now_add=True)),
-                ('cantidad_eliminada', models.PositiveIntegerField()),
-                ('responsable_eliminacion', models.CharField(max_length=100)),
-                ('vacuna', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.vacunastock')),
+                ('fecha_eliminacion', models.DateTimeField()),
+                ('motivo_eliminacion', models.CharField(max_length=200)),
+                ('inventario_vacuna', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.inventariovacuna')),
             ],
         ),
         migrations.CreateModel(
             name='AdministracionVacuna',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fecha', models.DateTimeField(auto_now_add=True)),
+                ('fecha_administracion', models.DateTimeField()),
                 ('cantidad_administrada', models.PositiveIntegerField()),
-                ('vacuna', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.vacunastock')),
+                ('inventario_vacuna', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventario.inventariovacuna')),
             ],
         ),
     ]

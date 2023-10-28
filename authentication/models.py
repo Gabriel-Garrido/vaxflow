@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from inventario.models import Vacunatorio
+
 
 class CustomUser(AbstractUser):
 
@@ -8,7 +10,7 @@ class CustomUser(AbstractUser):
     name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     phone = models.CharField(max_length=20)
-    vacunatorio = models.ForeignKey('inventario.Vacunatorio', on_delete=models.SET_NULL, null=True, blank=False)
+    vacunatorio = models.ForeignKey(Vacunatorio, on_delete=models.SET_NULL, null=True, blank=False)
     email = models.EmailField(_("email"), max_length=254, blank=False)
 
     groups = models.ManyToManyField(

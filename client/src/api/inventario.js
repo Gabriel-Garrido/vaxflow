@@ -9,185 +9,158 @@ const inventarioApi = axios.create({
     timeout: 100000,
 });
 
-export const getAllStock = () => {
-    try {
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get('/vacunasStock/', { headers: { Authorization: `Bearer ${token}` } });
-    } catch (error) {
-        // Aquí puedes manejar el error, por ejemplo, registrándolo en la consola
-        console.error('Error en getAllStock:', error);
-        
-        throw error; // Puedes relanzar el error para que sea manejado por quien llame a esta función
-    }
-};
-
+// Función para obtener todas las vacunas
 export const getAllVacunas = () => {
-    try{
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get('/vacunas/', { headers: { Authorization: `Bearer ${token}` } });
-    } catch (error) {
-        // Aquí puedes manejar el error, por ejemplo, registrándolo en la consola
-        console.error('Error en getAllVacunas:', error);
-        throw error; // Puedes relanzar el error para que sea manejado por quien llame a esta función
-    }
-};
-
-export const getAllVacunatorios = () => {
-    try{
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get('/vacunatorios/', { headers: { Authorization: `Bearer ${token}` } });
-    } catch (error) {
-        // Aquí puedes manejar el error, por ejemplo, registrándolo en la consola
-        console.error('Error en getAllVacunatorios:', error);
-        throw error; // Puedes relanzar el error para que sea manejado por quien llame a esta función
-    }
-};
-
-export const createTraspaso = (traspaso) => {
-    try{
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.post('/traspasos/', traspaso, { headers: { Authorization: `Bearer ${token}` } });
-    } catch (error) {
-        // Aquí puedes manejar el error, por ejemplo, registrándolo en la consola
-        console.error('Error en createTraspaso:', error);
-        throw error; // Puedes relanzar el error para que sea manejado por quien llame a esta función
-    }
-};
-
-export const getAllUsuariosByVacunatorioId = (vacunatorioId) => {
-    try{
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get(`/usuarios/vacunatorio/${vacunatorioId}/`, { headers: { Authorization: `Bearer ${token}` } });
-    } catch (error) {
-        // Aquí puedes manejar el error, por ejemplo, registrándolo en la consola
-        console.error('Error en getAllUsuariosByVacunatorioId:', error);
-        throw error; // Puedes relanzar el error para que sea manejado por quien llame a esta función
-    }
-};
-
-export const getAllTraspasos = () => {
     try {
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get('/traspasos/', { headers: { Authorization: `Bearer ${token}` } });
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get('/vacunas/', { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en getAllTraspasos:', error);
-        throw error;
+      console.error('Error en getAllVacunas:', error);
+      throw error;
     }
-};
-
-export const createEliminacionVacuna = async (eliminacionVacunaData) => {
+  };
+  
+  // Función para crear una nueva vacuna
+  export const createVacuna = (vacunaData) => {
     try {
-        const token = localStorage.getItem('accessToken');
-        await inventarioApi.post('/eliminaciones/', eliminacionVacunaData, { headers: { Authorization: `Bearer ${token}` } });
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.post('/vacunas/', vacunaData, { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en createEliminacionVacuna:', error);
-        throw error;
+      console.error('Error en createVacuna:', error);
+      throw error;
     }
-};
-
-export const createAdministracionVacuna = async (administracionVacunaData) => {
+  };
+  
+  // Función para obtener todos los vacunatorios
+  export const getAllVacunatorios = () => {
     try {
-        const token = localStorage.getItem('accessToken');
-        await inventarioApi.post('/administraciones/', administracionVacunaData, { headers: { Authorization: `Bearer ${token}` } });
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get('/vacunatorios/', { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en createAdministracionVacuna:', error);
-        throw error;
+      console.error('Error en getAllVacunatorios:', error);
+      throw error;
     }
-};
-
-export const getAllEliminaciones = async () => {
+  };
+  
+  // Función para crear un nuevo traspaso de vacuna
+  export const createTraspaso = (traspasoData) => {
     try {
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get('/eliminaciones/', { headers: { Authorization: `Bearer ${token}` } });
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.post('/traspaso-vacuna/', traspasoData, { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en getAllEliminaciones:', error);
-        throw error;
+      console.error('Error en createTraspaso:', error);
+      throw error;
     }
-};
-
-export const getAllAdministraciones = async () => {
+  };
+  
+  // Otras funciones que necesitas
+  
+  // Función para obtener todos los traspasos de vacunas
+  export const getAllTraspasos = () => {
     try {
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get('/administraciones/', { headers: { Authorization: `Bearer ${token}` } });
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get('/traspaso-vacuna/', { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en getAllAdministraciones:', error);
-        throw error;
+      console.error('Error en getAllTraspasos:', error);
+      throw error;
     }
-};
-
-export const getAllRetirosCamara = async () => {
+  };
+  
+  // Función para crear una eliminación de vacuna
+  export const createEliminacionVacuna = (eliminacionData) => {
     try {
-        const token = localStorage.getItem('accessToken');
-        const response = await inventarioApi.get('/retiroCamara/', { headers: { Authorization: `Bearer ${token}` } });
-        return response
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.post('/eliminacion-vacuna/', eliminacionData, { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en getAllRetirosCamara:', error);
-        throw error;
+      console.error('Error en createEliminacionVacuna:', error);
+      throw error;
     }
-}
-
-export const createVacuna = async (vacunaData) => {
+  };
+  
+  // Función para crear una administración de vacuna
+  export const createAdministracionVacuna = (administracionData) => {
     try {
-        const token = localStorage.getItem('accessToken');
-        const response = await inventarioApi.post('/vacunas/', vacunaData, { headers: { Authorization: `Bearer ${token}` } });
-        return response.data; // Devuelve la respuesta del servidor
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.post('/administracion-vacuna/', administracionData, { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en createVacuna:', error);
-        throw error;
+      console.error('Error en createAdministracionVacuna:', error);
+      throw error;
     }
-};
-
-export const createVacunaStock = async (vacunaStockData) => {
+  };
+  
+  // Función para obtener todas las eliminaciones de vacunas
+  export const getAllEliminaciones = () => {
     try {
-        const token = localStorage.getItem('accessToken');
-        const response = await inventarioApi.post('/vacunasStock/', vacunaStockData, { headers: { Authorization: `Bearer ${token}` } });
-        return response.data; 
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get('/eliminacion-vacuna/', { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en createVacunaStock:', error);
-        throw error;
+      console.error('Error en getAllEliminaciones:', error);
+      throw error;
     }
-};
-
-export const createRetiroCamara = async (vacunaStockData) => {
+  };
+  
+  // Función para obtener todas las administraciones de vacunas
+  export const getAllAdministraciones = () => {
     try {
-        const token = localStorage.getItem('accessToken');
-        const response = await inventarioApi.post('/retiroCamara/', vacunaStockData, { headers: { Authorization: `Bearer ${token}` } });
-        return response.data; 
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get('/administracion-vacuna/', { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en createRetiroCamara:', error);
-        throw error;
+      console.error('Error en getAllAdministraciones:', error);
+      throw error;
     }
-};
-
-export const createRegistroInventario = (registroInventarioData) => {
+  };
+  
+  // Función para obtener todos los retiros de cámara
+  export const getAllRetirosCamara = () => {
     try {
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.post('/registroInventario/', registroInventarioData, { headers: { Authorization: `Bearer ${token}` } });
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get('/retiro-camara/', { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en createRegistroInventario:', error);
-        throw error;
+      console.error('Error en getAllRetirosCamara:', error);
+      throw error;
     }
-};
-
-export const getAllRegistrosInventario = () => {
+  };
+  
+  // Función para crear un retiro de cámara
+  export const createRetiroCamara = (retiroCamaraData) => {
     try {
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get('/registroInventario/', { headers: { Authorization: `Bearer ${token}` } });
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.post('/retiro-camara/', retiroCamaraData, { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en getAllRegistrosInventario:', error);
-        throw error;
+      console.error('Error en createRetiroCamara:', error);
+      throw error;
     }
-};
-
-export const getRegistrosInventarioPorFecha = (fecha) => {
+  };
+  
+  // Función para obtener todos los elementos del inventario de vacunas
+  export const getAllInventarioVacuna = () => {
     try {
-        const token = localStorage.getItem('accessToken');
-        return inventarioApi.get('/registroInventario/', {
-            params: { fecha: fecha },
-            headers: { Authorization: `Bearer ${token}` },
-        });
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get('/inventario-vacuna/', { headers: { Authorization: `Bearer ${token}` } });
     } catch (error) {
-        console.error('Error en getRegistrosInventarioPorFecha:', error);
-        throw error;
+      console.error('Error en getAllInventarioVacuna:', error);
+      throw error;
     }
-};
+  };
+  
+  // Función para obtener elementos del inventario de vacunas por fecha
+  export const getInventarioVacunaPorFecha = (fecha) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get(`/inventario-vacuna/${fecha}/`, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+      console.error('Error en getInventarioVacunaPorFecha:', error);
+      throw error;
+    }
+  };
+  
+  // Función para crear un elemento en el inventario de vacunas
+  export const createInventarioVacuna = (inventarioVacunaData) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.post('/inventario-vacuna/', inventarioVacunaData, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+      console.error('Error en createInventarioVacuna:', error);
+      throw error;
+    }
+  };

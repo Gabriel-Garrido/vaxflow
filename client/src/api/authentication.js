@@ -6,7 +6,7 @@ const baseURL ='http://localhost:8000/auth/';
 
 const authApi = axios.create({
     baseURL,
-    timeout: 30000,
+    timeout: 100000,
 });
 
 // Función para realizar el inicio de sesión
