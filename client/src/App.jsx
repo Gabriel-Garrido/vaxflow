@@ -10,13 +10,12 @@ import { useAuth } from "./AuthContext";
 
 
 function App() {
-  const { isAuthenticated, user, setUserDetails, fetchUserDetails } = useAuth();
+  const { isAuthenticated, userDetails } = useAuth();
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     setLoading(true)
-    if (isAuthenticated){
-      fetchUserDetails()
+    if (userDetails){
       setLoading(false)
       } else {
           setLoading(false)

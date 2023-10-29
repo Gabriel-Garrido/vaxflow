@@ -12,6 +12,8 @@ class VacunatorioSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InventarioVacunaSerializer(serializers.ModelSerializer):
+    vacuna_nombre = serializers.CharField(source='vacuna.nombre', read_only=True)    
+    
     class Meta:
         model = InventarioVacuna
         fields = '__all__'

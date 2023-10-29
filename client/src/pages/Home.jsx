@@ -1,13 +1,19 @@
 import { useAuth } from '../AuthContext';
+import { useStock } from '../StockContext';
 import { Historial } from '../components/home/Historial'
 import { Reportes } from '../components/home/Reportes'
 import { Stock } from '../components/home/Stock'
 
 export function Home() {
     const { userDetails } = useAuth();
+    const { stock, stockPorVacunatorio } = useStock();    
+
+    console.log("userDetails en home", userDetails);
+    console.log("stock en home", stock);
+    console.log("stockPorVacunatorio en home", stockPorVacunatorio);
 
 
-    if (!userDetails) {
+    if (!userDetails && !stock) {
         return (
           <div>
             <div className="text-center mt-5 fs-1">
@@ -28,12 +34,12 @@ export function Home() {
             </div>
             <div className='col-lg-5 d-none d-xl-block'>
                 <div className='col-12 col-md-10 offset-md-1'>
-                    <Stock userDetails={userDetails} size="lg"/>
+                    <Stock userDetails={userDetails} stock={stockPorVacunatorio} size="lg"/>
                 </div>
             </div>
             <div className='col-lg-3 d-none d-xl-block'>
                 <div className='container col-12'>
-                    <Reportes userDetails={userDetails} />
+                    {/* <Reportes userDetails={userDetails} /> */}
                 </div>
             </div>
         </div>
@@ -52,10 +58,10 @@ export function Home() {
                 <Historial userDetails={userDetails} />
             </div>
             <div className="tab-pane fade show active" id="nav-stock" role="tabpanel" aria-labelledby="nav-stock-tab" tabIndex="0">
-                <Stock userDetails={userDetails} size="sm"/>
+                <Stock userDetails={userDetails} stock={stockPorVacunatorio} size="sm"/>
             </div>
             <div className="tab-pane fade" id="nav-reporte" role="tabpanel" aria-labelledby="nav-reporte-tab" tabIndex="0">
-                <Reportes userDetails={userDetails} />
+                {/* <Reportes userDetails={userDetails} /> */}
             </div>
         </div>
         </div>

@@ -17,7 +17,9 @@ export function Login() {
         localStorage.setItem('user', JSON.stringify(username));
         setIsAuthenticated(true);
         setUser(username);
+        window.location.reload()
       }
+
     } catch (error) {
       setProcessing(false); // Finalizar el proceso de inicio de sesión (éxito o fallo)
       return setError('Error al iniciar sesión. Verifique sus credenciales.');

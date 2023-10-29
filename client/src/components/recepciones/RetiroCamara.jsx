@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createVacuna, createVacunaStock, getAllVacunas, createRetiroCamara } from '../../api/inventario';
+import { createVacuna, createInventarioVacuna, getAllVacunas, createRetiroCamara } from '../../api/inventario';
 import { useForm } from 'react-hook-form';
 
 export function RetiroCamara({ userDetails, size, stock }) {
@@ -105,7 +105,7 @@ export function RetiroCamara({ userDetails, size, stock }) {
   
   
     try {
-      const nuevoStock = await createVacunaStock(vacunaStockData);
+      const nuevoStock = await createInventarioVacuna(vacunaStockData);
       const nuevoRetiroData = {
         cantidad_retiro: parseInt(data.stock),
         vacuna_retiro: nuevoStock.id,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllStock, getAllVacunatorios, createTraspaso, getAllUsuariosByVacunatorioId } from '../../api/inventario';
+import { getAllInventarioVacuna, getAllVacunatorios, createTraspaso, getAllUsuariosByVacunatorioId } from '../../api/inventario';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
@@ -49,7 +49,7 @@ export function Traspaso({ stock, size }) {
     setLoading(true)
     async function loadStocks() {
       try {
-        const response = await getAllStock();
+        const response = await getAllInventarioVacuna();
         setStocks(response.data);
         setLoading(false)
       } catch (error) {

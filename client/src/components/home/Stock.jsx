@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../AuthContext';
 import { StockCard } from './StockCard';
 import moment from 'moment';
 
-export function Stock({ size, userDetails }) {
+export function Stock({ size, userDetails, stock }) {
   const [loading, setLoading] = useState(true);
-  const { fetchStock, stock } = useAuth();
 
   useEffect(() => {
-    setLoading(true);
-    fetchStock();
-    setLoading(false)
-  }, []);
+    if(userDetails){
+      setLoading(false)
+    }
+  }, [userDetails]);
+
+  console.log("stock en stock",stock);
+
 
   // Función para calcular los días restantes hasta la caducidad
   const calcularDiasRestantes = (item) => {
@@ -55,7 +56,7 @@ export function Stock({ size, userDetails }) {
 
         <div className="accordion fs-5" id="stockAccordion">
   {stock.map((item) =>
-    item.vacunatorio === userDetails.vacunatorio && item.stock !== 0 ? (
+    item.vacunatorio === userDetails.vacunatorio? (
       <div className="accordion-item bg-secondary" key={item.id}>
         <div className={`accordion-header ${determinarClaseColor(calcularDiasRestantes(item))}`} id={`heading${item.id}`}>
           <button
@@ -69,14 +70,14 @@ export function Stock({ size, userDetails }) {
             <div className="row" style={{ overflow: 'hidden' }}>
               <div className='col-2 d-flex flex-column justify-content-center align-items-center ms-2'>
               <span className=" fs-7 badge rounded-pill bg-primary fs-7 end-0">
-                    {item.stock} dosis
+                    {item.cantidad} dosis
                   </span>
               
               </div>
               <div className="col-8 text-start ">
                 
                 <div style={{ maxHeight: '100px', overflow: 'hidden' }}>
-                  <h6 className="mb-0 fs-5 mb-1 border-bottom border-secondary"><i className="fa-solid fa-syringe fs-5  "></i> {item.nombre_vacuna}</h6>
+                  <h6 className="mb-0 fs-5 mb-1 border-bottom border-secondary"><i className="fa-solid fa-syringe fs-5  "></i> {item.vacuna_nombre}</h6>
                 </div>
                 <div className="fs-7 ms-4 ">Lote: {item.lote}</div>
                 {item.fecha_caducidad_descongelacion && (

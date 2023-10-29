@@ -1,75 +1,61 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getUserDetails, logout } from './api/authentication';
-import { getAllStock } from './api/inventario';
-
 
 const AuthContext = createContext();
+
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
-  const [stock, setStock] = useState([]);
-
-
-  const fetchUserDetails = async () => {
-    try {
-      const userDetailsData = await getUserDetails();
-      if (userDetailsData) {
-        setIsAuthenticated(true);
-        setUserDetails(userDetailsData);
-      }
-    } catch (error) {
-      console.error('-----error en fetchUserDetails------')
-      logout();
-      setIsAuthenticated(false);
-      window.location.reload()
-      // Maneja errores de obtención de userDetails si es necesario
-    }
-  };
-
-  const fetchStock = async () => {
-    try {
-      // Verificar si userDetails está disponible antes de continuar
-      if (!userDetails) {
-        return;
-      }
-
-      const response = await getAllStock();
-      setStock(response.data);
-    } catch (error) {
-      console.error('Error fetching stock:', error);
-      if (error.response && error.response.status === 401) {
-        logout();
-        setIsAuthenticated(false);
-      }
-    }
-  }
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    const savedToken = localStorage.getItem('accessToken');
+    const loadUserData = async () => {
+      const savedUser = localStorage.getItem('user');
+      const savedToken = localStorage.getItem('accessToken');
 
-    if (savedUser && savedToken) {
-      const parsedUser = JSON.parse(savedUser);
-      if (parsedUser && savedToken.trim() !== '') {
-        setIsAuthenticated(true);
-        setUser(parsedUser);
-        fetchUserDetails(); // Obtiene userDetails al iniciar sesión
-      } else {
-        logout();
-        setIsAuthenticated(false);
+      console.log(savedUser);
 
+      if (savedUser && savedToken) {
+        const parsedUser = JSON.parse(savedUser);
+
+        try {
+          const userDetailsData = await getUserDetails();
+  
+          if (userDetailsData) {
+            setUserDetails(userDetailsData);
+            setIsAuthenticated(true);
+          }
+        } catch (error) {
+          console.error('Error en fetchUserDetails:', error);
+          logout();
+          setIsAuthenticated(false);
+          // Maneja errores de obtención de userDetails si es necesario
+        }
+
+        if (parsedUser && savedToken.trim() !== '') {
+          setIsAuthenticated(true);
+          setUser(parsedUser);
+        }
       }
-    } else {
-      logout();
-      setIsAuthenticated(false);
 
-    }
+      
+
+      setLoading(false);
+    };
+
+    loadUserData();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser, userDetails, setUserDetails, fetchUserDetails, fetchStock, stock}}>
-      {children}
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser, userDetails, setUserDetails }}>
+      {loading ? <div>
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div> : children}
     </AuthContext.Provider>
   );
 }

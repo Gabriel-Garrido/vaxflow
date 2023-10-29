@@ -164,3 +164,14 @@ export const getAllVacunas = () => {
       throw error;
     }
   };
+
+  export const getAllUsuariosByVacunatorioId = (vacunatorioId) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      return inventarioApi.get(`/usuarios/vacunatorio/${vacunatorioId}/`, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+      console.error('Error en getAllUsuariosByVacunatorioId:', error);
+      throw error;
+    }
+  };
+  

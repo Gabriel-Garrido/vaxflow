@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getAllAdministraciones, getAllEliminaciones, getAllRetirosCamara, getAllTraspasos } from '../../api/inventario';
-import { useAuth } from '../../AuthContext';
+import { useStock } from '../../StockContext';
 import { ReporteVacuna } from './ReporteVacuna';
 
 export function Reportes({ userDetails }) {
-  const { fetchStock, stock } = useAuth();
+  const { stock } = useStock();
   const [todaysTraspasos, setTodaysTraspasos] = useState([]);
   const [eliminaciones, setEliminaciones] = useState([]);
   const [administraciones, setAdministraciones] = useState([])
@@ -12,8 +12,8 @@ export function Reportes({ userDetails }) {
   const [retirosCamara, setRetirosCamara] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10)); // Fecha actual por defecto
 
+  
   useEffect(() => {
-    fetchStock();
     fetchTodaysTraspasos();
     fetchAllEliminaciones();
     fetchAllAdministraciones();

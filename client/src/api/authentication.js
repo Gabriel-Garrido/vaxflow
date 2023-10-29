@@ -41,10 +41,8 @@ export const getUserDetails = async () => {
     if (error.response && error.response.status === 401) {
       // Token inválido o expirado, realizar alguna acción aquí, por ejemplo, logout.
       logout();
-      window.location.reload()
 
     }
-    window.location.reload()
     throw error;
   }
 };

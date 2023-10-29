@@ -2,7 +2,7 @@ from django.db import models
 
 # Entidad para representar los diferentes tipos de vacunas
 class Vacuna(models.Model):
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100, unique=True)
     # Otros campos relacionados a las vacunas (fabricante, tipo, etc.)
 
     def __str__(self):
@@ -10,9 +10,7 @@ class Vacuna(models.Model):
 
 # Entidad para representar los vacunatorios
 class Vacunatorio(models.Model):
-    nombre = models.CharField(max_length=100)
-    direccion = models.CharField(max_length=200)
-    # Otros campos relacionados al vacunatorio (capacidad, ubicación geográfica, etc.)
+    nombre = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.nombre
@@ -21,13 +19,18 @@ class Vacunatorio(models.Model):
 class InventarioVacuna(models.Model):
     vacuna = models.ForeignKey(Vacuna, on_delete=models.CASCADE)
     vacunatorio = models.ForeignKey(Vacunatorio, on_delete=models.CASCADE)
+    lote = models.CharField(max_length=100)
     fecha_caducidad_fabricante = models.DateField()
-    fecha_descongelacion = models.DateTimeField(null=True, blank=True)
-    fecha_caducidad_descongelacion = models.DateTimeField(null=True, blank=True)
+    fecha_descongelacion = models.DateField(null=True, blank=True)
+    fecha_caducidad_descongelacion = models.DateField(null=True, blank=True)
+    hora_descongelacion = models.TimeField(null=True, blank=True)
+    fecha_eliminacion = models.DateField(null=True, blank=True, default=None)
+    fecha_administracion = models.DateField(null=True, blank=True, default=None)
+    
     existe = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.vacuna} en {self.vacunatorio}"
+        return f"{self.vacuna.nombre} - {self.lote} en {self.vacunatorio}"
 
 # Entidad para representar el retiro de vacunas de la cámara de descongelación
 class RetiroCamara(models.Model):
@@ -36,7 +39,7 @@ class RetiroCamara(models.Model):
     cantidad_retirada = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"Retiro de {self.cantidad_retirada} de {self.inventario_vacuna}"
+        return f"Retiro de {self.cantidad_retirada} de {self.inventario_vacuna.vacuna.nombre} en {self.inventario_vacuna.vacunatorio.nombre}"
 
 # Entidad para representar el traspaso de vacunas entre vacunatorios
 class TraspasoVacuna(models.Model):

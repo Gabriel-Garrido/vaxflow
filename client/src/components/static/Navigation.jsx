@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../api/authentication';
 import { useAuth } from '../../AuthContext';
+import { useStock } from '../../StockContext';
+
 import { Recepcion } from '../recepciones/Recepcion';
 import { RetiroCamara } from '../recepciones/RetiroCamara';
 
 export function Navigation() {
   const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated, user, setUser, userDetails, stock } = useAuth();
+  const { isAuthenticated, setIsAuthenticated, user, setUser, userDetails } = useAuth();
+  const { stock } = useStock();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
