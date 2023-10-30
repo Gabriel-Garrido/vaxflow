@@ -9,19 +9,19 @@ import moment from 'moment';
 
 export function StockCard({ stock, size }) {
 
-  // console.log("stock en stockcard",stock);
+console.log("stock en stockcard",stock);
 
   return (
     <div key={stock.id + size} className="card text-white">
       <div className="card-body text-start row">
         <div className="col-6">
-          {stock.fecha_descongelacion && stock.hora_descongelacion && (
+          {stock.fecha_caducidad_descongelacion && stock.hora_descongelacion && (
             <p className="mb-0 custom-stock-card">
               <strong>
                 <i className="fa-solid fa-temperature-arrow-up"></i> Descongelación:{' '}
               </strong>{' '}
               <br />{' '}
-              {moment(`${stock.fecha_descongelacion} ${stock.hora_descongelacion}`).format('DD MMM YYYY HH:mm')}
+              {moment(`${stock.fecha_caducidad_descongelacion} ${stock.hora_descongelacion}`).format('DD MMM YYYY HH:mm')}
             </p>
           )}
           <br />

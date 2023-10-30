@@ -8,9 +8,9 @@ export function Home() {
     const { userDetails } = useAuth();
     const { stock, stockPorVacunatorio } = useStock();    
 
-    console.log("userDetails en home", userDetails);
-    console.log("stock en home", stock);
-    console.log("stockPorVacunatorio en home", stockPorVacunatorio);
+    // console.log("userDetails en home", userDetails);
+    // console.log("stock en home", stock);
+    // console.log("stockPorVacunatorio en home", stockPorVacunatorio);
 
 
     if (!userDetails && !stock) {

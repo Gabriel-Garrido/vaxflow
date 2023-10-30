@@ -38,10 +38,20 @@ export const getUserDetails = async () => {
     });
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      // Token inválido o expirado, realizar alguna acción aquí, por ejemplo, logout.
-      logout();
-
+    if (error.response) {
+      if (error.response.status === 401) {
+        // Token inválido o expirado, realizar alguna acción aquí, por ejemplo, logout.
+        logout();
+      } else {
+        // Otro tipo de error en la respuesta del servidor, puedes manejarlo aquí.
+        console.error('Error en la respuesta del servidor:', error.response.data);
+      }
+    } else if (error.request) {
+      // Error de red, el backend no está disponible.
+      console.error('Error de red, el servidor no está disponible:', error.request);
+    } else {
+      // Otros tipos de errores.
+      console.error('Error:', error.message);
     }
     throw error;
   }

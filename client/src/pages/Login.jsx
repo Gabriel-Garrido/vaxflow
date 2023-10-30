@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { login } from '../api/authentication';
+import { login, logout } from '../api/authentication';
 import { useAuth } from '../AuthContext';
 
 export function Login() {
@@ -8,6 +8,9 @@ export function Login() {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false); // Nuevo estado para el procesamiento
   const { setIsAuthenticated, setUser } = useAuth();
+
+  logout()
+
 
   const handleLogin = async () => {
     try {

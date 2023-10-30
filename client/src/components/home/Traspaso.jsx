@@ -3,6 +3,7 @@ import { getAllInventarioVacuna, getAllVacunatorios, createTraspaso, getAllUsuar
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
+import { useStock } from '../../StockContext';
 import { logout } from '../../api/authentication';
 
 export function Traspaso({ stock, size }) {

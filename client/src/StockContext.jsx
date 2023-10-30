@@ -71,17 +71,19 @@ export function StockProvider({ children }) {
           vacunatorio: item.vacunatorio,
           caducidad_fabricante: item.fecha_caducidad_fabricante,
           fecha_caducidad_descongelacion: item.fecha_caducidad_descongelacion,
+          hora_descongelacion: item.hora_descongelacion
+
         });
       }
     });
     setStockPorVacunatorio(agrupaStockPorVacunatorio);
   };
 
-  console.log("vacunatorios", vacunatorios);
-  console.log("vacunas", vacunas);
+//  console.log("vacunatorios", vacunatorios);
+  // console.log("vacunas", vacunas);
 
   return (
-    <StockContext.Provider value={{ stock, isLoadingStock, stockPorVacunatorio, vacunas }}>
+    <StockContext.Provider value={{ stock, isLoadingStock, stockPorVacunatorio, vacunas, vacunatorios }}>
       {isLoadingStock ? (
         <div>
           <div className="text-center mt-6">
