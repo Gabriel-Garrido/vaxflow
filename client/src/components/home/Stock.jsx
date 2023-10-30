@@ -4,14 +4,25 @@ import moment from 'moment';
 
 export function Stock({ size, userDetails, stock }) {
   const [loading, setLoading] = useState(true);
+  const [vacunasAgrupadas, setVacunasAgrupadas] = useState([]);
 
   useEffect(() => {
     if(userDetails){
+      setLoading(true)
+      agruparVacunas(stock)
       setLoading(false)
     }
-  }, [userDetails]);
+  }, [userDetails, stock]);
 
   console.log("stock en stock",stock);
+
+// Obtener nombres únicos de las vacunas
+  const agruparVacunas = (stock) => {
+    const vacunaNombres = [...new Set(stock.map((item) => item.vacuna_nombre))]; 
+    setVacunasAgrupadas(vacunaNombres);
+  };
+
+  console.log("vacunasAgrupadas", vacunasAgrupadas)
 
 
   // Función para calcular los días restantes hasta la caducidad
@@ -36,6 +47,10 @@ export function Stock({ size, userDetails, stock }) {
     }
   };
 
+  const formatFecha = (fecha) => {
+    return moment(fecha).format('DD-MM-YYYY'); // Formato "dd-mm-aaaa"
+  };
+
   if (loading) {
     return (
       <div>
@@ -50,70 +65,74 @@ export function Stock({ size, userDetails, stock }) {
     return (
       <div className="container card " style={{ maxHeight: '75vh', overflowY: 'auto' }}>
                 
-        <h3 className="card-title fs-4 mt-2 text-success text-center">
+        <h3 className="card-title fs-5 mt-1 text-success text-center">
           Stock vacunatorio {userDetails.vacunatorio_nombre}
         </h3>
 
-        <div className="accordion fs-5" id="stockAccordion">
-  {stock.map((item) =>
-    item.vacunatorio === userDetails.vacunatorio? (
-      <div className="accordion-item bg-secondary" key={item.id}>
-        <div className={`accordion-header ${determinarClaseColor(calcularDiasRestantes(item))}`} id={`heading${item.id}`}>
-          <button
-            className={`btn w-100 ${determinarClaseColor(calcularDiasRestantes(item))}`}
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target={`#collapse${item.id}`}
-            aria-expanded="false"
-            aria-controls={`collapse${item.id}`}
-          >
-            <div className="row" style={{ overflow: 'hidden' }}>
-              <div className='col-2 d-flex flex-column justify-content-center align-items-center ms-2'>
-              <span className=" fs-7 badge rounded-pill bg-primary fs-7 end-0">
-                    {item.cantidad} dosis
-                  </span>
-              
-              </div>
-              <div className="col-8 text-start ">
-                
-                <div style={{ maxHeight: '100px', overflow: 'hidden' }}>
-                  <h6 className="mb-0 fs-5 mb-1 border-bottom border-secondary"><i className="fa-solid fa-syringe fs-5  "></i> {item.vacuna_nombre}</h6>
+        <div className="accordion fs-6" id="stockAccordion">
+          {stock.map((item) =>
+            item.vacunatorio === userDetails.vacunatorio? (
+              <div className="accordion-item bg-secondary" key={item.id}>
+                <div className={`accordion-header ${determinarClaseColor(calcularDiasRestantes(item))}`} id={`heading${item.id}`}>
+                  <button
+                    className={`btn w-100 ${determinarClaseColor(calcularDiasRestantes(item))}`}
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#collapse${item.id}`}
+                    aria-expanded="false"
+                    aria-controls={`collapse${item.id}`}
+                  >
+                    <div className="row" style={{ overflow: 'hidden' }}>
+                      <div className='col-2 d-flex flex-column justify-content-center align-items-center ms-2'>
+                      <span className="badge rounded-pill bg-primary fs-7 end-0">
+                            {item.cantidad} dosis
+                          </span>
+                      
+                      </div>
+                      <div className="col-8 text-start ">
+                        
+                        <div style={{ maxHeight: '100px', overflow: 'hidden' }}>
+                          <h6 className="fs-6 mb-0 border-bottom border-white"><i className="fa-solid fa-syringe fs-7  "></i> {item.vacuna_nombre}</h6>
+                        </div>
+                        <div className="fs-7 ms-4 ">Lote: {item.lote}</div>
+                        {item.fecha_caducidad_descongelacion && (
+                          <h6 className='ms-4'>
+                            Vencimiento: <strong>{formatFecha(item.fecha_caducidad_descongelacion)} ({calcularDiasRestantes(item)} días)</strong>
+                          </h6>
+                        )}
+                        {!item.fecha_caducidad_descongelacion && (
+                          <h6 className='ms-4'>
+                            Vencimiento: <strong>{formatFecha(item.caducidad_fabricante)} ({calcularDiasRestantes(item)} días)</strong>
+                          </h6>
+                        )}
+                        
+                      </div>
+                      <div className="col-1 d-flex flex-column justify-content-center align-items-start ">
+                        
+                        <i className="fa-solid fa-angle-down fs-5"></i>
+                        
+                      </div>
+                      
+                    
+                    </div>
+                  </button>
                 </div>
-                <div className="fs-7 ms-4 ">Lote: {item.lote}</div>
-                {item.fecha_caducidad_descongelacion && (
-                  <h6 className='ms-4'>Vigencia: {calcularDiasRestantes(item)} días</h6>
-                )}
-                {!item.fecha_caducidad_descongelacion && (
-                  <h6 className='ms-4'>Vigencia: {calcularDiasRestantes(item)} días</h6>
-                )}
-                
+                <div
+                  id={`collapse${item.id}`}
+                  className="accordion-collapse collapse"
+                  aria-labelledby={`heading${item.id}`}
+                  data-bs-parent="#stockAccordion"
+                >
+                  <div className="accordion-body bg-secondary">
+                    <StockCard stock={item} size={size} />
+                  </div>
+                </div>
               </div>
-              <div className="col-1 d-flex flex-column justify-content-center align-items-start ">
-                
-                <i className="fa-solid fa-angle-down fs-5"></i>
-                
-              </div>
-              
-            
-            </div>
-          </button>
+            ) : (
+              <div key={item.id}></div>
+            )
+          )}
         </div>
-        <div
-          id={`collapse${item.id}`}
-          className="accordion-collapse collapse"
-          aria-labelledby={`heading${item.id}`}
-          data-bs-parent="#stockAccordion"
-        >
-          <div className="accordion-body bg-secondary">
-            <StockCard stock={item} size={size} />
-          </div>
-        </div>
-      </div>
-    ) : (
-      <div key={item.id}></div>
-    )
-  )}
-</div>
 
       </div>
     );

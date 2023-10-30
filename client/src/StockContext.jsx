@@ -56,7 +56,7 @@ export function StockProvider({ children }) {
 
     stock.forEach((item, i) => {
       const existingItem = agrupaStockPorVacunatorio.find(
-        (x) => x.vacuna === item.vacuna && x.lote === item.lote
+        (x) => x.vacuna === item.vacuna && x.lote === item.lote && x.fecha_caducidad_fabricante === item.fecha_caducidad_fabricante
       );
 
       if (existingItem) {
@@ -69,6 +69,8 @@ export function StockProvider({ children }) {
           lote: item.lote,
           cantidad: 1,
           vacunatorio: item.vacunatorio,
+          caducidad_fabricante: item.fecha_caducidad_fabricante,
+          fecha_caducidad_descongelacion: item.fecha_caducidad_descongelacion,
         });
       }
     });
