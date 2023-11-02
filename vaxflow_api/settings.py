@@ -96,11 +96,19 @@ WSGI_APPLICATION = 'vaxflow_api.wsgi.application'
 #     )
 # }
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
-    )
-}
+if DEBUG:
+    # Configuración de la base de datos en entorno de desarrollo (SQLite)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    # Configuración de la base de datos en entorno de producción (PostgreSQL)
+    DATABASES = {
+        'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    }
 
 
 # Password validation
