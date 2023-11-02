@@ -20,7 +20,8 @@ export function Login() {
         localStorage.setItem('user', JSON.stringify(username));
         setIsAuthenticated(true);
         setUser(username);
-        window.location.reload()
+        
+
       }
 
     } catch (error) {

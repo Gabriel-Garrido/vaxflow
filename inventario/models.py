@@ -26,7 +26,6 @@ class InventarioVacuna(models.Model):
     hora_descongelacion = models.TimeField(null=True, blank=True)
     fecha_eliminacion = models.DateField(null=True, blank=True, default=None)
     fecha_administracion = models.DateField(null=True, blank=True, default=None)
-    
     existe = models.BooleanField(default=True)
 
     def __str__(self):

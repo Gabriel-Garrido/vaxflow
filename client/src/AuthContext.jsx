@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
     };
 
     loadUserData();
-  }, []);
+  }, [user, isAuthenticated]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, setUser, userDetails, setUserDetails }}>

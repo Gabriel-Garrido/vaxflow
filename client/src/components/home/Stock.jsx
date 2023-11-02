@@ -14,7 +14,7 @@ export function Stock({ size, userDetails, stock }) {
     }
   }, [userDetails, stock]);
 
-  // console.log("stock en stock",stock);
+console.log("stock en stock",stock);
 
 // Obtener nombres únicos de las vacunas
   const agruparVacunas = (stock) => {
@@ -22,7 +22,7 @@ export function Stock({ size, userDetails, stock }) {
     setVacunasAgrupadas(vacunaNombres);
   };
 
-  // console.log("vacunasAgrupadas", vacunasAgrupadas)
+console.log("vacunasAgrupadas", vacunasAgrupadas)
 
 
   // Función para calcular los días restantes hasta la caducidad
@@ -33,8 +33,6 @@ export function Stock({ size, userDetails, stock }) {
     const diferenciaDias = Math.ceil((fechaCaducidadDate - fechaActual) / (1000 * 60 * 60 * 24));
     return diferenciaDias;
   };
-
-  
 
   // Función para determinar la clase de color del botón
   const determinarClaseColor = (diasRestantes) => {
@@ -115,7 +113,6 @@ export function Stock({ size, userDetails, stock }) {
                         
                       </div>
                       
-                    
                     </div>
                   </button>
                 </div>

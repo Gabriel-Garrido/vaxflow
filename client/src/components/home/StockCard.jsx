@@ -9,7 +9,7 @@ import moment from 'moment';
 
 export function StockCard({ stock, size }) {
 
-console.log("stock en stockcard",stock);
+// console.log("stock en stockcard",stock);
 
   return (
     <div key={stock.id + size} className="card text-white">
