@@ -90,9 +90,15 @@ WSGI_APPLICATION = 'vaxflow_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')
+#     )
+# }
+
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')
+        default=os.environ.get('DATABASE_URL')
     )
 }
 
