@@ -5,6 +5,7 @@ set -o errexit
 # poetry install
 pip install -r requirements.txt
 
+
 # Obtener los datos del superusuario de la variable de entorno SUPERUSER
 SUPERUSER_DATA=$SUPERUSER
 
@@ -27,4 +28,5 @@ EOF
 fi
 
 python manage.py collectstatic --no-input
+python manage.py makemigrations
 python manage.py migrate
